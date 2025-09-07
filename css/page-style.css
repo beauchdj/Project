@@ -1,0 +1,16 @@
+body {
+	background: linear-gradient(to bottom, #b18ca4, #453840);
+	font-family: Arial, sans-serif;
+	text-align: center;
+	padding: 20px;
+	margin: 0;
+	background-repeat: no-repeat;
+	background-attachment: fixed;
+}
+h1 {
+	color: darkblue;
+}
+	p {
+	color: darkgreen;
+	font-size: 18px;
+}
