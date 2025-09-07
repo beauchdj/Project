@@ -2,7 +2,7 @@
 <html>
 <head>
   <title>Interactive Web Page</title>
-  <link rel = "page-style" href="../css/page-style.css">
+  <link rel="stylesheet" href="/css/page-style.css">
 </head>
 <body>
   <h1>Interactive Provider Page</h1>
@@ -10,14 +10,6 @@
   <button onclick="changeMessage(); increaseCount()">Click Me!</button>
   <p id= "message"></p>
 
-  <script>
-    var totalCount = 0;
-    function changeMessage() {
-      document.getElementById("message").innerHTML = `🎉 You clicked the button! ${totalCount}`;
-    }
-    function increaseCount() {
-      totalCount++;
-    }
-  </script>
+  <script src="js/clicker.js"></script>
 </body>
 </html>
