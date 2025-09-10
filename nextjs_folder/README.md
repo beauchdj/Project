@@ -21,7 +21,9 @@
 
 - After installing docker and **ensuring docker is running**, open your terminal and go to the directory: `Project/nextjs_folder/docker-nextjs-template` (shown below)
 
-- Run the command `docker compose up -d` if you get an error message throw the response into chat-gpt and see if the issue is fixable.
+- Run the command `docker compose up` if everything worked and it says the database is ready to accept connections: SUCCESS, and you can move onto #3 or learn to stop/kill the docker container(s) (below).
+
+- If you do run into error message I reccomend pasting the error message into chat-gpt or look online
 
 - tear down the container: `docker compose down`
 
