@@ -1,6 +1,6 @@
 # **This file will guide you through installing dependencies, running a docker container and adding to the database.**
 
-#### **\_As a pre-requisite ensure you have npm (node package manager) available or install with [nodejs](https://nodejs.org/en/download)**
+#### **As a pre-requisite ensure you have npm (node package manager) available or install with [nodejs](https://nodejs.org/en/download)**
 
 ## 1. Accessing the git branch, installing npm dependencies and running the nextjs server without docker-postgres running
 
@@ -74,4 +74,5 @@
 
 - This will be updated further but for the sake of time im going to push this :D
 
-# I would highly recommend asking chat-gpt for a crash course on nextjs for a quick summary of what is going on!
+# I would highly recommend asking chat-gpt for a crash course on `nextjs app router` for a quick summary of what is going on! NOTE: this project uses NEXTJS 15 which uses app router instead of pages router 
+# This project also uses tailwindcss for styling, this is not required but quickens up styling a page for sure ^_^
