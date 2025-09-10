@@ -13,7 +13,7 @@
 
 - Visit it at `localhost:3000/` but it may break due to the database not being active (The next section covers this).
 
-![Terminal Example](/Project/nextjs_folder/example1.png)
+![Terminal Example](./example1.png)
 
 ## 2. Run the docker container:
 
@@ -29,7 +29,7 @@
 
 - if container(s) are still running: `docker kill db adminer`
 
-![Terminal Example2](/Project/nextjs_folder/example2.png)
+![Terminal Example2](example2.png)
 
 ## 3. Verify the docker containers are working
 
