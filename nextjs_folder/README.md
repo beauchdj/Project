@@ -49,13 +49,13 @@
 
 - Hit the Login button and it should take you to a screen where you can explore the tables in the db mainly the **users** table.
 
-## 4. Now that everything is setup explore the code a little bit, that being said not much there yet lol :D
+## 4. Now that everything is setup explore the code a little bit, that being said not much there yet
 
 - In the directory nextjs-folder/docker-nextjs-template `docker compose up -d` then `npm run dev`
 
-- I recommend creating a user in the users database and logging in on the frontend and exploring the code behind how logging in works in terms of frontend to database interactions
+- I recommend creating a user in the users table in adminer(localhost:8080/) and using the user you've created to try logging in on the frontend and exploring the code behind how logging in works in terms of frontend to database interactions
 
-## 4. Some notes about the file structure:
+## 5. Some notes about the file structure:
 
 - docker-nextjs-template: contains the entire nextjs and docker-postgres app
 
