@@ -2,7 +2,7 @@
 
 #### **\_As a pre-requisite ensure you have npm (node package manager) available or install with [nodejs](https://nodejs.org/en/download)**
 
-## 1. Accessing the branch and installing npm dependencies and running the nextjs frontend
+## 1. Accessing the git branch, installing npm dependencies and running the nextjs server without docker-postgres running
 
 - Ensure you have npm installed in terminal run: `npm -v` otherwise install npm by installing[nodejs](https://nodejs.org/en/download)
 - Open your terminal and in the Projects git repo or folder checkout to gavins_branch `git checkout gavins_branch`
