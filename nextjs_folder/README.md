@@ -40,7 +40,7 @@
       System: PostgreSQL
       Server: db
       Username: postgres
-      Password: **test123**
+      Password: test123
       Database: postgres
 
 ![adminer login](example3.png)
