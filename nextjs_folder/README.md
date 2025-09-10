@@ -43,7 +43,7 @@
       Password: **test123**
       Database: postgres
 
-![adminer login](/Project/nextjs_folder/example3.png)
+![adminer login](example3.png)
 
 - Hit the Login button and it should take you to a screen where you can explore the tables in the db mainly the **users** table.
 
