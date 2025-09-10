@@ -7,7 +7,7 @@
 - Ensure you have npm installed in terminal run: `npm -v` otherwise install npm by installing [nodejs](https://nodejs.org/en/download)
 - Open your terminal and in the Projects git repo or folder checkout to gavins_branch `git checkout gavins_branch`
 - There should be a folder named nextjs_folder, in your terminal change directory to **docker-nextjs-template**
-- **Run the command `npm i` npm dependencies should install and subsequently you should be able to run npm should return that packages have been added**
+- **Run the command `npm i` npm dependencies should install and subsequently you should see npm saying it installed many dependencies**
 
 - Run the nextjs server to test to see if it works! `npm run dev`
 
