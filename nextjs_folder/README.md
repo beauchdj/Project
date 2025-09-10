@@ -11,7 +11,7 @@
 
 - Run the nextjs server to test to see if it works! `npm run dev`
 
-- Visit it at `localhost:3000/` but it may break due to the database not being active (The next section covers this).
+- Open your browser and visit it at `localhost:3000/` but it may break due to the database not being active (The next section covers this).
 
 ![Terminal Example](./example1.png)
 
