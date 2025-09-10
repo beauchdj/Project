@@ -19,7 +19,7 @@
 
 - Install docker/docker desktop [docker.com](https://www.docker.com/)
 
-- After installing docker in terminal go to directory Project/nextjs_folder/docker-nextjs-template (shown below)
+- After installing docker and **ensuring docker is running**, open your terminal and go to the directory: `Project/nextjs_folder/docker-nextjs-template` (shown below)
 
 - Run the command `docker compose up -d` if you get an error message throw the response into chat-gpt and see if the issue is fixable.
 
