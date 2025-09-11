@@ -4,7 +4,6 @@ import Dropdown from "./dropdown";
 
 export default function Nav() {
   const { data: session, status } = useSession();
-  console.log("Session return: ", session, " status: ", status);
 
   const signOutHandler = async () => {
     await signOut({ callbackUrl: "/" });
@@ -25,13 +24,11 @@ export default function Nav() {
       <Dropdown />
       <div>{session?.user.poop && <>hey {session.user.poop}</>}</div>
       <div>Status: {status}</div>
-      <div>
-        {session?.user.poop && (
-          <button onClick={signOutHandler} className="nav-btn">
-            SignOut
-          </button>
-        )}
-      </div>
+      {session?.user.poop && (
+        <button onClick={signOutHandler} className="nav-btn">
+          SignOut
+        </button>
+      )}
     </main>
   );
 }

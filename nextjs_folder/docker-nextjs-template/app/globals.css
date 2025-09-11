@@ -5,29 +5,14 @@
   --foreground: #171717;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #717171;
-    --foreground: #ededed;
-  }
-}
-
 body {
-  background: var(--background);
-  color: var(--foreground);
+  background: var(--foreground);
+  color: var(--background);
   font-family: Arial, Helvetica, sans-serif;
 }
 
 .nav-btn {
-  @apply 
-  text-xl 
+  @apply text-xl 
   m-2 
   bg-slate-900 
   hover:bg-slate-500
@@ -35,4 +20,8 @@ body {
   py-2
   text-white 
   rounded-2xl;
+}
+
+.input-element {
+  @apply border-white border indent-2 text-white rounded-xl;
 }

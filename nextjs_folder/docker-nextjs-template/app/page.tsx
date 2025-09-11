@@ -9,16 +9,28 @@ type User = {
 };
 export default async function page() {
   const data: User[] = await fetchUsers();
-  if (data[0]) console.log("got this data: ", data[0].username);
+  // if (data[0]) console.log("got this data: ", data[0].username);
 
   return (
-    <>
-      <main className="flex w-full items-center justify-center mt-8 ">
-        {/* <h1 className="px-4 py-2 text-2xl bg-white text-black rounded-3xl">
-          ID: {data[0].id} <br></br> Username: {data[0].username}
-          <br></br> Password:{data[0].password}
-        </h1> */}
-      </main>
-    </>
+    <main className="flex w-full items-center justify-center mt-8 ">
+      <div className="bg-slate-700 w-[80%] min-h-80 text-center rounded-3xl">
+        <div className="flex justify-start items-center mb-2 pl-5 pt-3">
+          <p>User List:</p>
+        </div>
+        <div className="flex items-center justify-center">
+          {(data.length > 0 &&
+            data.map((user, index) => (
+              <div
+                key={index}
+                className="hover:border-white hover:border w-[50%] cursor-pointer hover:rounded-4xl"
+              >
+                {user.username}
+              </div>
+            ))) || (
+            <p className="text-red-400 text-2xl">No users or fetch failed!</p>
+          )}
+        </div>
+      </div>
+    </main>
   );
 }
