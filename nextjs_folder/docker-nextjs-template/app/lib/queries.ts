@@ -1,3 +1,4 @@
+"use server";
 export async function fetchUsers() {
   return await fetch("http://localhost:3000/api/users")
     .then((res) => res.json())
@@ -13,8 +14,6 @@ export async function fetchData() {
       "https://baconipsum.com/api/?type=all-meat&paras=8&format=json"
     );
     if (!response.ok) throw new Error(`Http error: status: ${response.status}`);
-
-    console.log(response);
 
     return response;
   } catch (error) {

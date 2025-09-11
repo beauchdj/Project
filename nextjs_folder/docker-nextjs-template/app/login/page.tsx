@@ -19,14 +19,29 @@ export default function Page() {
 
   return (
     <>
-      <main className="flex flex-col items-center">
+      <main className="w-full flex flex-col justify-center items-center mt-4 text-white rounded-2xl">
         <form
           onSubmit={loginHandler}
-          className="flex flex-col justify-center items-center"
+          className="flex flex-col justify-center items-center h-50 w-75 bg-slate-700 rounded-3xl"
         >
-          <input type="text" name="username" placeholder="username" />
-
-          <input type="password" name="password" placeholder="password" />
+          <label htmlFor="username" className="">
+            Username
+          </label>
+          <input
+            type="text"
+            name="username"
+            placeholder="Username"
+            className="input-element"
+          />
+          <label htmlFor="password" className="">
+            Password
+          </label>
+          <input
+            type="password"
+            name="password"
+            placeholder="Password"
+            className="input-element"
+          />
           <button type="submit">Login</button>
         </form>
       </main>

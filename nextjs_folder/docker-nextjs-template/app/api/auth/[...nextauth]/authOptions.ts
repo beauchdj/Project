@@ -2,8 +2,11 @@
 import { NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 // import GitHubProvider from "next-auth/providers/github";
-// AuthOptions should define the providers 
+// AuthOptions should define the providers
 // along with what pages to use for signIn instead of default
+/**
+ * To add to the session object, define your property in types/next-auth.d.ts
+ */
 export const authOptions: NextAuthOptions = {
   providers: [
     CredentialsProvider({
@@ -13,6 +16,8 @@ export const authOptions: NextAuthOptions = {
         password: { label: "Password", type: "password" },
       },
       async authorize(credentials) {
+        // This authorize function will have a salted and hashed password with bcrypt library
+        // along with validation from the database as to whether our user exists
         // Replace this with your real user lookup
         const user = {
           id: "123",
@@ -27,8 +32,8 @@ export const authOptions: NextAuthOptions = {
     }),
   ],
   session: {
-    strategy: 'jwt',  
-    maxAge: 1 // set the age of the token (seconds)
+    strategy: "jwt",
+    maxAge: 1, // set the age of the token (seconds)
   },
   callbacks: {
     // extra types are defined in types/next-auth.d.ts (price and poop)
