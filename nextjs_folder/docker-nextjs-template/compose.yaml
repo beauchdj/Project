@@ -1,0 +1,30 @@
+# Basic compose to start up a postgres db with adminer to alter the db
+# container also has a volume called init.sql which will run the init.sql located
+# in the same directory as compose.yaml
+services:
+  db:
+    image: postgres
+    container_name: db
+    restart: always
+    # set shared memory limit when using docker compose
+    shm_size: 128mb
+    volumes:
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql:ro
+      - pgdata:/var/lib/postgresql/data # pgdata: <- defines the volume name
+
+    environment:
+      POSTGRES_PASSWORD: test123
+      POSTGRES_USER: postgres
+      POSTGRES_DB: postgres
+    ports:
+      - "5432:5432"
+
+  adminer:
+    image: adminer
+    container_name: adminer
+    restart: always
+    ports:
+      - 8080:8080
+
+volumes:
+  pgdata:

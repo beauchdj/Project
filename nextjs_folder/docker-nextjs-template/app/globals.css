@@ -1,0 +1,27 @@
+@import "tailwindcss";
+
+:root {
+  --background: #ffffff;
+  --foreground: #171717;
+}
+
+body {
+  background: var(--foreground);
+  color: var(--background);
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.nav-btn {
+  @apply text-xl 
+  m-2 
+  bg-slate-900 
+  hover:bg-slate-500
+  px-5
+  py-2
+  text-white 
+  rounded-2xl;
+}
+
+.input-element {
+  @apply border-white border indent-2 text-white rounded-xl;
+}
