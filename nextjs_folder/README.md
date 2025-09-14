@@ -8,7 +8,7 @@
 - Open your terminal and in the Projects git repo or folder checkout to gavins_branch `git checkout gavins_branch`
 - There should be a folder named nextjs_folder, in your terminal change directory to **docker-nextjs-template**
 - **Run the command `npm i` npm dependencies should install and subsequently you should see npm saying it installed many dependencies**
-
+- _You might need to run the command "Set-ExecutionPolicy -ExecutionPolicy Unrestricted" to allow the script to run._
 - Run the nextjs server to test to see if it works! `npm run dev`
 
 - Open your browser and visit it at `localhost:3000/` but it may break due to the database not being active (The next section covers this).
