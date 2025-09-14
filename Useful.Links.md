@@ -1,4 +1,5 @@
-[Project Document](https://docs.google.com/document/d/1qvKRpxlpYWQecKnf5UdRj4bNGQpMqiRhFnZRe6c1OKo/edit?usp=sharing)
+[Deliverable 1: Project Document](https://docs.google.com/document/d/1qvKRpxlpYWQecKnf5UdRj4bNGQpMqiRhFnZRe6c1OKo/edit?usp=sharing)
+
+[Deliverable 2: Functional Requirements](https://docs.google.com/document/d/15YNmKwkxfkvX6OTlKG83YQ5qtGbaL_ctJ_EB14hhv-4/edit?usp=sharing)
 
 [Jira](https://cs440proj.atlassian.net/jira/software/projects/CS440/boards/1)
-
