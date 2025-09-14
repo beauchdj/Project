@@ -33,5 +33,5 @@ What does upcoming mean? A timeframe that we determine? Or is there a setting th
 
 ##### Login Page and Registration Page for all user types
 <img src="https://github.com/beauchdj/Project/blob/397269d0d7e7eee3903b55547db007e4f3327c81/MeetingMinutes/Images/1_Login_Register.jpg" alt="login and registration page sketch" width="400" height="600">
-<img src="" alt="User dashboard and book appointment page sketch" width="400" height="600">
+<img src="https://github.com/beauchdj/Project/blob/b47bc7a651a49577f6dfe2920a5665297b2868f1/MeetingMinutes/Images/2_User_Dash_BookAppt.jpg" alt="User dashboard and book appointment page sketch" width="400" height="600">
 <img src="" alt="User view all appointments page and settings page sketch" width="400" height="600">
