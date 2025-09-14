@@ -28,10 +28,24 @@ What does upcoming mean? A timeframe that we determine? Or is there a setting th
 * Requirement states that a user can make/search/modify their appointment. What should the functionality be for modify? Just cancel? 
 * Forgot password on login page - is pretty standard. Do we want this, if so, how to implement?
 * User Appointment view - ok as just a list? Or should there be a calendar view?
+* Service Provider appointment availability - how should this work? Couple of options that I can think of:
+    Specific Time Slots for specific appointment types Ex: Monday 9-10am Haircut, 10-11:00am Haircut, 11-11:30 Nails
+    Specific Time Slots, whatever fits: Monday 9-9:45am, 10-10:45 am, etc and then appointment types have durations, so when user selects appointment
+    type, only the timeslots that are the right lenght will be available
+    Availability Time Blocks: Monday 8am - 5pm, and then appointment types have durations, so a user selects appointment type and then selects a time     within the available time block
+
+    For any of these, need to think through the UI and how we can implement...
 
 #### UI Design Drafts
 
 ##### Login Page and Registration Page for all user types
 <img src="https://github.com/beauchdj/Project/blob/397269d0d7e7eee3903b55547db007e4f3327c81/MeetingMinutes/Images/1_Login_Register.jpg" alt="login and registration page sketch" width="400" height="600">
+##### User: Dashboard and Appointment Booking Pages
 <img src="https://github.com/beauchdj/Project/blob/b47bc7a651a49577f6dfe2920a5665297b2868f1/MeetingMinutes/Images/2_User_Dash_BookAppt.jpg" alt="User dashboard and book appointment page sketch" width="400" height="600">
+##### User: View Appointments Page and Account Settings Page
 <img src="https://github.com/beauchdj/Project/blob/d05ba3f04f8cbdb5fee7b67b5b7926a0f5d83954/MeetingMinutes/Images/3_User_ViewAppts_Settings.jpg" alt="User view all appointments page and settings page sketch" width="400" height="600">
+##### Service Provider: Dashboard and Appointment Availability Pages
+<img src="" alt="Service Provider dashboard and appointment availability pages" width="400" height="600">
+##### Service Provider: View Appointments page and Account Settings Page
+<img src="" alt="Service Provider view appointments and account settings pages" width="400" height="600">
+### Service 
