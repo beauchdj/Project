@@ -19,7 +19,7 @@ Next Meeting:
 | Functional Requirements, Use Case Model Overview and Questions | Jackie | 40min | Review UI design, discuss and answer questions (see below)|
 | Jira Review | All | 5 min | | 
 
-## Questions 
+#### Questions 
 * General question about barebones fulfillment of requirements vs ensuring we have conventional website design and elements (without over doing it)
 * Alerts for upcoming appointments - what should this look like? list upcoming appointments prominantly on the dashboard ok? Or a pop up alert? 
 What does upcoming mean? A timeframe that we determine? Or is there a setting that the user selects?
@@ -29,4 +29,8 @@ What does upcoming mean? A timeframe that we determine? Or is there a setting th
 * Forgot password on login page - is pretty standard. Do we want this, if so, how to implement?
 * User Appointment view - ok as just a list? Or should there be a calendar view?
 
-##UI Design Drafts
+#### UI Design Drafts
+
+##### Login Page and Registration Page for all user types
+![login and registration page sketch](MeetingMinutes/Images/1_Login_Register.jpg)
+
