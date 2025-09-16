@@ -29,12 +29,14 @@ What does upcoming mean? A timeframe that we determine? Or is there a setting th
 * Forgot password on login page - is pretty standard. Do we want this, if so, how to implement?
 * User Appointment view - ok as just a list? Or should there be a calendar view?
 * Service Provider appointment availability - how should this work? Couple of options that I can think of:  
-    Specific Time Slots for specific appointment types Ex: Monday 9-10am Haircut, 10-11:00am Haircut, 11-11:30 Nails  
-    Specific Time Slots, whatever fits: Monday 9-9:45am, 10-10:45 am, etc and then appointment types have durations, so when user selects appointment
+    * Specific Time Slots for specific appointment types Ex: Monday 9-10am Haircut, 10-11:00am Haircut, 11-11:30 Nails  
+    * Specific Time Slots, whatever fits: Monday 9-9:45am, 10-10:45 am, etc and then appointment types have durations, so when user selects appointment
     type, only the timeslots that are the right lenght will be available  
-    Availability Time Blocks: Monday 8am - 5pm, and then appointment types have durations, so a user selects appointment type and then selects a time     within the available time block  
+    * Availability Time Blocks: Monday 8am - 5pm, and then appointment types have durations, so a user selects appointment type and then selects a time     within the available time block
+* Appointment history & trends, appointment reports by category and time period 
 
     For any of these, need to think through the UI and how we can implement...
+    Also, how for out in advance can sp set availability/user can book?
 
 #### UI Design Drafts
 
