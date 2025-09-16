@@ -37,7 +37,8 @@ What does upcoming mean? A timeframe that we determine? Or is there a setting th
 
     For any of these, need to think through the UI and how we can implement...
     Also, how for out in advance can sp set availability/user can book?
-
+* What does functional requirements mean to you? Example from prof
+* 
 #### UI Design Drafts
 
 ##### Login Page and Registration Page for all user types
