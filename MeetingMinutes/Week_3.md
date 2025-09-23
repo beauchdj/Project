@@ -16,5 +16,6 @@ Next Meeting:
 ### Meeting Agenda Items
 | Topic | Who | Expected Time | Notes | 
 |---|---|---|---|
-| User Stories | All | 5min | |
-| Jira Review | All | 5 min | | 
+| Jira Review | All | 5 min | |
+| Review Gavin's Project Setup | All 5 min| |
+| User Stories Dscussion | All | 5min | |
