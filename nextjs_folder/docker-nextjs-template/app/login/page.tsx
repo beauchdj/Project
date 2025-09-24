@@ -13,7 +13,7 @@ export default function Page() {
       username,
       password,
       redirect: true,
-      callbackUrl: "/",
+      callbackUrl: "/home",
     });
   }
 
@@ -42,7 +42,9 @@ export default function Page() {
             placeholder="Password"
             className="input-element"
           />
-          <button type="submit">Login</button>
+          <button className="btn mt-2" type="submit">
+            Login
+          </button>
         </form>
       </main>
     </>

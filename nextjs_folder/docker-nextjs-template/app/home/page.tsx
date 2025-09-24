@@ -13,10 +13,12 @@ export default async function HomePage() {
   }
 
   return (
-    <main className="w-screen h-[100%] flex justify-center">
-      <div className="w-[90%] h-[99%] max-h-140 overflow-scroll">
-        <div>hey its homepage</div>
-        <div>
+    <main className="w-screen h-[80vh] flex justify-center items-center flex-col">
+      <div className="w-full flex justify-center items-center m-2">
+        hey its homepage
+      </div>
+      <div className="w-[90%] h-[99%] overflow-auto">
+        <div className="bg-slate-700 p-4 rounded">
           {(length > 0 &&
             json.map((baconipsum, index) => (
               <div
