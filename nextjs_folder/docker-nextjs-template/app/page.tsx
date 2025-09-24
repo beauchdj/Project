@@ -1,7 +1,7 @@
 "use server";
 
-import { CalendarComponent } from "./lib/calendar";
-import { fetchUsers } from "./lib/queries";
+import { CalendarComponent } from "./lib/components/calendar";
+import { fetchUsers } from "./lib/fetching/queries";
 
 type User = {
   username: string;
