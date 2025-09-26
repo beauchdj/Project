@@ -1,7 +1,7 @@
 Group Members: Dan Beauchaine, Gavin Stankovsky, Jackie Sobolewski  
 Meeting Date: 9/22/2025  
 Meeting Time: 7pm  
-Members Present: All
+Members Present: All  
 Upcoming Deliverables: [User Stories](https://docs.google.com/document/d/15YNmKwkxfkvX6OTlKG83YQ5qtGbaL_ctJ_EB14hhv-4/edit?usp=sharing) Due Sept 25  
 Next Meeting: 9/29/25 
 
