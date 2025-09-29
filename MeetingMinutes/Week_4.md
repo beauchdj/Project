@@ -22,3 +22,5 @@ Next Meeting:  10/6/2025
 
 ### Possible DB models
 
+<img src="https://github.com/beauchdj/Project/blob/308e3fb73315d9bc77eac572d7b9125eac3f644c/MeetingMinutes/Images/apptbookingdbdan.jpg" alt="Dan DB Model" width="400" height="600">
+<img src="https://github.com/beauchdj/Project/blob/308e3fb73315d9bc77eac572d7b9125eac3f644c/MeetingMinutes/Images/apptbookingdb.jpg" alt="Jackie DB Model" width="400" height="600">
