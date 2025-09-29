@@ -21,5 +21,4 @@ Next Meeting:  10/6/2025
 | Discuss DB Schema? | All | Images below |
 
 ### Possible DB models
-<img src="https://github.com/beauchdj/Project/blob/f3b130fe5ad62616660276685b4e70a40361d089/MeetingMinutes/Images/Er-ptoject.drawio" alt="Dan's DB Model" width="400" height="600">
-<img src="https://github.com/beauchdj/Project/blob/f0b7c0ac85b6a1169380801d19f966bf88fbd119/MeetingMinutes/Images/apptbookingdb.pdf" alt="Jackie's DB Model" width="400" height="600">
+<img src="https://github.com/beauchdj/Project/blob/397269d0d7e7eee3903b55547db007e4f3327c81/MeetingMinutes/Images/1_Login_Register.jpg" alt="login and registration page sketch" width="400" height="600">
