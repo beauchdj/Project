@@ -16,5 +16,5 @@ Next Meeting:  10/6/2025
 ### Meeting Agenda Items
 | Topic | Who | Notes | 
 |---|---|---|
-| Jira Review | All | Review the tickets Dan has created in Jira. What do we want to have accomplished for the first demo? Make sure all tickets are created (and assigned) to accomplish that | 
+| Jira Review | All | Review the tickets Dan has created in Jira. What do we want to have accomplished for the first demo? Make sure all tickets are created (and assigned?) to accomplish that | 
 | Help | Jackie | Jackie has a few questions about git, database/docker, project structure to make sure she is understanding what is going on! |
