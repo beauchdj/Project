@@ -18,3 +18,8 @@ Next Meeting:  10/6/2025
 |---|---|---|
 | Jira Review | All | Review the tickets Dan has created in Jira. What do we want to have accomplished for the first demo? Make sure all tickets are created (and assigned?) to accomplish that | 
 | Help | Jackie | Jackie has a few questions about git, database/docker, project structure to make sure she is understanding what is going on! |
+| Discuss DB Schema? | All | Images below |
+
+### Possible DB models
+<img src="https://github.com/beauchdj/Project/blob/f3b130fe5ad62616660276685b4e70a40361d089/MeetingMinutes/Images/Er-ptoject.drawio" alt="Dan's DB Model" width="400" height="600">
+<img src="https://github.com/beauchdj/Project/blob/f3b130fe5ad62616660276685b4e70a40361d089/MeetingMinutes/Images/apptbookingdb.pdf" alt="Dan's DB Model" width="400" height="600">
