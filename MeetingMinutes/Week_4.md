@@ -22,4 +22,4 @@ Next Meeting:  10/6/2025
 
 ### Possible DB models
 <img src="https://github.com/beauchdj/Project/blob/f3b130fe5ad62616660276685b4e70a40361d089/MeetingMinutes/Images/Er-ptoject.drawio" alt="Dan's DB Model" width="400" height="600">
-<img src="https://github.com/beauchdj/Project/blob/f3b130fe5ad62616660276685b4e70a40361d089/MeetingMinutes/Images/apptbookingdb.pdf" alt="Dan's DB Model" width="400" height="600">
+<img src="https://github.com/beauchdj/Project/blob/f0b7c0ac85b6a1169380801d19f966bf88fbd119/MeetingMinutes/Images/apptbookingdb.pdf" alt="Jackie's DB Model" width="400" height="600">
