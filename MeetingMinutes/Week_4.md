@@ -21,4 +21,4 @@ Next Meeting:  10/6/2025
 | Discuss DB Schema? | All | Images below |
 
 ### Possible DB models
-<img src="https://github.com/beauchdj/Project/blob/397269d0d7e7eee3903b55547db007e4f3327c81/MeetingMinutes/Images/1_Login_Register.jpg" alt="login and registration page sketch" width="400" height="600">
+
