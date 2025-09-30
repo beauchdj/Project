@@ -32,3 +32,14 @@ Next Meeting:  10/6/2025
       * as a user, your upcoming booked appointments
       * as a service provider, your upcoming booked appointments
       * as an admin, all upcoming booked appointments
+
+### Update to dos after in class demo data & assumptions discussion
+For demo 1:
+Code:
+* Login
+* Create Account/Register for Customers and Service Providers
+* Service Provider create appointments
+* Customer book appointments  
+Other:
+* Create Powerpoint
+* Update User Stories and Assumptions
