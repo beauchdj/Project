@@ -1,0 +1,336 @@
+-- ==========================================
+-- Script from chatgpt
+-- ==========================================
+
+-- Fresh DB & schema (matches your tables exactly)
+DROP DATABASE IF EXISTS apptbookings2;
+CREATE DATABASE apptbookings2;
+USE apptbookings2;
+
+CREATE TABLE users (
+  Id int NOT NULL auto_increment,
+  fullname varchar(100) NOT NULL,
+  hashpass varchar(100) NOT NULL,
+  street1 varchar(50),
+  street2 varchar(20),
+  city varchar(30),
+  state varchar(5),
+  zip varchar(5),
+  phone varchar(10),
+  email varchar(50),
+  username varchar(50),
+  serviceCategory varchar(30),
+  userType varchar(30),
+  PRIMARY KEY (Id)
+);
+
+CREATE TABLE appts (
+  Id int NOT NULL auto_increment,
+  spId int,
+  startTime DATETIME NOT NULL,
+  endTime DATETIME NOT NULL,
+  service varchar(30),
+  PRIMARY KEY (Id),
+  FOREIGN KEY (spId) References users(Id)
+);
+
+CREATE TABLE bookings (
+  Id int NOT NULL auto_increment,
+  apptId int,
+  custId int,
+  bookStatus varchar(50),
+  PRIMARY KEY (Id),
+  FOREIGN KEY (apptId) References appts(Id),
+  FOREIGN KEY (custId) References users(Id)
+);
+
+-- -----------------------------------------
+-- Helper constants
+-- -----------------------------------------
+SET @now_ts = NOW();
+SET @start_epoch = UNIX_TIMESTAMP('2025-09-01 00:00:00');
+SET @end_epoch   = UNIX_TIMESTAMP('2025-12-31 23:59:59');
+
+-- ==========================================
+-- USERS
+-- ==========================================
+DELIMITER $$
+
+DROP PROCEDURE IF EXISTS populate_users $$
+CREATE PROCEDURE populate_users()
+BEGIN
+  DECLARE i INT;
+
+  -- 50 Service Providers
+  SET i = 1;
+  WHILE i <= 50 DO
+    INSERT INTO users (fullname, hashpass, street1, street2, city, state, zip, phone, email, username, serviceCategory, userType)
+    VALUES (
+      CONCAT('Service Provider ', i),
+      MD5(CONCAT('pass_sp_', i)),
+      CONCAT(100 + i, ' Main St'), NULL, 'La Crosse', 'WI',
+      LPAD(FLOOR(RAND()*100000), 5, '0'),
+      LPAD(FLOOR(RAND()*10000000000), 10, '0'),
+      CONCAT('sp', i, '@example.com'),
+      CONCAT('sp', i),
+      (CASE FLOOR(RAND()*3)
+        WHEN 0 THEN 'beauty'
+        WHEN 1 THEN 'medical'
+        ELSE 'wellness'
+      END),
+      'ServiceProvider'
+    );
+    SET i = i + 1;
+  END WHILE;
+
+  -- 448 Customers
+  SET i = 1;
+  WHILE i <= 448 DO
+    INSERT INTO users (fullname, hashpass, street1, street2, city, state, zip, phone, email, username, serviceCategory, userType)
+    VALUES (
+      CONCAT('Customer ', i),
+      MD5(CONCAT('pass_cust_', i)),
+      CONCAT(200 + i, ' Oak Ave'), NULL, 'Onalaska', 'WI',
+      LPAD(FLOOR(RAND()*100000), 5, '0'),
+      LPAD(FLOOR(RAND()*10000000000), 10, '0'),
+      CONCAT('customer', i, '@example.com'),
+      CONCAT('customer', i),
+      NULL, 'Customer'
+    );
+    SET i = i + 1;
+  END WHILE;
+
+  -- 2 Admins
+  SET i = 1;
+  WHILE i <= 2 DO
+    INSERT INTO users (fullname, hashpass, street1, street2, city, state, zip, phone, email, username, serviceCategory, userType)
+    VALUES (
+      CONCAT('Admin ', i),
+      MD5(CONCAT('pass_admin_', i)),
+      CONCAT(300 + i, ' Pine Rd'), NULL, 'Holmen', 'WI',
+      LPAD(FLOOR(RAND()*100000), 5, '0'),
+      LPAD(FLOOR(RAND()*10000000000), 10, '0'),
+      CONCAT('admin', i, '@example.com'),
+      CONCAT('admin', i),
+      NULL, 'Admin'
+    );
+    SET i = i + 1;
+  END WHILE;
+END $$
+DELIMITER ;
+
+CALL populate_users();
+
+-- ==========================================
+-- APPOINTMENTS (50 per ServiceProvider)
+-- ==========================================
+DELIMITER $$
+
+DROP PROCEDURE IF EXISTS populate_appts $$
+CREATE PROCEDURE populate_appts()
+BEGIN
+  DECLARE v_spId INT;
+  DECLARE v_cat VARCHAR(30);
+  DECLARE v_j INT;
+
+  DECLARE v_start DATETIME;
+  DECLARE v_dur INT;
+  DECLARE v_service VARCHAR(30);
+
+  -- Build temp list of providers to iterate safely
+  DROP TEMPORARY TABLE IF EXISTS tmp_providers;
+  CREATE TEMPORARY TABLE tmp_providers (spId INT PRIMARY KEY) ENGINE=Memory;
+  INSERT INTO tmp_providers (spId)
+  SELECT Id FROM users WHERE userType='ServiceProvider' ORDER BY Id;
+
+  WHILE (SELECT COUNT(*) FROM tmp_providers) > 0 DO
+    SELECT spId INTO v_spId FROM tmp_providers ORDER BY spId LIMIT 1;
+    DELETE FROM tmp_providers WHERE tmp_providers.spId = v_spId;
+
+    SELECT serviceCategory INTO v_cat FROM users WHERE Id = v_spId;
+
+    SET v_j = 1;
+    WHILE v_j <= 50 DO
+      SET v_start = FROM_UNIXTIME(@start_epoch + FLOOR(RAND() * (@end_epoch - @start_epoch + 1)));
+      SET v_dur   = (CASE FLOOR(RAND()*3) WHEN 0 THEN 30 WHEN 1 THEN 60 ELSE 90 END);
+
+      SET v_service =
+        (CASE v_cat
+          WHEN 'beauty' THEN
+            (CASE FLOOR(RAND()*5)
+              WHEN 0 THEN 'Haircut'
+              WHEN 1 THEN 'Manicure'
+              WHEN 2 THEN 'Facial'
+              WHEN 3 THEN 'Makeup'
+              ELSE 'Brow Wax'
+            END)
+          WHEN 'medical' THEN
+            (CASE FLOOR(RAND()*5)
+              WHEN 0 THEN 'Checkup'
+              WHEN 1 THEN 'Dental Cleaning'
+              WHEN 2 THEN 'Physical Therapy'
+              WHEN 3 THEN 'Vaccination'
+              ELSE 'Derm Consult'
+            END)
+          ELSE
+            (CASE FLOOR(RAND()*5)
+              WHEN 0 THEN 'Massage'
+              WHEN 1 THEN 'Yoga Session'
+              WHEN 2 THEN 'Nutrition Consult'
+              WHEN 3 THEN 'Acupuncture'
+              ELSE 'Meditation'
+            END)
+        END);
+
+      INSERT INTO appts (spId, startTime, endTime, service)
+      VALUES (v_spId, v_start, DATE_ADD(v_start, INTERVAL v_dur MINUTE), v_service);
+
+      SET v_j = v_j + 1;
+    END WHILE;
+  END WHILE;
+END $$
+DELIMITER ;
+
+CALL populate_appts();
+
+-- ==========================================
+-- BOOKINGS (exactly 5 per Customer; ≥3 distinct providers)
+-- ==========================================
+DELIMITER $$
+
+DROP PROCEDURE IF EXISTS populate_bookings $$
+CREATE PROCEDURE populate_bookings()
+BEGIN
+  DECLARE v_custId INT;
+  DECLARE v_remaining INT;
+
+  DECLARE v_apptId INT;
+  DECLARE v_spId INT;
+  DECLARE v_end DATETIME;
+
+  DECLARE v_sp1 INT;
+  DECLARE v_sp2 INT;
+  DECLARE v_sp3 INT;
+
+  DECLARE v_k INT;
+
+  -- Build pool of available appts (no double-booking)
+  DROP TEMPORARY TABLE IF EXISTS available_appts;
+  CREATE TEMPORARY TABLE available_appts (
+    apptId INT PRIMARY KEY,
+    spId   INT NOT NULL,
+    endTime DATETIME NOT NULL
+  ) ENGINE=Memory;
+
+  INSERT INTO available_appts (apptId, spId, endTime)
+  SELECT Id, spId, endTime FROM appts;
+
+  -- Build list of customers
+  DROP TEMPORARY TABLE IF EXISTS tmp_customers;
+  CREATE TEMPORARY TABLE tmp_customers (custId INT PRIMARY KEY) ENGINE=Memory;
+  INSERT INTO tmp_customers (custId)
+  SELECT Id FROM users WHERE userType='Customer' ORDER BY Id;
+
+  SELECT COUNT(*) INTO v_remaining FROM tmp_customers;
+
+  WHILE v_remaining > 0 DO
+    -- take next customer
+    SELECT custId INTO v_custId FROM tmp_customers ORDER BY custId LIMIT 1;
+    DELETE FROM tmp_customers WHERE tmp_customers.custId = v_custId;
+
+    -- first booking: any provider
+    SET v_apptId = NULL; SET v_sp1 = NULL; SET v_end = NULL;
+    SELECT apptId, spId, endTime
+      INTO v_apptId, v_sp1, v_end
+    FROM available_appts
+    ORDER BY RAND()
+    LIMIT 1;
+
+    IF v_apptId IS NOT NULL THEN
+      INSERT INTO bookings (apptId, custId, bookStatus)
+      VALUES (
+        v_apptId, v_custId,
+        CASE WHEN v_end < @now_ts
+          THEN (CASE FLOOR(RAND()*2) WHEN 0 THEN 'Completed' ELSE 'Cancelled' END)
+          ELSE (CASE FLOOR(RAND()*2) WHEN 0 THEN 'Booked' ELSE 'Cancelled' END)
+        END
+      );
+      DELETE FROM available_appts WHERE apptId = v_apptId;
+    END IF;
+
+    -- second: different provider
+    SET v_apptId = NULL; SET v_sp2 = NULL; SET v_end = NULL;
+    SELECT apptId, spId, endTime
+      INTO v_apptId, v_sp2, v_end
+    FROM available_appts
+    WHERE spId <> v_sp1
+    ORDER BY RAND()
+    LIMIT 1;
+
+    IF v_apptId IS NOT NULL THEN
+      INSERT INTO bookings (apptId, custId, bookStatus)
+      VALUES (
+        v_apptId, v_custId,
+        CASE WHEN v_end < @now_ts
+          THEN (CASE FLOOR(RAND()*2) WHEN 0 THEN 'Completed' ELSE 'Cancelled' END)
+          ELSE (CASE FLOOR(RAND()*2) WHEN 0 THEN 'Booked' ELSE 'Cancelled' END)
+        END
+      );
+      DELETE FROM available_appts WHERE apptId = v_apptId;
+    END IF;
+
+    -- third: different from both
+    SET v_apptId = NULL; SET v_sp3 = NULL; SET v_end = NULL;
+    SELECT apptId, spId, endTime
+      INTO v_apptId, v_sp3, v_end
+    FROM available_appts
+    WHERE spId <> v_sp1
+      AND (v_sp2 IS NULL OR spId <> v_sp2)
+    ORDER BY RAND()
+    LIMIT 1;
+
+    IF v_apptId IS NOT NULL THEN
+      INSERT INTO bookings (apptId, custId, bookStatus)
+      VALUES (
+        v_apptId, v_custId,
+        CASE WHEN v_end < @now_ts
+          THEN (CASE FLOOR(RAND()*2) WHEN 0 THEN 'Completed' ELSE 'Cancelled' END)
+          ELSE (CASE FLOOR(RAND()*2) WHEN 0 THEN 'Booked' ELSE 'Cancelled' END)
+        END
+      );
+      DELETE FROM available_appts WHERE apptId = v_apptId;
+    END IF;
+
+    -- 4th and 5th: any provider
+    SET v_k = 4;
+    WHILE v_k <= 5 DO
+      SET v_apptId = NULL; SET v_spId = NULL; SET v_end = NULL;
+      SELECT apptId, spId, endTime
+        INTO v_apptId, v_spId, v_end
+      FROM available_appts
+      ORDER BY RAND()
+      LIMIT 1;
+
+      IF v_apptId IS NULL THEN
+        SET v_k = 6; -- break inner loop
+      ELSE
+        INSERT INTO bookings (apptId, custId, bookStatus)
+        VALUES (
+          v_apptId, v_custId,
+          CASE WHEN v_end < @now_ts
+            THEN (CASE FLOOR(RAND()*2) WHEN 0 THEN 'Completed' ELSE 'Cancelled' END)
+            ELSE (CASE FLOOR(RAND()*2) WHEN 0 THEN 'Booked' ELSE 'Cancelled' END)
+          END
+        );
+        DELETE FROM available_appts WHERE apptId = v_apptId;
+        SET v_k = v_k + 1;
+      END IF;
+    END WHILE;
+
+    -- next customer?
+    SELECT COUNT(*) INTO v_remaining FROM tmp_customers;
+  END WHILE;
+END $$
+DELIMITER ;
+
+CALL populate_bookings();
