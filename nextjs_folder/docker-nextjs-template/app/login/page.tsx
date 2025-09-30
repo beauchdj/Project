@@ -19,7 +19,7 @@ export default function Page() {
 
   return (
     <>
-      <main className="w-full flex flex-col justify-center items-center mt-4 text-white rounded-2xl">
+      <div className="w-full flex flex-col justify-center items-center mt-4 text-white rounded-2xl">
         <form
           onSubmit={loginHandler}
           className="flex flex-col justify-center items-center h-50 -75 bg-slate-700 rounded-3xl"
@@ -46,7 +46,7 @@ export default function Page() {
             Login
           </button>
         </form>
-      </main>
+      </div>
     </>
   );
 }
