@@ -24,29 +24,43 @@ export async function GET(request: Request) {
 }
 
 export async function POST(request: Request) {
-  const body: User & { password: string } = await request.json(); // & { password: string } adds password variable onto User object
-  console.log("This is the posted body: ", body);
+  try {
+    const body: User & { password: string } = await request.json(); // & { password: string } adds password variable onto User object
+    console.log("This is the posted body: ", body);
 
-  const created = { username: body.username, password: body.password };
+    const created = { username: body.username, password: body.password };
 
-  const res = await pool.query(
-    `INSERT INTO users (fullname, username, hashpass) VALUES ($1, $2, $3)`,
-    [created.username, created.username, created.password]
-  );
-  console.log("This is from post: ", res);
+    const res = await pool.query(
+      `INSERT INTO users (fullname, username, hashpass) VALUES ($1, $2, $3)`,
+      [created.username, created.username, created.password]
+    );
+    console.log("This is from post: ", res);
 
-  return NextResponse.json(created, { status: 201 });
+    return NextResponse.json(created, { status: 201 });
+  } catch (error) {
+    console.log("/users POST ERROR: ", error);
+    return NextResponse.json("failed", { status: 500 });
+  }
 }
 
 export async function DELETE(request: Request) {
-  const bod = await request.json();
-  const username = bod.username;
+  try {
+    const bod = await request.json();
+    const username = bod.username;
 
-  // const res = await pool.query("DELETE FROM users WHERE username = $1", [
-  //   username,
-  // ]);
+    const res = await pool.query("DELETE FROM users WHERE username = $1", [
+      username,
+    ]);
 
-  return NextResponse.json(JSON.stringify({ username: username }), {
-    status: 200,
-  });
+    console.log("Server API: /users DELETE ", res);
+
+    return NextResponse.json(JSON.stringify({ username: username }), {
+      status: 200,
+    });
+  } catch (error) {
+    console.log("Server API: /users DELETE ERROR", error);
+    return NextResponse.json("failed", {
+      status: 500,
+    });
+  }
 }

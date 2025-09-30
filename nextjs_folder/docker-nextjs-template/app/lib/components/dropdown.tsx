@@ -28,6 +28,9 @@ export default function Dropdown() {
             <Link href={"/demo"} className={"nav-btn"}>
               Demo
             </Link>
+            <Link href={"/register"} className={"nav-btn"}>
+              Register
+            </Link>
           </div>
         </div>
       </div>

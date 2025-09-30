@@ -21,9 +21,8 @@ export function RemoveUser({
     });
 
     const json = await ret.json();
-    console.log("This is json: ", json);
+
     const user = JSON.parse(json);
-    console.log("after json.parse: ", user);
 
     if (ret) {
       removeUser(user.username);
