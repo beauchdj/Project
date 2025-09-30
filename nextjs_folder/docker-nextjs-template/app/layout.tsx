@@ -5,14 +5,11 @@ import "./lib/css/calendar.css";
 import Nav from "./lib/components/nav";
 export default function RootLayout({
   children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+}: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en">
       <body className={`antialiased`}>
         <SessionProvider>
-          {" "}
           {/* Pass the session provider down */}
           <Nav />
           {children}

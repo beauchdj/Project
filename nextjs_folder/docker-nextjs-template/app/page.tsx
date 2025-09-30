@@ -2,6 +2,7 @@
 
 import { CalendarComponent } from "./lib/components/calendar";
 import { fetchUsers } from "./lib/fetching/queries";
+import { getUser } from "./lib/fetching/queries";
 
 type User = {
   username: string;
@@ -12,6 +13,8 @@ type User = {
 export default async function page() {
   const data: User[] = await fetchUsers();
   // if (data[0]) console.log("got this data: ", data[0].username);
+  console.log("running getUser: ");
+  await getUser("user");
 
   return (
     <main className="flex w-full items-center justify-center mt-8 flex-col">

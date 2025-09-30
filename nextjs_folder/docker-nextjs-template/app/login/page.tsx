@@ -22,7 +22,7 @@ export default function Page() {
       <main className="w-full flex flex-col justify-center items-center mt-4 text-white rounded-2xl">
         <form
           onSubmit={loginHandler}
-          className="flex flex-col justify-center items-center h-50 w-75 bg-slate-700 rounded-3xl"
+          className="flex flex-col justify-center items-center h-50 -75 bg-slate-700 rounded-3xl"
         >
           <label htmlFor="username" className="">
             Username
