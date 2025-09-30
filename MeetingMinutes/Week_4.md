@@ -1,7 +1,7 @@
 Group Members: Dan Beachaine, Gavin Stankovsky, Jackie Sobolewski  
 Meeting Date:  9/29/2025  
 Meeting Time:  7pm  
-Members Present:  
+Members Present:  All
 Upcoming Deliverables Due: Demo Oct 9    
 Next Meeting:  10/6/2025  
 
@@ -24,3 +24,11 @@ Next Meeting:  10/6/2025
 
 <img src="https://github.com/beauchdj/Project/blob/308e3fb73315d9bc77eac572d7b9125eac3f644c/MeetingMinutes/Images/apptbookingdbdan.jpg" alt="Dan DB Model" width="400" height="600">
 <img src="https://github.com/beauchdj/Project/blob/308e3fb73315d9bc77eac572d7b9125eac3f644c/MeetingMinutes/Images/apptbookingdb.jpg" alt="Jackie DB Model" width="400" height="600">
+
+### Discussion: What do we want to have finished for the demo?
+  * Login
+  * Create Account/Register
+  * Once logged in, landing page for each account type displaying upcoming booked appointments
+      * as a user, your upcoming booked appointments
+      * as a service provider, your upcoming booked appointments
+      * as an admin, all upcoming booked appointments
