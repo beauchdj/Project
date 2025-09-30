@@ -14,11 +14,11 @@ Next Meeting:  10/6/2025
 | 5 min | Review takeaways, new action items, and decisions made from this meeting | 
 
 ### Meeting Agenda Items
-| Topic | Who | Notes | 
-|---|---|---|
-| Jira Review | All | Review the tickets Dan has created in Jira. What do we want to have accomplished for the first demo? Make sure all tickets are created (and assigned?) to accomplish that | 
-| Help | Jackie | Jackie has a few questions about git, database/docker, project structure to make sure she is understanding what is going on! |
-| Discuss DB Schema? | All | Images below |
+| Topic | Who | Description | Notes from Meeting |
+|---|---|---|---|
+| Jira Review | All | Review the tickets Dan has created in Jira. What do we want to have accomplished for the first demo? Make sure all tickets are created (and assigned?) to accomplish that | Decided on what we want to accomplish (see below). Created & assigned tickets in Jira |
+| Help | Jackie | Jackie has a few questions about git, database/docker, project structure to make sure she is understanding what is going on! | Gavin demo'd project structure, how to create components, etc |
+| Discuss DB Schema? | All | Images below | Jackie shared create db script for Gavin to load into postgres |
 
 ### Possible DB models
 
