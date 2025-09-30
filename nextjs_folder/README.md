@@ -72,11 +72,11 @@
 
 - layout.tsx: is the root file that houses the entire html js css frontend, notice how it is the only place where \<html\> and \<body\> tags exist. This file substitutes out what page.tsx is shown in place of { children } in the layout.tsx file.
 
-  #### Removing Docker image's volume
-* The goal is to remove the current docker container's saved volume. This volume is the home for the data saved in our database tables.
+  #### Removing Postgresql Docker image volume
+* The goal is to remove the current docker container's saved volume. This volume is the home for the data saved in our database.
 * Clearing the volume will allow init.sql to initalize the database again.
 ##### Process for removing postgres's volume 
-  1. Ensure docker is up and running. Along with making sure the image is turned off ( docker compose down or docker kill <image_name> ) 
+  1. Ensure docker is up and running. Along with making sure the image is turned off ( `docker compose down` or `docker kill <image_name/image_id>` ) 
   3. run: `docker volume ls` this will show you what volumes are created already
   4. run: `docker volume rm docker-nextjs-template_pgdata` this will delete the volume named docker-nextjs-template_pgdata
   5. Start up the postgres image again: `docker compose up` without -d you can see any errors thrown by the image container in the terminal.
