@@ -1,50 +1,44 @@
+"use client";
 import { User } from "next-auth";
-import { useActionState } from "react";
 
 export function RemoveUser({
   user,
   removeUser,
 }: {
   user: User;
-  removeUser: (user: User) => void;
+  removeUser: (user: string) => void;
 }) {
-  const [message, formAction, isPending] = useActionState(actionWrapper, "");
+  const handleDelete = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
 
-  // when the form is submitted submit http post request to the /api/users endpoint
-  async function actionWrapper(prevState: string, formData: FormData) {
+    const formData = new FormData(e.currentTarget);
     const username = formData.get("username") as string;
 
-    const users = await fetch("/api/users", {
+    const ret = await fetch("/api/users", {
       method: "DELETE",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ username: username }),
     });
-    const res: User = await users.json();
 
-    if (res) {
-      removeUser(res);
-      return "Success";
+    const json = await ret.json();
+    console.log("This is json: ", json);
+    const user = JSON.parse(json);
+    console.log("after json.parse: ", user);
+
+    if (ret) {
+      removeUser(user.username);
     }
-
-    return "Fail";
-  }
+  };
 
   return (
-    <form action={formAction}>
+    <form onSubmit={handleDelete} className="">
       <input name="username" type="hidden" defaultValue={user.username} />
       <button
         type="submit"
-        disabled={isPending}
-        className="bg-blue-500 hover:bg-blue-900 border-black border"
+        className="bg-blue-500 hover:bg-blue-900 border-black border px-2 cursor-pointer hover:text-red-500"
       >
-        Remove
+        X
       </button>
-      {message &&
-        (message === "Success" ? (
-          <p className="text-green-400">Success</p>
-        ) : (
-          <p className="text-red-400">Failed</p>
-        ))}
     </form>
   );
 }

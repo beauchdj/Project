@@ -15,14 +15,12 @@ import { UserList } from "./lib/user_list";
 export default async function Page() {
   // const str = "hot reload";
   const data: User[] = await fetchUsers();
-  console.log("DATA: ", data);
+  // console.log("DATA: ", data);
 
   return (
-    <div>
+    <div className="flex justify-center items-center flex-col">
       <p>This is the demo page</p>
-      <div className="h-[60vh] overflow-scroll">
-        <UserList user_list={data} />
-      </div>
+      <UserList user_list={data} />
     </div>
   );
 }

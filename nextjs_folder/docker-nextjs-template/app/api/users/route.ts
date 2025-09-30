@@ -1,3 +1,7 @@
+/**
+ * This route is used under /demo
+ *  Show casing server to client side interactions with
+ */
 import { NextResponse } from "next/server";
 import { pool } from "@/app/lib/fetching/db";
 import { User } from "next-auth";
@@ -24,10 +28,10 @@ export async function POST(request: Request) {
   console.log("This is the posted body: ", body);
 
   const created = { username: body.username, password: body.password };
-  const id = crypto.randomUUID();
+
   const res = await pool.query(
-    `INSERT INTO users (username, password) VALUES ($1,$2,$3)`,
-    [created.username, created.password, id]
+    `INSERT INTO users (fullname, username, hashpass) VALUES ($1, $2, $3)`,
+    [created.username, created.username, created.password]
   );
   console.log("This is from post: ", res);
 
@@ -37,11 +41,12 @@ export async function POST(request: Request) {
 export async function DELETE(request: Request) {
   const bod = await request.json();
   const username = bod.username;
-  console.log("dELETE: ", bod);
 
-  const res = await pool.query("DELETE FROM users WHERE username = $1", [
-    username,
-  ]);
+  // const res = await pool.query("DELETE FROM users WHERE username = $1", [
+  //   username,
+  // ]);
 
-  return NextResponse.json(JSON.stringify(username), { status: 200 });
+  return NextResponse.json(JSON.stringify({ username: username }), {
+    status: 200,
+  });
 }

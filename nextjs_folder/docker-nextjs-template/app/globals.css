@@ -23,7 +23,7 @@ body {
 }
 
 .input-element {
-  @apply border-white border indent-2 text-white rounded-xl;
+  @apply border-white border indent-2 text-white rounded-xl bg-black;
 }
 
 .btn {
