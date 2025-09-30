@@ -72,10 +72,10 @@
 
 - layout.tsx: is the root file that houses the entire html js css frontend, notice how it is the only place where \<html\> and \<body\> tags exist. This file substitutes out what page.tsx is shown in place of { children } in the layout.tsx file.
 
-  #### Removing Postgresql Docker image volume
+#### Removing Postgresql Docker image volume
 
-* The goal is to remove the current docker container's saved volume. This volume is the home for the data saved in our database.
-* Clearing the volume will allow init.sql to initalize the database again.
+- The goal is to remove the current docker container's saved volume. This volume is the home for the data saved in our database.
+- Clearing the volume will allow init.sql to initalize the database again.
 
 ##### Process for removing postgres's volume
 
@@ -83,11 +83,12 @@
 2. run: `docker volume ls` this will show you what volumes are created already
 3. run: `docker volume rm docker-nextjs-template_pgdata` this will delete the volume named docker-nextjs-template_pgdata
 4. Start up the postgres image again: `docker compose up` without -d you can see any errors thrown by the image container in the terminal.
-   ![docker volumes1](./images/volume1.png)
 
-##### You should see this somewhere in the wall of text from `docker compose up`
+![docker volumes1](./images/volume1.png)
+
+##### From the output of docker compose up you should see something like below, otherwise
 
 ![docker volumes2](./images/volume2.png)
 
-1. Visit localhost:8080 if no errors are thrown from `docker compose up`
-2. Check to see that the tables exist and users have 2 users, one appt_avail and one appt_bookings
+1. Visit localhost:8080 if no errors are thrown from `docker compose up` and log into adminer
+2. Check to see that the tables exist and you should two users: one basic user and a Service Provider, along with one appt_avail and one appt_bookings
