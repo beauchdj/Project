@@ -1,0 +1,36 @@
+CREATE DATABASE apptbookings2;
+USE apptbookings2;
+CREATE TABLE users (
+	Id int NOT NULL auto_increment,
+	fullname varchar(100) NOT NULL,
+    hashpass varchar(100) NOT NULL,
+    street1 varchar(50),
+    street2 varchar(20),
+    city varchar(30),
+    state varchar(5),
+    zip varchar(5),
+    phone varchar(10),
+    email varchar(50),
+    username varchar(50),
+    serviceCategory varchar(30),
+    userType varchar(30),
+    PRIMARY KEY (Id)
+    );
+CREATE TABLE appts (
+	Id int NOT NULL auto_increment,
+    spId int,
+    startTime DATETIME NOT NULL,
+    endTime DATETIME NOT NULL,
+    service varchar(30),
+    PRIMARY KEY (Id),
+    FOREIGN KEY (spId) References users(Id)
+    );
+CREATE TABLE bookings (
+	Id int NOT NULL auto_increment,
+    apptId int,
+    custId int,
+    bookStatus varchar(50),
+    PRIMARY KEY (Id),
+    FOREIGN KEY (apptId) References appts(Id),
+    FOREIGN KEY (custId) References users(Id)
+    );
