@@ -72,7 +72,12 @@
 
 - layout.tsx: is the root file that houses the entire html js css frontend, notice how it is the only place where \<html\> and \<body\> tags exist. This file substitutes out what page.tsx is shown in place of { children } in the layout.tsx file.
 
-- This will be updated further but for the sake of time im going to push this :D
+  #### Removing Docker image's volume
+* The goal is to remove the current docker container's saved volume. This volume is the home for the data saved in our database tables.
+* Clearing the volume will allow init.sql to initalize the database again.
+##### Process for removing postgres's volume 
+  1. Ensure docker is up and running. Along with making sure the image is turned off ( docker compose down or docker kill <image_name> ) 
+  3. run: `docker volume ls` this will show you what volumes are created already
+  4. run: `docker volume rm docker-nextjs-template_pgdata` this will delete the volume named docker-nextjs-template_pgdata
+  5. Start up the postgres image again: `docker compose up` without -d you can see any errors thrown by the image container in the terminal.
 
-# I would highly recommend asking chat-gpt for a crash course on `nextjs app router` for a quick summary of what is going on! NOTE: this project uses NEXTJS 15 which uses app router instead of pages router 
-# This project also uses tailwindcss for styling, this is not required but quickens up styling a page for sure ^_^
