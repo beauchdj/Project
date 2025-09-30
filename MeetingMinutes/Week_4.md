@@ -39,7 +39,7 @@ Code:
 * Login
 * Create Account/Register for Customers and Service Providers
 * Service Provider create appointments
-* Customer book appointments
+* Customer book appointments  
 Other:
 * Create Powerpoint
 * Update User Stories and Assumptions
