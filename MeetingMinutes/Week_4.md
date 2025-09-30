@@ -1,7 +1,7 @@
 Group Members: Dan Beachaine, Gavin Stankovsky, Jackie Sobolewski  
 Meeting Date:  9/29/2025  
 Meeting Time:  7pm  
-Members Present:  All
+Members Present:  All  
 Upcoming Deliverables Due: Demo Oct 9    
 Next Meeting:  10/6/2025  
 
