@@ -13,18 +13,20 @@ import bcrypt from "bcryptjs";
 export async function POST(response: Response) {
   try {
     const body: users_db = await response.json();
-    console.log("do we have the pass;", body.hashpass);
     const hashed = await bcrypt.hash(body.hashpass, 10);
-
-    console.log("did we hash?: ", hashed);
+    // validate the data passed in should prob do this on frontend
+    console.log("going to insert: ", body);
 
     const ret = await pool.query(
-      "INSERT INTO users (fullname, username, hashpass, usertype,street1,street2,city,state,zip,phone,email,servicecategory) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9 ,$10,$11,$12)",
+      "INSERT INTO users (providername, fullname, username, hashpass, isAdmin, isSp, isCustomer,street1,street2,city,state,zip,phone,email,servicecategory,qualifications) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16)",
       [
+        body.providername,
         body.fullname,
         body.username,
         hashed,
-        body.usertype,
+        body.isAdmin,
+        body.isSp,
+        body.isCustomer,
         body.street_1,
         body.street_2 || null,
         body.city,
@@ -33,12 +35,12 @@ export async function POST(response: Response) {
         body.phone,
         body.email,
         body.sp_type,
+        body.qualifications,
       ]
     );
+    console.log("got back registration query: ", ret);
 
-    console.log("Registered: ", ret);
-
-    return NextResponse.json(body, { status: 200 });
+    return NextResponse.json(body, { status: 201 });
   } catch (error) {
     console.log("Registration error: ", error);
     return NextResponse.json("Error in registration", { status: 500 });
@@ -46,6 +48,7 @@ export async function POST(response: Response) {
 }
 
 export async function PUT(response: Response) {
+  // should change this to a get with path parameter/query param
   const json = await response.json();
   const username = json.username;
   console.log("GET: ", json, username);
@@ -54,9 +57,9 @@ export async function PUT(response: Response) {
     username,
   ]);
   if (res.rowCount === 0) {
-    return NextResponse.json("Unauthorized", { status: 401 });
+    return NextResponse.json(null, { status: 401 });
   } else {
-    console.log("GOt rows! ", res.rows);
+    console.log("Got rows! ", res.rows);
   }
 
   return NextResponse.json(res.rows[0], { status: 200 });

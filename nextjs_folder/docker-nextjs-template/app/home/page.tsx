@@ -1,11 +1,15 @@
 "use server";
 
+import { auth } from "@/auth";
 import { fetchData } from "../../lib/queries";
 
 export default async function HomePage() {
   const d = await fetchData();
   let json: string[] = [];
   let length = 0;
+  const session = await auth();
+
+  console.log(session);
 
   if (d) {
     json = await d.json();
@@ -16,6 +20,7 @@ export default async function HomePage() {
     <main className="w-screen h-[80vh] flex justify-center items-center flex-col">
       <div className="w-full flex justify-center items-center m-2">
         hey its homepage
+        {session?.user && <div>{}</div>}
       </div>
       <div className="w-[90%] h-[99%] overflow-auto">
         <div className="bg-slate-700 p-4 rounded">

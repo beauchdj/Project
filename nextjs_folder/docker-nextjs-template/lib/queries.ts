@@ -25,11 +25,7 @@ export async function fetchData() {
 }
 
 export async function getUser(username: string): Promise<void> {
-  if (typeof process === "undefined") {
-    console.log("Edge Runtime USER!");
-  } else {
-    console.log("Node Runtime USER!");
-  }
+  console.log("Are we in runtime?: ", isRuntime());
   const res = await pool.query(`SELECT * FROM users WHERE username = $1`, [
     username,
   ]);

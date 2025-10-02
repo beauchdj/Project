@@ -1,20 +1,30 @@
 "use client";
 import { signIn } from "next-auth/react";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
 
 export default function Page() {
+  const [isError, setIsError] = useState<boolean>(false);
+  const route = useRouter();
   async function loginHandler(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    const form = e.currentTarget;
     const formData = new FormData(e.currentTarget);
     const username = formData.get("username") as string;
     const password = formData.get("password") as string;
 
-    e.preventDefault();
-
-    await signIn("credentials", {
+    const ret = await signIn("credentials", {
       username,
       password,
-      redirect: true,
-      callbackUrl: "/home",
+      redirect: false,
     });
+    if (!ret.error) {
+      setIsError(false);
+      route.push("/home");
+    } else {
+      setIsError(true);
+    }
+    if (form) form.reset();
   }
 
   return (
@@ -27,6 +37,7 @@ export default function Page() {
         name="username"
         placeholder="Username"
         className="input-element"
+        required
       />
       <label htmlFor="password" className="">
         Password
@@ -36,8 +47,14 @@ export default function Page() {
         name="password"
         placeholder="Password"
         className="input-element"
+        required
       />
-      <button className="btn shadow shadow-black mt-2" type="submit">
+      {isError && (
+        <p className="text-red-500 w-full text-center font-bold">
+          Invalid Credentials
+        </p>
+      )}
+      <button className="btn shadow shadow-black mt-1" type="submit">
         Login
       </button>
     </form>
