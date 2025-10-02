@@ -1,3 +1,4 @@
+export const runtime = "nodejs";
 /**
  * About auth.ts
  *  THE TYPES BEHIND ALLOWING THIS ARE IN types.d.ts  !!!!
@@ -8,6 +9,8 @@
  */
 import NextAuth, { User } from "next-auth";
 import Credentials from "next-auth/providers/credentials";
+import bcrypt from "bcryptjs";
+// import { getPassword } from "./lib/queries";
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
   session: {
@@ -19,8 +22,10 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     async jwt({ token, user }) {
       // console.log("jwt: ", token, user);
       if (token && user) {
-        token.poop = user.poop;
-        token.price = user.price;
+        token.address = user.address;
+        token.email_ = user.email;
+        token.sp_category = user.sp_category;
+        token.usertype = user.usertype;
         token.username = user.username;
       }
 
@@ -30,8 +35,9 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       // `session.user.address` is now a valid property, and will be type-checked
       if (token) {
         session.user.username = token.username;
-        session.user.poop = token.poop;
-        session.user.price = token.price;
+        session.user.address = token.address;
+        session.user.sp_category = token.sp_category;
+        session.user.email_ = token.email;
       }
       return session;
     },
@@ -53,25 +59,35 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       //   },
       // },
       authorize: async (credentials) => {
-        // console.log("authorize credentials: ", credentials);
+        console.log("authorize credentials: ", credentials);
+        const username = credentials.username as string;
+        const password = credentials.password as string;
+        // const saltRounds = 10;
         const user: User = {
-          username: credentials.username as string,
-          address: "123 lane dr",
-          role: "custer",
-          price: "4200",
-          poop: "💩",
+          username: username,
+          password: password,
         };
 
-        // logic to salt and hash password
-        // const pwHash = saltAndHashPassword(credentials.password);
+        const ret = await fetch("http://localhost:3000/api/accounts", {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ username: username }),
+        });
 
-        // logic to verify if the user exists
-        // user = await getUserFromDb(credentials.email, pwHash);
+        const json = await ret.json();
+
+        const comp = await bcrypt.compare(password, json.hashpass);
+        const retUser: User = json;
 
         if (!user) {
           // No user found, so this is their first attempt to login
           // Optionally, this is also the place you could do a user registration
           throw new Error("Invalid credentials.");
+        }
+
+        if (comp) {
+          console.log(user);
+          return retUser;
         }
 
         // console.log("authorizing this user: ", user);

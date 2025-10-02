@@ -230,7 +230,7 @@ export function RegisterForm() {
             required
           ></input>
         </label>
-        <button className="bg-sky-600 px-4 rounded-xl w-full hover:bg-sky-500 cursor-pointer mt-2 shadow-black shadow no-underline">
+        <button className="bg-sky-600 px-4 rounded-xl w-full hover:bg-sky-500 cursor-pointer mt-2 shadow-black shadow">
           Register
         </button>
       </form>

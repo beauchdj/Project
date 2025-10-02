@@ -3,7 +3,7 @@
  *  Show casing server to client side interactions with
  */
 import { NextResponse } from "next/server";
-import { pool } from "@/app/lib/fetching/db";
+import { pool } from "@/lib/db";
 import { User } from "next-auth";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
