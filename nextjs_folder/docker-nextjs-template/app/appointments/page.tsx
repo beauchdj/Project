@@ -30,10 +30,10 @@ export default async function CreateAppointments() {
     //const spId = typeof spIdRaw === "string" ? parseInt(spIdRaw, 10) : spIdRaw;
     //if (!spId || Number.isNaN(spId)) throw new Error("Invalid provider id on session.");
 
-    await pool.execute(
+    await pool.query(
         `
-        INSERT INTO appts (spId, service, starttime, endtime)
-        VALUES (?,?,?,?)
+        INSERT INTO appts_avail (spId, service, starttime, endtime)
+        VALUES ($1,$2,$3,$4)
         `,
         [spId,service,startAt,endAt]
     );
