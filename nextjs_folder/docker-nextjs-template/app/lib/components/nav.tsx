@@ -14,7 +14,7 @@ export default function Nav() {
       className="
       flex flex-row h-20 
       items-center justify-between
-      bg-gradient-to-l from-slate-800 to-slate-700 
+      bg-emerald-700
       rounded-3xl
       my-2
       mx-4

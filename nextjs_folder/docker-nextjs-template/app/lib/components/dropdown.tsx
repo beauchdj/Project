@@ -8,12 +8,15 @@ export default function Dropdown() {
   // const [selected, setSelected] = useState('');
 
   return (
-    <main className="drop-down">
-      <div className="group w-8 h-8 relative cursor-default">
-        <div className="text-black bg-amber-400 group-hover:bg-slate-400 h-8 w-8 items-center justify-center flex rounded-2xl">
+    <main className="">
+      <div className="group relative p-1 cursor-default">
+        <div className="flex flex-col gap-0.5">
+          <div className="hover-bar" />
+          <div className="hover-bar" />
+          <div className="hover-bar" />
           <div
             className={
-              "group-hover:flex group-hover:absolute flex-col hidden top-4 left-4 z-10 bg-slate-600 w-fit h-fit rounded" // default behavior is hidden, when the group is hovered it will stay with group-hover:...
+              "group-hover:flex group-hover:absolute flex-col hidden top-0 left-[-2em] z-10 bg-emerald-900 w-fit h-fit rounded-xl" // default behavior is hidden, when the group is hovered it will stay with group-hover:...
             }
           >
             <Link className="nav-btn" href={"/"}>
