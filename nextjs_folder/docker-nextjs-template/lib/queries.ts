@@ -1,4 +1,5 @@
-"use server";
+export const runtime = "nodejs";
+
 import { pool } from "./db";
 
 export async function fetchUsers() {
@@ -24,8 +25,32 @@ export async function fetchData() {
 }
 
 export async function getUser(username: string): Promise<void> {
+  if (typeof process === "undefined") {
+    console.log("Edge Runtime USER!");
+  } else {
+    console.log("Node Runtime USER!");
+  }
   const res = await pool.query(`SELECT * FROM users WHERE username = $1`, [
     username,
   ]);
   console.log("looked up a user: ", res.rows);
+}
+
+export async function getPassword(username: string) {
+  try {
+    const ret = pool.query("SELECT * FROM users WHERE username = $1", [
+      username,
+    ]);
+    console.log("got ret getPassword(): ", ret);
+  } catch (error) {
+    console.log("GOt an error in queries.ts/getPassword() ", error);
+  }
+}
+
+export function isRuntime(): void {
+  if (typeof process === "undefined") {
+    console.log("Edge Runtime!");
+  } else {
+    console.log("Node Runtime!");
+  }
 }

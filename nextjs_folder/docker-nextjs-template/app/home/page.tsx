@@ -1,6 +1,6 @@
 "use server";
 
-import { fetchData } from "../lib/fetching/queries";
+import { fetchData } from "../../lib/queries";
 
 export default async function HomePage() {
   const d = await fetchData();

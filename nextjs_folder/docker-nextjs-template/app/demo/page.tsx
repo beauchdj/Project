@@ -1,6 +1,6 @@
 "use server";
 import { User } from "next-auth";
-import { fetchUsers } from "../lib/fetching/queries";
+import { fetchUsers } from "../../lib/queries";
 import { UserList } from "./lib/user_list";
 
 /**

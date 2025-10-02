@@ -1,14 +1,15 @@
+export const runtime = "nodejs";
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { JWT } from "next-auth/jwt";
 
 declare module "next-auth/jwt" {
   /** Returned by the `jwt` callback and `auth`, when using JWT sessions */
   interface JWT {
-    address: string;
+    address?: string;
     username: string;
-    role: string;
-    price: string;
-    poop: string;
+    usertype?: string;
+    email?: string;
+    sp_category?: string;
   }
 }
 
@@ -18,12 +19,12 @@ declare module "next-auth" {
    */
   interface Session {
     user: {
-      /** The user's postal address. */
-      address: string;
+      address?: string;
+      fullname?: string;
       username: string;
-      role: string;
-      price: string;
-      poop: string;
+      usertype?: string;
+      sp_category?: string;
+      email?: string;
       /**
        * By default, TypeScript merges new interface properties and overwrites existing ones.
        * In this case, the default session user properties will be overwritten,
@@ -33,10 +34,12 @@ declare module "next-auth" {
     };
   }
   interface User {
-    address: string;
+    email_?: string;
+    address?: string;
+    fullname?: string;
     username: string;
-    role: string;
-    price: string;
-    poop: string;
+    password: string;
+    usertype?: string;
+    sp_category?: string;
   }
 }
