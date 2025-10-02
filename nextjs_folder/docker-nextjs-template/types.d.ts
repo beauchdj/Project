@@ -5,9 +5,14 @@ import { JWT } from "next-auth/jwt";
 declare module "next-auth/jwt" {
   /** Returned by the `jwt` callback and `auth`, when using JWT sessions */
   interface JWT {
+    id: string;
     address?: string;
+    qualifications?: string;
+    providername?: string;
     username: string;
-    usertype?: string;
+    isAdmin?: boolean;
+    isSp?: boolean;
+    isCustomer?: boolean;
     email?: string;
     sp_category?: string;
   }
@@ -19,12 +24,17 @@ declare module "next-auth" {
    */
   interface Session {
     user: {
+      id: string;
       address?: string;
       fullname?: string;
       username: string;
-      usertype?: string;
       sp_category?: string;
+      isAdmin?: boolean;
+      isSp?: boolean;
+      isCustomer?: boolean;
+      qualifications?: string;
       email?: string;
+      providername?: string;
       /**
        * By default, TypeScript merges new interface properties and overwrites existing ones.
        * In this case, the default session user properties will be overwritten,
@@ -34,12 +44,16 @@ declare module "next-auth" {
     };
   }
   interface User {
-    email_?: string;
+    id: string;
     address?: string;
     fullname?: string;
     username: string;
     password: string;
-    usertype?: string;
+    isAdmin?: boolean;
+    isSp?: boolean;
+    isCustomer?: boolean;
+    qualifications?: string;
     sp_category?: string;
+    providername?: string;
   }
 }

@@ -5,20 +5,24 @@ DROP TABLE IF EXISTS appts CASCADE;
 DROP TABLE IF EXISTS users CASCADE;
 
 CREATE TABLE public.users (
-    id uuid DEFAULT gen_random_uuid() NOT NULL,
-    fullname varchar(100) NOT NULL,
-    hashpass varchar(100) NOT NULL,
-    street1 varchar(50),
-    street2 varchar(20),
-    city varchar(30),
-    state varchar(5),
-    zip varchar(5),
-    phone varchar(10),
-    email varchar(50),
-    username varchar(50),
-    servicecategory varchar(30),
-    usertype varchar(30),
-    CONSTRAINT users_pkey PRIMARY KEY (id)
+      "id" uuid DEFAULT gen_random_uuid() NOT NULL,
+    "fullname" character varying(100) NOT NULL,
+    "hashpass" character varying(100) NOT NULL,
+    "street1" character varying(50),
+    "street2" character varying(20),
+    "city" character varying(30),
+    "state" character varying(5),
+    "zip" character varying(5),
+    "phone" character varying(10),
+    "email" character varying(50),
+    "username" character varying(50) NOT NULL,
+    "servicecategory" character varying(30),
+    "isadmin" boolean,
+    "issp" boolean,
+    "iscustomer" boolean,
+    "qualifications" character varying(255),
+    "providername" character varying(100),
+    CONSTRAINT "users_pkey" PRIMARY KEY ("id") 
 );
 
 CREATE TABLE public.appts_avail (
@@ -51,12 +55,6 @@ CREATE TABLE public.appt_bookings (
       ON DELETE CASCADE
 );
 
-INSERT INTO "users" ("id", "fullname", "hashpass", "street1", "street2", "city", "state", "zip", "phone", "email", "username", "servicecategory", "usertype") VALUES
-('381be27c-2d76-44db-a1e8-28dedf24647d',	'Example',	'nothashed',	'1021 amber city',	NULL,	'la crosse',	'wi',	'54603',	'6082029914',	'test@gmail.com',	'example',	NULL,	'basic'),
-('85d0144b-72aa-46a6-913e-cca1d5f5c7ac',	'sp_example',	'eeper',	NULL,	NULL,	NULL,	NULL,	NULL,	NULL,	NULL,	'sp_example',	'Medical',	'ServiceProvider');
-
-INSERT INTO "appts_avail" ("id", "spid", "starttime", "endtime", "service") VALUES
-('ea5a9223-cb91-4e73-9ca0-b970d9d4fbfc',	'85d0144b-72aa-46a6-913e-cca1d5f5c7ac',	'2025-09-30 16:09:56.612223',	'2025-09-30 16:14:56.612223',	NULL);
-
-INSERT INTO "appt_bookings" ("id", "apptid", "userid", "bookstatus") VALUES
-('30db9768-2ff0-4935-bf9b-c75206e2a533',	'ea5a9223-cb91-4e73-9ca0-b970d9d4fbfc',	'381be27c-2d76-44db-a1e8-28dedf24647d',	'booked');
+INSERT INTO "users" ("id", "fullname", "hashpass", "street1", "street2", "city", "state", "zip", "phone", "email", "username", "servicecategory", "isadmin", "issp", "iscustomer", "qualifications", "providername") VALUES
+('82dabe93-46b5-4d2b-aafa-25343949d0fa',	'Gavin S',	'$2b$10$cwetqFvi49nWQ.eSVr3Aq.lqtOBvCs4f4G3p1yxFYqsLr86NsR9/C',	'986',	'986',	'mad',	'wi',	'986',	'986',	'986',	'user',	'medical',	'0',	'1',	'1',	'986',	'Super Sweets'),
+('e6137093-9404-416c-a1e3-7a85964b9d55',	'Gavin Z',	'$2b$10$SI./dh.ZWWQsOxUcZgc6w.77.N2VPiClI7y7PZMrypbOsGv7AXFTK',	'123',	'1231',	'mad',	'wi',	'1234',	'123',	'123',	'user1',	NULL,	'0',	'0',	'1',	NULL,	NULL);

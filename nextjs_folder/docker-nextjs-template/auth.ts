@@ -10,63 +10,62 @@ export const runtime = "nodejs";
 import NextAuth, { User } from "next-auth";
 import Credentials from "next-auth/providers/credentials";
 import bcrypt from "bcryptjs";
+import { users_db } from "./app/lib/types/user_db";
 // import { getPassword } from "./lib/queries";
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
+  pages: {
+    signIn: "/login",
+  },
   session: {
     strategy: "jwt", // json-web-token, a way to hold an entire session in the users cookie, encrypts the data with our AUTH_SECRET in .env.local
-    maxAge: 6, // 60 seconds
+    maxAge: 60, // 60 seconds
     updateAge: 0,
   },
   callbacks: {
     async jwt({ token, user }) {
-      // console.log("jwt: ", token, user);
       if (token && user) {
+        token.id = user.id;
         token.address = user.address;
-        token.email_ = user.email;
+        token.email = user.email!;
         token.sp_category = user.sp_category;
-        token.usertype = user.usertype;
+        token.isAdmin = user.isAdmin;
+        token.isSp = user.isSp;
+        token.isCustomer = user.isCustomer;
         token.username = user.username;
       }
 
       return token;
     },
     async session({ session, token }) {
-      // `session.user.address` is now a valid property, and will be type-checked
       if (token) {
+        session.user.id = token.id;
         session.user.username = token.username;
         session.user.address = token.address;
+        session.user.isAdmin = token.isAdmin;
+        session.user.isSp = token.isSp;
+        session.user.isCustomer = token.isCustomer;
         session.user.sp_category = token.sp_category;
-        session.user.email_ = token.email;
+        session.user.email = token.email!;
       }
       return session;
     },
   },
   providers: [
     Credentials({
-      // THESE ARE FOR BUILT-IN PAGES NOT USING IT THO
-      // maybe this actually sets the type of the credentials pass in?
-      // credentials: {
-      //   email: {
-      //     type: "text",
-      //     label: "Username",
-      //     placeholder: "Username",
-      //   },
-      //   password: {
-      //     type: "password",
-      //     label: "Password",
-      //     placeholder: "Password",
-      //   },
-      // },
+      credentials: {
+        username: {
+          type: "text",
+          label: "Username",
+        },
+        password: {
+          type: "password",
+          label: "Password",
+        },
+      },
       authorize: async (credentials) => {
-        console.log("authorize credentials: ", credentials);
         const username = credentials.username as string;
         const password = credentials.password as string;
-        // const saltRounds = 10;
-        const user: User = {
-          username: username,
-          password: password,
-        };
 
         const ret = await fetch("http://localhost:3000/api/accounts", {
           method: "PUT",
@@ -74,25 +73,29 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           body: JSON.stringify({ username: username }),
         });
 
-        const json = await ret.json();
+        if (ret.status === 401) {
+          return null;
+        }
+
+        const json: users_db = await ret.json();
 
         const comp = await bcrypt.compare(password, json.hashpass);
-        const retUser: User = json;
 
-        if (!user) {
-          // No user found, so this is their first attempt to login
-          // Optionally, this is also the place you could do a user registration
-          throw new Error("Invalid credentials.");
-        }
+        const retUser: User = {
+          id: json.id!,
+          address: json.street_1,
+          email: json.email,
+          isAdmin: json.isAdmin,
+          isSp: json.isSp,
+          isCustomer: json.isCustomer,
+          username: json.username,
+          sp_category: json.sp_type,
+          password: json.hashpass,
+        };
 
-        if (comp) {
-          console.log(user);
-          return retUser;
-        }
+        if (!comp || !retUser) return null;
 
-        // console.log("authorizing this user: ", user);
-        // return user object with their profile data
-        return user;
+        return retUser;
       },
     }),
   ],

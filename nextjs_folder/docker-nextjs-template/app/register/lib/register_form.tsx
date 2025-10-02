@@ -11,7 +11,8 @@ export function RegisterForm() {
     const form = e.currentTarget;
     const fd = new FormData(form);
 
-    const role = fd.get("role") as string;
+    const isSp = fd.get("isSp") as string;
+    const isCustomer = fd.get("isCustomer") as string;
     const sp_type = fd.get("sp-type") as string;
     const fullname = fd.get("fullname") as string;
     const username = fd.get("username") as string;
@@ -23,13 +24,19 @@ export function RegisterForm() {
     const street_2 = fd.get("street_2") as string;
     const phone = fd.get("phone") as string;
     const email = fd.get("email") as string;
+    const qualifications = fd.get("qualifications") as string;
+    const providername = fd.get("providername") as string;
 
     const dt: users_db = {
       sp_type: sp_type,
       fullname: fullname,
+      providername: providername,
       username: username,
       hashpass: password,
-      usertype: role,
+      isAdmin: false,
+      isSp: !!isSp,
+      isCustomer: !!isCustomer,
+      qualifications: qualifications,
       city: city,
       state: state,
       zip: zip,
@@ -38,6 +45,7 @@ export function RegisterForm() {
       phone: phone,
       email: email,
     };
+    console.log("validate this: ", dt);
 
     // const validate;
 
@@ -65,25 +73,25 @@ export function RegisterForm() {
           Account Type:
           <div className="flex gap-1">
             <label className="flex gap-1 text-sm w-full">
-              Basic
+              Customer
               <input
-                defaultChecked
-                type="radio"
-                name="role"
-                value="basic"
+                type="checkbox"
+                name="isCustomer"
+                value="isCustomer"
                 className="cursor-pointer"
-                onChange={() => setIsSp(false)}
               />
             </label>
 
             <label className="flex gap-1 text-sm w-full">
               Service Provider
               <input
-                type="radio"
-                name="role"
-                value="service provider"
+                type="checkbox"
+                name="isSp"
+                value="isSp"
                 className="cursor-pointer"
-                onChange={() => setIsSp(true)}
+                onChange={(e) => {
+                  setIsSp(e.target.checked);
+                }}
               ></input>
             </label>
           </div>
@@ -121,9 +129,20 @@ export function RegisterForm() {
             </div>
           )}
         </div>
-
+        {isSp && (
+          <label className="label-col">
+            Provider Name
+            <input
+              type="text"
+              name="providername"
+              placeholder="Enter service name"
+              className="input-element"
+              required
+            ></input>
+          </label>
+        )}
         <label className="label-col">
-          {isSp ? <>Provider Name</> : <>Full Name</>}
+          Full Name
           <input
             type="text"
             name="fullname"
@@ -230,6 +249,18 @@ export function RegisterForm() {
             required
           ></input>
         </label>
+        {isSp && (
+          <label className="label-col">
+            Qualifications
+            <input
+              type="text"
+              name="qualifications"
+              className="input-element"
+              placeholder="Enter qualifications"
+              required
+            ></input>
+          </label>
+        )}
         <button className="bg-sky-600 px-4 rounded-xl w-full hover:bg-sky-500 cursor-pointer mt-2 shadow-black shadow">
           Register
         </button>

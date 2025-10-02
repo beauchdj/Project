@@ -1,6 +1,11 @@
 export type users_db = {
-  usertype: string;
-  sp_type: string;
+  id?: string;
+  isAdmin?: boolean;
+  isSp?: boolean;
+  isCustomer?: boolean;
+  qualifications?: string;
+  providername?: string;
+  sp_type?: string;
   fullname: string;
   username: string;
   hashpass: string;
