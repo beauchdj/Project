@@ -15,7 +15,7 @@ export default async function Page() {
     
   return (
     <div className="flex justify-center items-center flex-col">
-      <p>This is appointments page for user</p>
+      <p>This is the appointments page for my jira ticket</p>
     </div>
   );
 }
