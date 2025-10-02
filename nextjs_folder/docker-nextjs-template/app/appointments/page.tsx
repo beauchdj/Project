@@ -26,7 +26,7 @@ export default async function CreateAppointments() {
     if (endAt <= startAt) throw new Error("End time must be after start time.");
 
      // spId: adapt to your user ID type (string vs number)
-    const spId = session?.user.userId;
+    const spId = session?.user.id;
     //const spId = typeof spIdRaw === "string" ? parseInt(spIdRaw, 10) : spIdRaw;
     //if (!spId || Number.isNaN(spId)) throw new Error("Invalid provider id on session.");
 

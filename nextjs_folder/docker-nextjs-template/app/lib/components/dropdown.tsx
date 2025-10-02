@@ -34,6 +34,9 @@ export default function Dropdown() {
             <Link href={"/register"} className={"nav-btn"}>
               Register
             </Link>
+            <Link href={"/appointments"} className={"nav-btn"}>
+              Create Appt Availability
+            </Link>
           </div>
         </div>
       </div>
