@@ -44,7 +44,7 @@ function reducer(state: State, action: Action): State {
 
   switch (action.type) {
     case "print":
-      console.log(newMap);
+      // console.log(newMap);
       return { ...state, map: newMap };
     case "getfirst":
       return { ...state };

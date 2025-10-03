@@ -20,7 +20,6 @@ export function AddUser({ addUser }: { addUser: (user: User) => void }) {
     });
 
     const ret: User = await res.json();
-    console.log("this is ret: ", ret);
 
     if (res.ok) {
       addUser(ret);

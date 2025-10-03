@@ -1,12 +1,17 @@
 "use client";
 
+import { Session } from "next-auth";
 import Link from "next/link";
 
 // import { useState } from 'react';
 
-export default function Dropdown() {
+export default function Dropdown({ session }: { session?: Session | null }) {
   // const [selected, setSelected] = useState('');
-
+  let isSp = false;
+  if (session && session.user) {
+    isSp = session.user.isSp!;
+    console.log("should set isSp: ", isSp, session.user);
+  }
   return (
     <main className="">
       <div className="group relative p-1 cursor-default">
@@ -34,9 +39,11 @@ export default function Dropdown() {
             <Link href={"/register"} className={"nav-btn"}>
               Register
             </Link>
+            {/* {isSp && ( */}
             <Link href={"/appointments"} className={"nav-btn"}>
               Create Appt Availability
             </Link>
+            {/* )} */}
           </div>
         </div>
       </div>

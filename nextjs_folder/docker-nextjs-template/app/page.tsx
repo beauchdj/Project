@@ -13,7 +13,6 @@ type User = {
 export default async function page() {
   const data: User[] = await fetchUsers();
   // if (data[0]) console.log("got this data: ", data[0].username);
-  console.log("running getUser: ");
   await getUser("user");
 
   return (

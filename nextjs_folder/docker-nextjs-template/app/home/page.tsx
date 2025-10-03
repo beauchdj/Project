@@ -9,7 +9,7 @@ export default async function HomePage() {
   let length = 0;
   const session = await auth();
 
-  console.log(session);
+  // console.log("what is session: ", session, session?.user.isCustomer);
 
   if (d) {
     json = await d.json();

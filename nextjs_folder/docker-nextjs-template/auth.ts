@@ -68,11 +68,12 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         const username = credentials.username as string;
         const password = credentials.password as string;
 
-        const ret = await fetch("http://localhost:3000/api/accounts", {
-          method: "PUT",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ username: username }),
-        });
+        const ret = await fetch(
+          `http://localhost:3000/api/accounts?username=${username}`,
+          {
+            method: "GET",
+          }
+        );
 
         if (ret.status === 401) {
           return null;
@@ -85,10 +86,11 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         const retUser: User = {
           id: json.id!,
           address: json.street_1,
+          fullname: json.fullname,
           email: json.email,
-          isAdmin: json.isAdmin,
-          isSp: json.isSp,
-          isCustomer: json.isCustomer,
+          isAdmin: json.isadmin,
+          isSp: json.issp,
+          isCustomer: json.iscustomer,
           username: json.username,
           sp_category: json.sp_type,
           password: json.hashpass,

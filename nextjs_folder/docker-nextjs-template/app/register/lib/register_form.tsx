@@ -5,6 +5,8 @@ import { useState } from "react";
 
 export function RegisterForm() {
   const [isSp, setIsSp] = useState<boolean>(false);
+  const [charLimit, setCharLimit] = useState<number>(0);
+  const [serverError, setServerError] = useState<boolean>(false);
 
   async function handleRegister(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -33,9 +35,9 @@ export function RegisterForm() {
       providername: providername,
       username: username,
       hashpass: password,
-      isAdmin: false,
-      isSp: !!isSp,
-      isCustomer: !!isCustomer,
+      isadmin: false,
+      issp: !!isSp,
+      iscustomer: !!isCustomer,
       qualifications: qualifications,
       city: city,
       state: state,
@@ -45,9 +47,6 @@ export function RegisterForm() {
       phone: phone,
       email: email,
     };
-    console.log("validate this: ", dt);
-
-    // const validate;
 
     const ret = await fetch("/api/accounts", {
       method: "POST",
@@ -55,21 +54,25 @@ export function RegisterForm() {
       body: JSON.stringify(dt),
     });
 
-    const json = await ret.json();
+    await ret.json();
+    console.log(ret.ok, ret.status);
 
-    console.log("giving data back: ", json);
-
-    setIsSp(false);
-    form.reset();
+    if (ret.ok) {
+      setIsSp(false); // remove
+      form.reset();
+    } else {
+    }
   }
+
+  // function validateInput() {}
 
   return (
     <div className="flex w-full flex-col justify-center items-center text-black">
       <form
         onSubmit={handleRegister}
-        className="flex justify-center items-start flex-col bg-lime-200 px-12 py-8 text-black rounded-2xl w-[80%] shadow-white shadow underline"
+        className="flex justify-center items-start flex-col bg-emerald-700 px-12 py-8 text-black rounded-2xl w-[80%] shadow-white shadow "
       >
-        <div className="flex gap-1 mt-1 flex-col w-full">
+        <div className="flex gap-1 mt-1 flex-col w-full underline">
           Account Type:
           <div className="flex gap-1">
             <label className="flex gap-1 text-sm w-full">
@@ -79,6 +82,7 @@ export function RegisterForm() {
                 name="isCustomer"
                 value="isCustomer"
                 className="cursor-pointer"
+                required={!isSp} // service provider = true, require = false, service provider = false, require = true
               />
             </label>
 
@@ -251,19 +255,38 @@ export function RegisterForm() {
         </label>
         {isSp && (
           <label className="label-col">
-            Qualifications
-            <input
-              type="text"
-              name="qualifications"
-              className="input-element"
-              placeholder="Enter qualifications"
-              required
-            ></input>
+            <div className="flex justify-between items-end">
+              <span>Qualifications:</span>
+              <span className="text-sm">{charLimit}/255</span>
+            </div>
+            <div className="flex items-end gap-1">
+              <textarea
+                name="qualifications"
+                rows={2}
+                placeholder="Enter qualifications"
+                className="input-element"
+                maxLength={255}
+                onChange={(e) => setCharLimit(e.currentTarget.value.length)}
+                required
+              ></textarea>
+            </div>
           </label>
         )}
-        <button className="bg-sky-600 px-4 rounded-xl w-full hover:bg-sky-500 cursor-pointer mt-2 shadow-black shadow">
+        <button className="bg-sky-600 px-4 rounded-xl w-full hover:bg-sky-500 cursor-pointer mt-2 shadow-black shadow mb-2">
           Register
         </button>
+        <div className="">
+          <p className="flex gap-1">
+            Already have an account?
+            <a
+              href={"/login"}
+              className="underline text-lime-200 hover:text-blue-200 active:text-pink-600"
+            >
+              Login
+            </a>
+          </p>
+        </div>
+        {serverError && <div className="w-full text-center">{}</div>}
       </form>
     </div>
   );

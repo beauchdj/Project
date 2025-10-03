@@ -28,35 +28,48 @@ export default function Page() {
   }
 
   return (
-    <form onSubmit={loginHandler} className="">
-      <label htmlFor="username" className="">
-        Username
-      </label>
-      <input
-        type="text"
-        name="username"
-        placeholder="Username"
-        className="input-element"
-        required
-      />
-      <label htmlFor="password" className="">
-        Password
-      </label>
-      <input
-        type="password"
-        name="password"
-        placeholder="Password"
-        className="input-element"
-        required
-      />
-      {isError && (
-        <p className="text-red-500 w-full text-center font-bold">
-          Invalid Credentials
+    <main>
+      <form onSubmit={loginHandler} className="">
+        <label htmlFor="username" className="">
+          Username
+        </label>
+        <input
+          type="text"
+          name="username"
+          placeholder="Username"
+          className="input-element"
+          required
+        />
+        <label htmlFor="password" className="">
+          Password
+        </label>
+        <input
+          type="password"
+          name="password"
+          placeholder="Password"
+          className="input-element"
+          required
+        />
+        {isError && (
+          <p className="text-red-500 w-full text-center font-bold">
+            Invalid Credentials
+          </p>
+        )}
+        <button className="btn shadow shadow-black mt-1" type="submit">
+          Login
+        </button>
+      </form>
+      <div>
+        <p>
+          Don&apos;t have an account?{" "}
+          <a
+            href={"/register"}
+            className="underline text-blue-600 visited:text-purple-500 hover:text-blue-200"
+          >
+            Register
+          </a>
         </p>
-      )}
-      <button className="btn shadow shadow-black mt-1" type="submit">
-        Login
-      </button>
-    </form>
+      </div>
+    </main>
   );
 }
