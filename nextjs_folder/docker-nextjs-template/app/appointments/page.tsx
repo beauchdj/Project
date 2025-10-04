@@ -43,9 +43,10 @@ export default async function CreateAppointments() {
     [spId, startAt, endAt]
   );
 
-  if (conflict.rowCount > 0) {
-    // optional: return a proper UI message instead of throwing
-    throw new Error("This time overlaps an existing availability slot.");
+  const hasConflict = (conflict.rowCount ?? 0) > 0;
+  if (hasConflict) {
+    //return { ok: false, message: "This time overlaps an existing slot." };
+    //throw new Error("This time overlaps an existing availability slot.");
   }
 
     await pool.query(
@@ -54,14 +55,14 @@ export default async function CreateAppointments() {
         VALUES ($1,$2,$3,$4)
         `,
         [spId,service,startAt,endAt]
-    );
-    
+    );    
 
     //revalidatePath("/appointments");
     redirect("/appointments?created=1");
   }
 
   return (
+    <div className="min-h-screen bg-[url('/cows.jpg')] bg-cover bg-center flex items-center justify-center p-6">
     <main className="max-w-xl mx-auto p-6 bg-emerald-900 rounded-2xl text-white">
       <h1 className="text-2xl font-semibold mb-4">Create Available Appointment</h1>
 
@@ -119,6 +120,7 @@ export default async function CreateAppointments() {
         </div>
       </form>
     </main>
+    </div>
   );
 }
 
