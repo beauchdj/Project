@@ -1,4 +1,5 @@
 CREATE EXTENSION IF NOT EXISTS "pgcrypto";
+CREATE EXTENSION IF NOT EXISTS btree_gist;
 
 DROP TABLE IF EXISTS bookings CASCADE;
 DROP TABLE IF EXISTS appts CASCADE;
@@ -35,7 +36,12 @@ CREATE TABLE public.appts_avail (
     CONSTRAINT appts_avail_spid_fkey FOREIGN KEY (spid)
       REFERENCES users(id)
       ON UPDATE CASCADE
-      ON DELETE CASCADE
+      ON DELETE CASCADE,
+    CONSTRAINT appts_avail_no_overlap
+      EXCLUDE USING gist (
+        spId WITH =,
+        tsrange(starttime, endtime, '[)') WITH &&
+      )
 );
 
 
