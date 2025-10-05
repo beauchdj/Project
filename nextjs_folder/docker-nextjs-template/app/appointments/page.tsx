@@ -46,7 +46,7 @@ export default async function CreateAppointments() {
   const hasConflict = (conflict.rowCount ?? 0) > 0;
   if (hasConflict) {
     //return { ok: false, message: "This time overlaps an existing slot." };
-    //throw new Error("This time overlaps an existing availability slot.");
+    throw new Error("This time overlaps an existing availability slot.");
   }
 
     await pool.query(
