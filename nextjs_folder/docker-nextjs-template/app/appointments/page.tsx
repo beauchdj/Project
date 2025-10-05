@@ -11,11 +11,18 @@
 // component for interactivity (our form).
 
 import CreateAppointmentForm from "./CreateAppointmentForm";
+import { auth } from "../../auth"
+import { redirect } from "next/navigation";
 
-export default function AppointmentsPage() {
+export default async function AppointmentsPage() {
+
+    const session = await auth()
+    if (!session) redirect("/login");
+    if (!session.user.isSp) redirect("/");
      // This is a **Server Component**. It executes only on the server
      // and sends pre-rendered HTML to the browser.
      // It’s not interactive by itself — it just provides the layout.
+         
     return (
     <main className="max-w-full px-4 py-2">
         <div className="sticky top-0 z-10 bg-emerald-900/90 backdrop-blur-sm p-2">
