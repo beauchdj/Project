@@ -15,6 +15,7 @@ declare module "next-auth/jwt" {
     isCustomer?: boolean;
     email?: string;
     sp_category?: string;
+    fullname?: string;
   }
 }
 
