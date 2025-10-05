@@ -29,16 +29,16 @@ export default function Page() {
   }
 
   return (
-    <div className="min-h-screen bg-[url('/ph1.jpg')] bg-cover bg-center flex items-center justify-center p-6">
+    <div className="min-h-screen bg-[url('/ph1.jpg')] bg-cover bg-center flex items-center justify-center">
 
       <main>
-              <div className="flex flex-col items-center justify-center">
-        <h1 className="text-6xl font-extrabold italic font-italic opacity-70 text-slate-900 text-8xl md:text-6xl">
-          Welcome to Schwellness!
-        </h1>
-      </div>
+        <div className="flex flex-col items-center justify-center">
+          <h1 className="text-6xl font-extrabold italic font-times-new-roman opacity-70 text-slate-900 text-8xl md:text-6xl">
+            Welcome to Schwellness!
+          </h1>
+        </div>
         <div className="flex h-screen items-center justify-center space-x-10 opacity-84">
-          <div className="flex items-center justify-center bg-emerald-900 w-3/8 h-4/8 rounded-2xl relative size- backdrop-filter backdrop-blur-lg">
+          <div className="flex items-center justify-center bg-emerald-900 w-3/8 h-4/8 rounded-2xl relative size-90 p-5">
             <form onSubmit={loginHandler} className="text-center">
               <label htmlFor="username" className="text-center">
                 Username
@@ -74,7 +74,7 @@ export default function Page() {
 
           </div>
           <div className="flex items-center justify-center bg-emerald-900 w-3/8 h-4/8 rounded-2xl relative size-90">
-            <p className="text-center">
+            <p className="text-center text-xl font-extrabold italic">
               Don&apos;t have an account?{" "}
               <br></br>
               <a
