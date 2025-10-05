@@ -5,3 +5,7 @@
 [Jira](https://cs440proj.atlassian.net/jira/software/projects/CS440/boards/1)
 
 [Draw.io Website Plan](https://drive.google.com/file/d/1MF1Otc_CCyZcYn7nrSObG02eLefP255W/view?usp=sharing)
+
+[NextJS Image component](https://nextjs.org/docs/app/api-reference/components/image)
+
+[Demo 1 Presentation](https://docs.google.com/presentation/d/1RQHTGeDOGz0IFldidYTPYQXFgh4-dSacDkTzj2Zhy-4/edit?slide=id.p#slide=id.p)
