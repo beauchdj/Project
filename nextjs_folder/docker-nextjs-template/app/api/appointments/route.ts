@@ -3,7 +3,7 @@
 
 import { NextResponse } from "next/server"; // Utility to send HTTP responses
 import { auth } from "@/auth";
-import { createAvailabilitySlot } from "@/app/lib/services/appointmentService";
+import { createAvailabilitySlot, listAvailableAppointmentsForSearch } from "@/app/lib/services/appointmentService";
 
 export async function POST(req: Request) {
     // Route handlers receive a 'Request' object, similar to the Fetch API.
@@ -46,4 +46,32 @@ export async function POST(req: Request) {
             return NextResponse.json({ error: msg.replace("SERVER:", "") }, { status: 500 });
         return NextResponse.json({ error: "Server error." }, { status: 500 });
     }
+}
+
+export async function GET(req: Request) {
+  const session = await auth();
+  if (!session) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
+  const { searchParams } = new URL(req.url);
+  const criteria = {
+    category: searchParams.get("category") || "",
+    provider: searchParams.get("provider") || "",
+    service: searchParams.get("service") || "",
+    date: searchParams.get("date") || "", 
+    start: searchParams.get("start") || "",
+    end: searchParams.get("end") || "",
+    duration: searchParams.get("duration") || "",
+  };
+
+  try {
+    const slots = await listAvailableAppointmentsForSearch(criteria);
+    return NextResponse.json({ ok: true, slots }, { status: 200 });
+  } catch (err: any) {
+    const msg = String(err);
+    if (msg.startsWith("VALIDATION"))
+      return NextResponse.json({ error: msg.replace("VALIDATION:","") }, { status: 400 });
+    return NextResponse.json({ error: "Server error." }, { status: 500});
+  }
 }
