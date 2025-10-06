@@ -16,6 +16,23 @@ Next Meeting:  10/13/2025
 ### Meeting Agenda Items
 | Topic | Who | Description | Notes from Meeting |
 |---|---|---|---|
-| Upcoming Demo | All | Powerpoint   Code   Updated Assumptions/User Story | |
+| Upcoming Demo | All | What is involved: Powerpoint, Code (Demo Data), Updated Assumptions/User Story | |
 | Using AI for Dev | Jackie | Discuss: Should we be using? How should we use? | | 
 | Code Review! | Dan | Conduct a code review for Dan's Pull Request | |
+
+### Demo 1 Requiremets
+* Question: Do we need this deployed somewhere or ok to demo on our personal computer??
+      Regardless, we need to figure out deployment. Openstack? Have we decided this
+      already and I just forgot??
+  
+* Powerpoint:
+    * First slide: title of project and names
+    * Second slide: important assumptions
+    * Third slide; tech used
+    * Fourth slide: divion of teamwork, verson control, collaborations
+
+* Demo:
+    * Service Provider Registration
+    * Appointment Slot Creation
+    * Customer Registration
+    * Booking
