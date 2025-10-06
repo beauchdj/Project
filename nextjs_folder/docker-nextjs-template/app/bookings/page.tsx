@@ -2,7 +2,7 @@
 import { pool } from "@/lib/db";
 import { auth } from "../../auth";
 import { redirect } from "next/navigation";
-import { CalendarComponent } from "../lib/components/calendar";
+// import { CalendarComponent } from "../lib/components/calendar";
 
 type booking = {
   id: string;
@@ -33,8 +33,7 @@ export default async function Page() {
     <div>
       <h1>This is the Bookings Page for {session.user.fullname}</h1>
       <div className="flex bg-emerald-700 h-[40vh] flex-col">
-        <CalendarComponent />
-        {bookings?.map((booking: booking, idx) => (
+        {bookings?.map((booking: booking) => (
           <div
             key={booking.id}
             className="grid grid-cols-3 text-xs w-full h-fit hover:border-white hover:border-1 m-1"
