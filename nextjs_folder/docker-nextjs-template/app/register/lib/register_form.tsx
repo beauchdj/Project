@@ -61,6 +61,7 @@ export function RegisterForm() {
       setIsSp(false); // remove
       form.reset();
     } else {
+      setServerError(true);
     }
   }
 
@@ -286,7 +287,9 @@ export function RegisterForm() {
             </a>
           </p>
         </div>
-        {serverError && <div className="w-full text-center">{}</div>}
+        {serverError && (
+          <div className="w-full text-center">Something went wrong...</div>
+        )}
       </form>
     </div>
   );
