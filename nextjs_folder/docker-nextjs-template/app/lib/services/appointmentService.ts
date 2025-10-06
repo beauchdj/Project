@@ -128,3 +128,210 @@ export async function createAvailabilitySlot(spId: string, rawInput: unknown): P
             throw new Error(`SERVER:${msg}`);
     }
 }
+
+// ========== Types for availability search -- move to type folder ==========
+export type AvailabilitySearchCriteria = {
+  category?: string;
+  provider?: string; 
+  service?: string;
+  date?: string; 
+  start?: string;
+  end?: string; 
+  duration?: string;
+};
+
+export type AvailabilitySearchDto = {
+  id: string;
+  date: string; 
+  starttime: string;
+  endtime: string; 
+  service: string;
+  providerId: string;
+  providerName: string;
+  providerCategory: string;
+};
+
+// ========== Helper: build optional time filters ==========
+function isoFromLocal(date: string, time: string) {
+  // Local date + time → ISO (UTC)
+  const [y, m, d] = date.split("-").map(Number);
+  const [hh, mm] = time.split(":").map(Number);
+  const local = new Date(y, (m - 1), d, hh || 0, mm || 0, 0, 0);
+  return local.toISOString();
+}
+
+// ========== GET availability for searching ==========
+export async function listAvailableAppointmentsForSearch(criteria: AvailabilitySearchCriteria): Promise<AvailabilitySearchDto[]> {
+  // Build dynamic WHERE with parameter binding—safe and flexible
+  const where: string[] = [];
+  const params: any[] = [];
+  let p = 1;
+
+  // Search by provider category
+  if (criteria.category?.trim()) {
+    where.push(`LOWER(u.servicecategory) LIKE LOWER($${p++})`);
+    params.push(`%${criteria.category.trim()}%`);
+  }
+
+  // Search by provider *name*
+  if (criteria.provider?.trim()) {
+    where.push(`LOWER(u.providername) LIKE LOWER($${p++})`);
+    params.push(`%${criteria.provider.trim()}%`);
+  }
+
+  // Search by service (free text)
+  if (criteria.service?.trim()) {
+    where.push(`LOWER(a.service) LIKE LOWER($${p++})`);
+    params.push(`%${criteria.service.trim()}%`);
+  }
+
+  // Date-only filter: match starttime’s date to YYYY-MM-DD
+  if (criteria.date?.trim()) {
+    where.push(`(a.starttime::date = $${p++}::date)`);
+    params.push(criteria.date.trim());
+  }
+
+  // Start time lower bound (same-day-aware if date given, otherwise general time)
+  if (criteria.date?.trim() && criteria.start?.trim()) {
+    where.push(`a.starttime >= $${p++}::timestamp`); //update to timestamptz
+    params.push(isoFromLocal(criteria.date.trim(), criteria.start.trim()));
+  }
+
+  if (criteria.date?.trim() && criteria.end?.trim()) {
+    where.push(`a.endtime <= $${p++}::timestamp`); //update to timestamptz
+    params.push(isoFromLocal(criteria.date.trim(), criteria.end.trim()));
+  }
+
+  // Minimum duration (minutes); computed as end - start
+  if (criteria.duration?.trim()) {
+    const mins = parseInt(criteria.duration.trim(), 10);
+    if (!Number.isNaN(mins) && mins > 0) {
+      // interval 'X minutes'
+      where.push(`(EXTRACT(EPOCH FROM (a.endtime - a.starttime)) / 60) >= $${p++}`);
+      params.push(mins);
+    }
+  }
+
+  // Core query:
+ 
+  const q = `
+    SELECT
+      a.id,
+      a.service,
+      a.spid               AS provider_id,
+      u.providername       AS provider_name,
+      u.servicecategory    AS provider_category,
+      a.starttime,
+      a.endtime
+    FROM appts_avail a
+    JOIN users u
+      ON u.id = a.spid
+    LEFT JOIN appt_bookings b
+      ON b.apptid = a.id
+     AND b.bookstatus = 'Booked'      -- exclude already booked
+    ${where.length ? `WHERE ${where.join(" AND ")}` : ""}
+    AND b.id IS NULL                  -- only those with no "Booked" row
+    ORDER BY a.starttime ASC
+    LIMIT 200
+  `;
+  try {
+    const { rows } = await pool.query(q, params);
+
+    return rows.map((r) => {
+      const startISO = new Date(r.starttime).toISOString();
+      const endISO = new Date(r.endtime).toISOString();
+      return {
+        id: String(r.id),
+        date: startISO.slice(0, 10), 
+        starttime: startISO,
+        endtime: endISO,
+        service: String(r.service),
+        providerId: String(r.provider_id),
+        providerName: String(r.provider_name),
+        providerCategory: String(r.provider_category || ""),
+      };
+    });
+  } catch (err: any) {
+    console.error("SEARCH SQL ERROR:", {
+      code: err?.code,
+      message: err?.message,
+      detail: err?.detail,
+      where: err?.where,
+      query: q,
+      params,
+    });
+    throw new Error(`Server:${err?.message || "Unknown DB error"}`);  
+  }
+}
+
+
+// ========== POST booking ==========
+type BookAppointmentInput = {
+  apptId: string;     
+  customerId: string;
+};
+
+export async function bookAppointment(input: BookAppointmentInput): Promise<string> {
+  const { apptId, customerId } = input;
+
+  if (!apptId) throw new Error("VALIDATION:Appointment id is required.");
+  if (!customerId) throw new Error("VALIDATION:Customer id is required.");
+
+  // 1) Read the appointment window
+  const apptQ = `
+    SELECT id, spid, service, starttime, endtime
+    FROM appts_avail
+    WHERE id = $1
+    LIMIT 1
+  `;
+  const apptRes = await pool.query(apptQ, [apptId]);
+  const appt = apptRes.rows[0];
+  if (!appt) throw new Error("VALIDATION:Appointment not found.");
+
+  const startISO = new Date(appt.starttime).toISOString();
+  const endISO = new Date(appt.endtime).toISOString();
+
+  // 2) Ensure the appointment is still unbooked
+  const alreadyBookedQ = `
+    SELECT 1
+    FROM appt_bookings
+    WHERE apptid = $1
+      AND bookstatus = 'Booked'
+    LIMIT 1
+  `;
+  const alreadyBooked = await pool.query(alreadyBookedQ, [apptId]);
+  if (alreadyBooked.rowCount && alreadyBooked.rowCount > 0) {
+    throw new Error("CONFLICT:This appointment was just booked by someone else.");
+  }
+
+  // 3) Customer conflict check: does customer already have a Booked slot that overlaps?
+  const custConflictQ = `
+    SELECT 1
+    FROM appt_bookings b
+    JOIN appts_avail a ON a.id = b.apptid
+    WHERE b.userid = $1
+      AND b.bookstatus = 'Booked'
+      AND NOT ($3 <= a.starttime OR $2 >= a.endtime)
+    LIMIT 1
+  `;
+  const custConflict = await pool.query(custConflictQ, [customerId, startISO, endISO]);
+  if (custConflict.rowCount && custConflict.rowCount > 0) {
+    throw new Error("CONFLICT:You already have an appointment overlapping this time.");
+  }
+
+  // 4) Insert booking as "Booked"
+  try {
+    const insertQ = `
+      INSERT INTO appt_bookings (apptid, userid, bookstatus)
+      VALUES ($1, $2, 'Booked')
+      RETURNING id
+    `;
+    const ins = await pool.query(insertQ, [apptId, customerId]);
+    const id = ins.rows?.[0]?.id;
+    if (!id) throw new Error("SERVER:Booking created but no id returned.");
+    return String(id);
+  } catch (err: any) {
+
+    throw new Error(`SERVER:${String(err?.message || err)}`);
+  }
+}
