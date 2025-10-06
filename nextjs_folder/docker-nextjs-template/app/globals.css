@@ -35,5 +35,5 @@ body {
 }
 
 .hover-bar {
-  @apply text-black bg-gray-300 border border-black group-hover:bg-green-400 h-1.5 w-10 items-center justify-center flex rounded-2xl;
+  @apply text-black bg-gray-300 border border-black group-hover:bg-green-400 h-1.5 w-10 items-center justify-center flex rounded-2xl shrink-0;
 }
