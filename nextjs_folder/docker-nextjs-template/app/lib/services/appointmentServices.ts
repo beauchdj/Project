@@ -38,6 +38,7 @@ export async function getAllSpAppts(spId: string) {
     }
 }
 
+
 export async function getAllAvailAppts(serviceCategory: string) {
     try {
         const { rows } = await pool.query(
