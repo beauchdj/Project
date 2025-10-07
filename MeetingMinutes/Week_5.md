@@ -36,3 +36,6 @@ Next Meeting:  10/13/2025
     * Appointment Slot Creation
     * Customer Registration
     * Booking
+ 
+### To Do's
+* Jackie will ask Mao about using AI: prototyping, how to cite
