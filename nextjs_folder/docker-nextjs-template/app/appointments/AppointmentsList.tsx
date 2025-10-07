@@ -1,7 +1,6 @@
 "use client";
 import { useEffect } from "react";
 import { useState } from "react";
-//add useState for re-rendering on data fetch
 
 export default function AppointmentsList() {
     const [data, setData] = useState(null);
