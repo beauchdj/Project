@@ -37,5 +37,10 @@ Next Meeting:  10/13/2025
     * Customer Registration
     * Booking
  
-### To Do's
-* Jackie will ask Mao about using AI: prototyping, how to cite
+### To Do's Left
+* Jackie will ask Mao about using AI: prototyping, how to cite, expectations
+* Gavin will ask Mao about website deployment - get Openstack account. do we need this set up for Demo 1 or just for final demo?
+* Dan will give Mao access to our GitHub
+* Jackie and Gavin will do a code review of Dan's pull request
+* Jackie will submit a pull request for CreateAppts (tues) and BookAppts (wed)
+* Jackie will create supplmental docs for deliverable (updated assumptions, project plan, meeting minutes, signature page)
