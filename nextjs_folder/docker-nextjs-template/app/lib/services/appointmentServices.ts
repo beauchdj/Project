@@ -37,3 +37,21 @@ export async function getAllSpAppts(spId: string) {
         throw new Error ("Get Sp Appointments Error");
     }
 }
+
+export async function getAllAvailAppts(serviceCategory: string) {
+    try {
+        const { rows } = await pool.query(
+            `SELECT appts.starttime, appts.endtime, appts.service, sps.providername, sps.servicecategory, clients.fullname
+             FROM appts_avail AS appts
+             LEFT JOIN appt_bookings AS bookings ON bookings.apptid = appts.id
+             JOIN users as sps ON appts.spid = sps.id
+             LEFT JOIN users as clients ON bookings.userid = clients.id
+             WHERE clients.fullname IS NULL AND sps.servicecategory = $1
+            `,
+            [serviceCategory]
+        );
+        return rows;
+    } catch (error) {
+        throw new Error ("Get All Available Appointments Error");
+    }
+}
