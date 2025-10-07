@@ -15,6 +15,7 @@ export default function SearchAppts() {
         const data = await response.json();
         console.log(data);
     }
+    
     return (
         <section className="space-y-3">
             <form
