@@ -1,3 +1,5 @@
+// endpoints for service providers to create available appointments and get their appointments (all of them - booked and open)
+
 import { NextResponse } from "next/server";
 import { auth } from "@/auth";
 import { createAvailabilitySlot, getAllSpAppts } from "@/app/lib/services/appointmentServices";
