@@ -1,18 +1,26 @@
 "use client" 
 
-export default function SearchAppts() {
+type Props = {
+    onResults?: (data: any) => void;
+}
+
+export default function SearchAppts({ onResults }: Props) {
 
      async function onSubmit(event: React.FormEvent<HTMLFormElement>) {
         event.preventDefault();
 
         const formData = new FormData(event.currentTarget);
-        const category = formData.get("category");
+        const category = (formData.get("category") || "").toString().trim();
         
-        const response = await fetch("/api/appointments?providercategory=${category}",{
+        const params = new URLSearchParams();
+        if (category) params.set("category", category);
+
+        const response = await fetch(`/api/openings?${params.toString()}`,{
             method: "GET",
         });
         
         const data = await response.json();
+        onResults?.(data);
         console.log(data);
     }
     
