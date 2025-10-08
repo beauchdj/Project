@@ -43,7 +43,6 @@ export async function getAllSpAppts(spId: string) {
 }
 
 export async function getAllAvailAppts(serviceCategory: string | null) {
-  console.log("Where does this search? ", serviceCategory);
   try {
     const { rows } = await pool.query(
       `SELECT appts.starttime, appts.endtime, appts.service, sps.providername, sps.servicecategory, clients.fullname, appts.id
@@ -55,7 +54,7 @@ export async function getAllAvailAppts(serviceCategory: string | null) {
             `,
       [serviceCategory]
     );
-    console.log("got back: ", rows);
+    // console.log("got back: ", rows);
     return rows;
   } catch (error) {
     console.log("appointment services error: ", error);
