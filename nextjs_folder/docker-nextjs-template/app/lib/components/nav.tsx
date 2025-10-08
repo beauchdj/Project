@@ -31,7 +31,7 @@ export default function Nav() {
     >
       <Dropdown session={session} />
       <h1 className="flex-1 w-full flex justify-center text-6xl bg-clip-text text-transparent bg-gradient-to-r from-sky-400 to-lime-400 italic font-serif ">
-        Shwellness
+        Schwellness
       </h1>
       {/* <div>Status: {status}</div> */}
       {/* {session && <Roles session={session} />} */}
