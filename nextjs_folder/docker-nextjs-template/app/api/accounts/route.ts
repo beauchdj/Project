@@ -37,7 +37,6 @@ export async function POST(response: Response) {
         body.qualifications,
       ]
     );
-    throw new Error("Some error");
 
     return NextResponse.json(body, { status: 201 });
   } catch (error) {

@@ -11,6 +11,7 @@ export default function Nav() {
   };
 
   console.log(session);
+  if (status === "loading") return <Loading />;
 
   return (
     <main
@@ -18,10 +19,11 @@ export default function Nav() {
       flex flex-row h-20 
       items-center justify-between
       bg-emerald-700
-      mb-2
       px-4
-      mx-2
+      m-2
       rounded-2xl
+      shadow-black
+      shadow
     "
     >
       <Dropdown session={session} />
@@ -46,5 +48,26 @@ function Roles({ session }: { session: Session }) {
         {session?.user.isSp ? "true" : "false"}
       </div>
     </div>
+  );
+}
+
+function Loading() {
+  return (
+    <main
+      className="
+      flex flex-row h-20 
+      items-center justify-between
+      bg-emerald-700
+      text-end
+      px-4
+      m-2
+      rounded-2xl
+      shadow-black
+      shadow
+      w-full
+    "
+    >
+      Loading...
+    </main>
   );
 }

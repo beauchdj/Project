@@ -23,17 +23,15 @@ export default async function HomePage() {
         {session?.user && <div>{}</div>}
       </div>
       <div className="w-[90%] h-[99%] overflow-auto">
-        <div className="bg-slate-700 p-4 rounded">
-          {(length > 0 &&
-            json.map((baconipsum, index) => (
-              <div
-                key={index}
-                className="rounded-2xl p-4 m-2 bg-black/85 text-white"
-              >
-                {baconipsum}
-              </div>
-            ))) || <>Fetch failed!</>}
-        </div>
+        {(length > 0 &&
+          json.map((baconipsum, index) => (
+            <div
+              key={index}
+              className="rounded-2xl p-4 m-2 bg-black/85 text-white"
+            >
+              {baconipsum}
+            </div>
+          ))) || <>Fetch failed!</>}
       </div>
     </main>
   );

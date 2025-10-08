@@ -7,14 +7,19 @@ export function RegisterForm() {
   const [isSp, setIsSp] = useState<boolean>(false);
   const [charLimit, setCharLimit] = useState<number>(0);
   const [serverError, setServerError] = useState<boolean>(false);
+  const [showPhone, setShowPhone] = useState<boolean>(false);
+  const [showZip, setShowZip] = useState<boolean>(false);
+  const [showCity, setShowCity] = useState<boolean>(false);
+  const [emailError, setEmailError] = useState<boolean>(false);
+  const [stateError, setStateError] = useState<boolean>(false);
 
   async function handleRegister(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     const form = e.currentTarget;
     const fd = new FormData(form);
 
-    const isSp = fd.get("isSp") as string;
-    const isCustomer = fd.get("isCustomer") as string;
+    const isSp = !!fd.get("isSp");
+    const isCustomer = !!fd.get("isCustomer");
     const sp_type = fd.get("sp-type") as string;
     const fullname = fd.get("fullname") as string;
     const username = fd.get("username") as string;
@@ -29,48 +34,90 @@ export function RegisterForm() {
     const qualifications = fd.get("qualifications") as string;
     const providername = fd.get("providername") as string;
 
-    const dt: users_db = {
-      sp_type: sp_type,
-      fullname: fullname,
-      providername: providername,
-      username: username,
-      hashpass: password,
-      isadmin: false,
-      issp: !!isSp,
-      iscustomer: !!isCustomer,
-      qualifications: qualifications,
-      city: city,
-      state: state,
-      zip: zip,
-      street_1: street_1,
-      street_2: street_2,
-      phone: phone,
-      email: email,
-    };
+    const isValid = validateInput(zip, city, phone, state, email);
 
-    const ret = await fetch("/api/accounts", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(dt),
-    });
+    if (isValid) {
+      const dt: users_db = {
+        sp_type: sp_type,
+        fullname: fullname,
+        providername: providername,
+        username: username,
+        hashpass: password,
+        isadmin: false,
+        issp: isSp,
+        iscustomer: isCustomer,
+        qualifications: qualifications,
+        city: city,
+        state: state,
+        zip: zip,
+        street_1: street_1,
+        street_2: street_2,
+        phone: phone,
+        email: email,
+      };
 
-    await ret.json();
-    console.log(ret.ok, ret.status);
+      const ret = await fetch("/api/accounts", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(dt),
+      });
 
-    if (ret.ok) {
-      setIsSp(false); // remove
-      form.reset();
-    } else {
+      await ret.json();
+
+      if (ret.ok) {
+        setIsSp(false); // remove
+        form.reset();
+      } else {
+        setServerError(true);
+      }
     }
   }
 
-  // function validateInput() {}
+  function validateInput(
+    zip: string,
+    city: string,
+    phone: string,
+    state: string,
+    email: string
+  ): boolean {
+    if (state.length > 5) {
+      setStateError(true);
+      return false;
+    } else {
+      setStateError(false);
+    }
+
+    const phoneRegex: RegExp = new RegExp(
+      "^(\\(?\\d{3}\\)?[\\s.-]?)?\\d{3}[\\s.-]?\\d{4}$"
+    );
+    const zipRegex: RegExp = new RegExp("^\\d{5}$");
+    const cityRegex: RegExp = new RegExp("^[a-zA-Z\\s'-]+$");
+    const emailRegex: RegExp = new RegExp(
+      "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+.[a-zA-Z]{2,}$"
+    );
+
+    const phoneTest = !phoneRegex.test(phone);
+    const zipTest = !zipRegex.test(zip);
+    const cityTest = !cityRegex.test(city);
+    const emailTest = !emailRegex.test(email);
+
+    setShowPhone(phoneTest);
+    setShowZip(zipTest);
+    setShowCity(cityTest);
+    setEmailError(emailTest);
+
+    if (phoneTest || zipTest || cityTest || emailTest) {
+      return false;
+    }
+
+    return true;
+  }
 
   return (
-    <div className="flex w-full flex-col justify-center items-center text-black">
+    <div className="flex w-full flex-col justify-center items-center text-black h-[calc(100vh-10rem)]">
       <form
         onSubmit={handleRegister}
-        className="flex justify-center items-start flex-col bg-emerald-700 px-12 py-8 text-black rounded-2xl w-[80%] shadow-white shadow "
+        className="flex items-start flex-col bg-emerald-700 px-12 py-8 text-black rounded-2xl w-[80%] shadow-white shadow h-[calc(100vh-10rem)] overflow-auto"
       >
         <div className="flex gap-1 mt-1 flex-col w-full underline">
           Account Type:
@@ -100,7 +147,7 @@ export function RegisterForm() {
             </label>
           </div>
           {isSp && (
-            <div className="flex flex-col text-center">
+            <div className="flex flex-col text-start">
               Service Provider Type:
               <label className="flex gap-1 text-sm">
                 Beauty
@@ -187,6 +234,7 @@ export function RegisterForm() {
             placeholder="Enter your city"
             required
           ></input>
+          {showCity && <p className="error-txt">City must have only letters</p>}
         </label>
 
         <label className="label-col">
@@ -198,6 +246,9 @@ export function RegisterForm() {
             placeholder="Enter your state"
             required
           ></input>
+          {stateError && (
+            <p className="error-text">Requires a two digit state</p>
+          )}
         </label>
 
         <label className="label-col">
@@ -209,6 +260,7 @@ export function RegisterForm() {
             placeholder="Enter your zip code"
             required
           ></input>
+          {showZip && <p className="error-text">Invalid Zip Code</p>}
         </label>
 
         <label className="label-col">
@@ -241,6 +293,7 @@ export function RegisterForm() {
             placeholder="Phone number"
             required
           ></input>
+          {showPhone && <p className="error-text">Invalid Phone Number</p>}
         </label>
 
         <label className="label-col">
@@ -252,6 +305,7 @@ export function RegisterForm() {
             placeholder="Email address"
             required
           ></input>
+          {emailError && <p className="error-text">Invalid Email</p>}
         </label>
         {isSp && (
           <label className="label-col">
@@ -272,6 +326,9 @@ export function RegisterForm() {
             </div>
           </label>
         )}
+        {serverError && (
+          <div className="error-text text-center">Server Error...</div>
+        )}
         <button className="bg-sky-600 px-4 rounded-xl w-full hover:bg-sky-500 cursor-pointer mt-2 shadow-black shadow mb-2">
           Register
         </button>
@@ -286,7 +343,6 @@ export function RegisterForm() {
             </a>
           </p>
         </div>
-        {serverError && <div className="w-full text-center">{}</div>}
       </form>
     </div>
   );
