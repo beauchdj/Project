@@ -19,12 +19,14 @@ export default async function CreateAppointmentsPage() {
   if (!session.user.isSp) redirect("/");
 
   return (
-    <main className="max-w-full px-4 py-2">
-      <div className="sticky top-0 z-0 bg-emerald-900/90 backdrop-blur-sm p-2">
-        <CreateApptForm />
-      </div>
-      <div className="my-4 font-semibold text-lg">
-        <AppointmentsList />
+    <main className="max-w-full flex justify-center overflow-auto z-0">
+      <div className="w-[95%] px-4 py-2 bg-emerald-900/90 backdrop-blur-sm p-2 rounded-xl">
+        <div className="sticky top-0 ">
+          <CreateApptForm />
+        </div>
+        <div className="my-4 font-semibold text-lg">
+          <AppointmentsList />
+        </div>
       </div>
     </main>
   );

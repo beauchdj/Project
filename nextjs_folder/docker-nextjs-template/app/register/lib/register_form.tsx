@@ -1,6 +1,7 @@
 "use client";
 
 import { users_db } from "@/app/lib/types/user_db";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 export function RegisterForm() {
@@ -12,9 +13,11 @@ export function RegisterForm() {
   const [showCity, setShowCity] = useState<boolean>(false);
   const [emailError, setEmailError] = useState<boolean>(false);
   const [stateError, setStateError] = useState<boolean>(false);
+  const router = useRouter();
 
   async function handleRegister(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
+    setServerError(false);
     const form = e.currentTarget;
     const fd = new FormData(form);
 
@@ -67,6 +70,8 @@ export function RegisterForm() {
       if (ret.ok) {
         setIsSp(false); // remove
         form.reset();
+        setServerError(false);
+        router.push("/login");
       } else {
         setServerError(true);
       }
@@ -88,7 +93,7 @@ export function RegisterForm() {
     }
 
     const phoneRegex: RegExp = new RegExp(
-      "^(\\(?\\d{3}\\)?[\\s.-]?)?\\d{3}[\\s.-]?\\d{4}$"
+      "^(\\+1)?[\\s.-]?(\\(?\\d{3}\\)?[\\s.-]?)?\\d{3}[\\s.-]?\\d{4}$"
     );
     const zipRegex: RegExp = new RegExp("^\\d{5}$");
     const cityRegex: RegExp = new RegExp("^[a-zA-Z\\s'-]+$");
@@ -117,7 +122,7 @@ export function RegisterForm() {
     <div className="flex w-full flex-col justify-center items-center text-black h-[calc(100vh-10rem)]">
       <form
         onSubmit={handleRegister}
-        className="flex items-start flex-col bg-emerald-700 px-12 py-8 text-black rounded-2xl w-[80%] shadow-white shadow h-[calc(100vh-10rem)] overflow-auto"
+        className="flex items-start flex-col bg-emerald-800/90 border-black border-2 px-12 py-8 text-black rounded-2xl w-[80%] shadow-black shadow h-[calc(100vh-10rem)] overflow-auto"
       >
         <div className="flex gap-1 mt-1 flex-col w-full underline">
           Account Type:

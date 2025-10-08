@@ -2,8 +2,10 @@
 
 import { auth } from "@/auth";
 import { fetchData } from "../../lib/queries";
+import { redirect } from "next/navigation";
 
 export default async function HomePage() {
+  redirect("/"); // dont allow visits to /home goto -> /
   const d = await fetchData();
   let json: string[] = [];
   let length = 0;

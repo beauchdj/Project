@@ -1,7 +1,9 @@
 "use client";
 
+import { Booking } from "../lib/types/Booking";
+
 type Props = {
-  onResults?: (data: any) => void;
+  onResults?: (data: Booking[]) => void;
 };
 
 export default function SearchAppts({ onResults }: Props) {
@@ -20,7 +22,6 @@ export default function SearchAppts({ onResults }: Props) {
 
     const data = await response.json();
     onResults?.(data);
-    console.log("this is adta: ", data);
   }
 
   return (
@@ -38,7 +39,7 @@ export default function SearchAppts({ onResults }: Props) {
 
         <select
           name="category"
-          className="w-28 md:w-36 rounded-md px-2 py-1 text-black text-sm focus:outline-none focus:ring-2 focus:ring-emerald-400"
+          className="w-28 md:w-36 rounded-md px-2 py-1 text-white text-sm focus:outline-none focus:ring-2 focus:ring-emerald-400"
           defaultValue=""
         >
           <option value="" disabled>

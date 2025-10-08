@@ -6,8 +6,8 @@
 }
 
 body {
-  /* background-image: url(../lib/dumb.png);
-  background-size: auto; */
+  background-image: url("../public/gemini_earthy_bg.png");
+  background-size: auto;
   background-color: var(--foreground);
   color: var(--background);
   font-family: Arial, Helvetica, sans-serif;
@@ -15,11 +15,11 @@ body {
 
 .nav-btn {
   @apply m-2 
-  bg-lime-500 
+  bg-teal-300 
   hover:bg-lime-300
   px-5
   py-2
-  text-white 
+  text-black
   rounded-2xl
   text-center
   shadow-black
@@ -41,5 +41,9 @@ body {
 }
 
 .error-text {
-  @apply text-red-500 text-sm w-full font-bold;
+  @apply text-orange-600 w-full font-bold font-sans;
+}
+
+.visit-links {
+  @apply underline text-lime-200 hover:text-blue-200 active:text-pink-600;
 }

@@ -1,5 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
+import { formatter } from "../lib/types/Formatter";
 
 type Row = {
   id?: string;
@@ -45,10 +46,12 @@ export default function AppointmentsList() {
               const customer = row.fullname ?? "";
               return (
                 <tr key={row.id ?? i} className="hover:bg-white/5">
-                  <td className="px-3 py-2 whitespace-nowrap">
-                    {row.starttime}
+                  <td className="px-3 py-2 whitespace-nowrap text-xs">
+                    {formatter.format(new Date(row.starttime))}
                   </td>
-                  <td className="px-3 py-2 whitespace-nowrap">{row.endtime}</td>
+                  <td className="px-3 py-2 whitespace-nowrap text-xs">
+                    {formatter.format(new Date(row.endtime))}
+                  </td>
                   <td className="px-3 py-2">{row.service}</td>
                   <td className="px-3 py-2">
                     {customer || <span className="opacity-60">—</span>}

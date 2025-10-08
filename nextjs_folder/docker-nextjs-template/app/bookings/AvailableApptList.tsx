@@ -1,15 +1,10 @@
 "use client";
+import { Booking } from "../lib/types/Booking";
+import { formatter } from "../lib/types/Formatter";
 import BookApptButton from "./BookApptButton";
 
 type Props = {
-  data: Row[] | null;
-};
-type Row = {
-  id: string;
-  starttime: string;
-  endtime: string;
-  service: string;
-  providername: string;
+  data: Booking[] | null;
 };
 
 export default function AvailableApptsList({ data }: Props) {
@@ -43,9 +38,11 @@ export default function AvailableApptsList({ data }: Props) {
               return (
                 <tr key={row.id} className="hover:bg-white/5">
                   <td className="px-3 py-2 whitespace-nowrap">
-                    {new Date(row.starttime).toLocaleString()}
+                    {formatter.format(new Date(row.starttime))}
                   </td>
-                  <td className="px-3 py-2 whitespace-nowrap">{row.endtime}</td>
+                  <td className="px-3 py-2 whitespace-nowrap">
+                    {formatter.format(new Date(row.endtime))}
+                  </td>
                   <td className="px-3 py-2">{row.service}</td>
                   <td className="px-3 py-2">{row.providername}</td>
                   <td className="px-3 py-2">

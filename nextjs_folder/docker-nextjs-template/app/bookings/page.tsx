@@ -9,7 +9,6 @@
 // error handling, loading state, redirection
 
 "use server";
-import { pool } from "@/lib/db";
 import { auth } from "../../auth";
 import { redirect } from "next/navigation";
 import BookingClient from "./BookingClient";
@@ -19,8 +18,8 @@ export default async function Page() {
   if (!session) redirect("/login");
 
   return (
-    <main className="w-full bg-emerald-900 text-white px-4 py-3">
-      <div>
+    <main className="flex items-center justify-center w-full">
+      <div className="w-[95%] bg-emerald-900 text-white px-4 py-4 rounded-xl">
         <h1 className="text-lg font-semibold mb-3">
           Find and Book Appointments
         </h1>

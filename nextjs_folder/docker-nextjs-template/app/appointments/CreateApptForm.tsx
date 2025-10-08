@@ -19,7 +19,7 @@ export default function CreateApptForm() {
       }),
     });
 
-    const data = await response.json();
+    await response.json();
   }
 
   return (
@@ -31,26 +31,26 @@ export default function CreateApptForm() {
         name="date"
         type="date"
         required
-        className="rounded-md px-2 py-1 text-black text-sm focus:outline-none focus:ring-2 focus:ring-emerald-400"
+        className="rounded-md px-2 py-1 text-white text-sm focus:outline-none focus:ring-2 focus:ring-emerald-400"
       />
       <input
         name="starttime"
         type="time"
         required
-        className="rounded-md px-2 py-1 text-black text-sm focus:outline-none focus:ring-2 focus:ring-emerald-400"
+        className="rounded-md px-2 py-1 text-white text-sm focus:outline-none focus:ring-2 focus:ring-emerald-400"
       />
       <input
         name="endtime"
         type="time"
         required
-        className="rounded-md px-2 py-1 text-black text-sm focus:outline-none focus:ring-2 focus:ring-emerald-400"
+        className="rounded-md px-2 py-1 text-white text-sm focus:outline-none focus:ring-2 focus:ring-emerald-400"
       />
       <input
         name="service"
         type="text"
-        placeholder="Service description"
+        placeholder="Service Description"
         required
-        className="w-32 md:w-48 rounded-md px-2 py-1 text-black text-sm focus:outline-none focus:ring-2 focus:ring-emerald-400"
+        className="w-36 md:w-48 rounded-md px-2 py-1 text-white text-sm focus:outline-none focus:ring-2 focus:ring-emerald-400"
       />
 
       <button
@@ -60,7 +60,7 @@ export default function CreateApptForm() {
                     text-white font-semibold
                     px-3 py-1 rounded-md
                     transition
-                disabled:opacity-50"
+                disabled:opacity-50 cursor-pointer"
       >
         Create
       </button>
