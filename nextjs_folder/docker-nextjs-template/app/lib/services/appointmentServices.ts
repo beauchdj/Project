@@ -42,7 +42,7 @@ export async function getAllSpAppts(spId: string) {
 export async function getAllAvailAppts(serviceCategory: string | null) {
     try {
         const { rows } = await pool.query(
-            `SELECT appts.starttime, appts.endtime, appts.service, sps.providername, sps.servicecategory, clients.fullname
+            `SELECT appts.starttime, appts.endtime, appts.service, sps.providername, sps.servicecategory, clients.fullname, appts.id
              FROM appts_avail AS appts
              LEFT JOIN appt_bookings AS bookings ON bookings.apptid = appts.id
              JOIN users as sps ON appts.spid = sps.id
@@ -58,7 +58,23 @@ export async function getAllAvailAppts(serviceCategory: string | null) {
 }
 
 export async function bookAppointment(apptId: string, userId: string) {
+    const alreadyBooked = await pool.query(
+        `SELECT id FROM appt_bookings WHERE apptid = $1 LIMIT 1`,
+        [apptId]
+    );
 
+    if (alreadyBooked.rowCount) {
+        throw new Error("Already Booked");
+    }
+
+    const { rows } = await pool.query(
+        `INSERT INTO appt_bookings (apptid, userid, bookstatus)
+         VALUES ($1, $2, 'Booked')
+         Returning id`,
+         [apptId, userId]
+    );
+
+    return rows[0].id as string;
 }
 
 export async function getBookedAppts(userId: string) {
