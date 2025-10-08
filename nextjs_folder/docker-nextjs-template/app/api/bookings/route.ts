@@ -11,13 +11,15 @@ export async function POST(request: Request) {
         return NextResponse.json({ error: "Unauthorized" }, { status: 401 });   
     }
 
-    // get appt id sent in request
-    let apptId: string;
-    // check validity of apptid
+    const { apptId } = (await request.json()) as { apptId: string };
+
+    if (!apptId) {
+        return NextResponse.json({ error: "Missing apptId" }, { status: 400 });
+    }
 
     try {
         const result = await bookAppointment(apptId, session.user.id);
-        return NextResponse.json({  }, { status: 201 } );
+        return NextResponse.json({ result }, { status: 201 } );
     } catch (error) {
         return NextResponse.json({ error: "Server Error" }, { status: 500 });  
     }
