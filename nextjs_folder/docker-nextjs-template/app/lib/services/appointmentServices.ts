@@ -26,8 +26,8 @@ export async function getAllSpAppts(spId: string) {
         const { rows } = await pool.query(
             `SELECT appts.starttime, appts.endtime, appts.service, clients.fullname
              FROM appts_avail as appts
-             JOIN appt_bookings as bookings ON appts.id = bookings.apptid
-             JOIN users as clients ON bookings.userid = clients.id
+             LEFT JOIN appt_bookings as bookings ON appts.id = bookings.apptid
+             LEFT JOIN users as clients ON bookings.userid = clients.id
              WHERE appts.spid = $1
              ORDER BY appts.starttime ASC`, 
              [spId]
@@ -39,7 +39,7 @@ export async function getAllSpAppts(spId: string) {
 }
 
 
-export async function getAllAvailAppts(serviceCategory: string) {
+export async function getAllAvailAppts(serviceCategory: string | null) {
     try {
         const { rows } = await pool.query(
             `SELECT appts.starttime, appts.endtime, appts.service, sps.providername, sps.servicecategory, clients.fullname
@@ -47,7 +47,7 @@ export async function getAllAvailAppts(serviceCategory: string) {
              LEFT JOIN appt_bookings AS bookings ON bookings.apptid = appts.id
              JOIN users as sps ON appts.spid = sps.id
              LEFT JOIN users as clients ON bookings.userid = clients.id
-             WHERE clients.fullname IS NULL AND sps.servicecategory = $1
+             WHERE bookings.apptid IS NULL AND sps.servicecategory = $1
             `,
             [serviceCategory]
         );
@@ -55,4 +55,12 @@ export async function getAllAvailAppts(serviceCategory: string) {
     } catch (error) {
         throw new Error ("Get All Available Appointments Error");
     }
+}
+
+export async function bookAppointment(apptId: string, userId: string) {
+
+}
+
+export async function getBookedAppts(userId: string) {
+
 }
