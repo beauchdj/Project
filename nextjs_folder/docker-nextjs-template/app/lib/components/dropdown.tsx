@@ -43,6 +43,9 @@ export default function Dropdown({ session }: { session?: Session | null }) {
             <Link href={"/appointments"} className={"nav-btn"}>
               Create Appt Availability
             </Link>
+            <Link href={"/bookings"} className={"nav-btn"}>
+              Book Appointment
+            </Link>
             {/* )} */}
           </div>
         </div>
