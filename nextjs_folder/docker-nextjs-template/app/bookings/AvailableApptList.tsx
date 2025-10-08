@@ -2,37 +2,38 @@
 import BookApptButton from "./BookApptButton";
 
 type Props = {
-    data: Row[] | null;
-}
+  data: Row[] | null;
+};
 type Row = {
-    id: string;
-    starttime: string;
-    endtime: string;
-    service: string;
-    providername: string;
+  id: string;
+  starttime: string;
+  endtime: string;
+  service: string;
+  providername: string;
 };
 
 export default function AvailableApptsList({ data }: Props) {
-    
-    if (!data) {
-        return (
-            <div>
-                <h2 className="text-lg font-semibold mb-2">All Appointments</h2>
-            </div>
-        )
-    }
+  if (!data) {
+    return (
+      <div>
+        <h2 className="text-lg font-semibold mb-2">All Appointments</h2>
+      </div>
+    );
+  }
 
-    return(
-       <div>
+  return (
+    <div className="">
       <h2 className="text-lg font-semibold mb-2">All Appointments</h2>
 
       <div className="overflow-x-auto rounded-lg border border-white/10">
         <table className="min-w-full text-sm">
-          <thead className="bg-white/10">
+          <thead className="bg-emerald-900/10">
             <tr>
               <th className="px-3 py-2 text-left font-semibold">Start</th>
               <th className="px-3 py-2 text-left font-semibold">End</th>
-              <th className="px-3 py-2 text-left font-semibold">Service</th>
+              <th className="px-3 py-2 text-left font-semibold">
+                Service Description
+              </th>
               <th className="px-3 py-2 text-left font-semibold">Provider</th>
               <th className="px-3 py-2 text-left font-semibold">Action</th>
             </tr>
@@ -41,7 +42,9 @@ export default function AvailableApptsList({ data }: Props) {
             {data.map((row) => {
               return (
                 <tr key={row.id} className="hover:bg-white/5">
-                  <td className="px-3 py-2 whitespace-nowrap">{new Date(row.starttime).toLocaleString()}</td>
+                  <td className="px-3 py-2 whitespace-nowrap">
+                    {new Date(row.starttime).toLocaleString()}
+                  </td>
                   <td className="px-3 py-2 whitespace-nowrap">{row.endtime}</td>
                   <td className="px-3 py-2">{row.service}</td>
                   <td className="px-3 py-2">{row.providername}</td>
@@ -54,11 +57,8 @@ export default function AvailableApptsList({ data }: Props) {
           </tbody>
         </table>
       </div>
-    </div> 
-    )
+    </div>
+  );
 }
-
-
-
 
 // <pre> {JSON.stringify(data)}</pre>

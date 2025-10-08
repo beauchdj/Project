@@ -1,33 +1,33 @@
 "use client";
-import { useEffect,useState } from "react";
+import { useEffect, useState } from "react";
 
 type Row = {
-    id?: string;
-    starttime: string;
-    endtime: string;
-    service: string;
-    fullname?: string | null;
+  id?: string;
+  starttime: string;
+  endtime: string;
+  service: string;
+  fullname?: string | null;
 };
 
 export default function AppointmentsList() {
-    const [data, setData] = useState<Row[] | null>(null);
-    const [ error, setError] = useState<string | null>(null);
-    useEffect(() => {
-        fetch("/api/appointments", { method: "GET" })
-        .then((response) => response.json())
-        .then(setData)
-        .catch(setError);
-        }, []);
+  const [data, setData] = useState<Row[] | null>(null);
+  const [error, setError] = useState<string | null>(null);
+  useEffect(() => {
+    fetch("/api/appointments", { method: "GET" })
+      .then((response) => response.json())
+      .then(setData)
+      .catch(setError);
+  }, []);
 
-    if (!data) {
-        return (
-            <div>
-                 <h2 className="text-lg font-semibold mb-2">Available Appointments</h2>
-            </div>
-        )
-    }
-    return(
-       <div>
+  if (!data) {
+    return (
+      <div>
+        <h2 className="text-lg font-semibold mb-2">Available Appointments</h2>
+      </div>
+    );
+  }
+  return (
+    <div>
       <h2 className="text-lg font-semibold mb-2">All Appointments</h2>
 
       <div className="overflow-x-auto rounded-lg border border-white/10">
@@ -45,19 +45,22 @@ export default function AppointmentsList() {
               const customer = row.fullname ?? "";
               return (
                 <tr key={row.id ?? i} className="hover:bg-white/5">
-                  <td className="px-3 py-2 whitespace-nowrap">{row.starttime}</td>
+                  <td className="px-3 py-2 whitespace-nowrap">
+                    {row.starttime}
+                  </td>
                   <td className="px-3 py-2 whitespace-nowrap">{row.endtime}</td>
                   <td className="px-3 py-2">{row.service}</td>
-                  <td className="px-3 py-2">{customer || <span className="opacity-60">—</span>}</td>
+                  <td className="px-3 py-2">
+                    {customer || <span className="opacity-60">—</span>}
+                  </td>
                 </tr>
               );
             })}
           </tbody>
         </table>
       </div>
-    </div> 
-    );
+    </div>
+  );
 }
 
-
-/* <pre> {JSON.stringify(data)}</pre> */ 
+/* <pre> {JSON.stringify(data)}</pre> */

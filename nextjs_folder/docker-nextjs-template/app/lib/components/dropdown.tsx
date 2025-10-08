@@ -8,9 +8,10 @@ import Link from "next/link";
 export default function Dropdown({ session }: { session?: Session | null }) {
   // const [selected, setSelected] = useState('');
   let isSp = false;
+  let isCustomer = false;
   if (session && session.user) {
     isSp = session.user.isSp!;
-    console.log("should set isSp: ", isSp, session.user);
+    isCustomer = session.user.isCustomer!;
   }
   return (
     <main className="">
@@ -39,14 +40,16 @@ export default function Dropdown({ session }: { session?: Session | null }) {
             <Link href={"/register"} className={"nav-btn"}>
               Register
             </Link>
-            {/* {isSp && ( */}
-            <Link href={"/appointments"} className={"nav-btn"}>
-              Create Appt Availability
-            </Link>
-            <Link href={"/bookings"} className={"nav-btn"}>
-              Book Appointment
-            </Link>
-            {/* )} */}
+            {isSp && (
+              <Link href={"/appointments"} className={"nav-btn text-sm"}>
+                Create Appointment
+              </Link>
+            )}
+            {isCustomer && (
+              <Link href={"/bookings"} className={"nav-btn text-sm"}>
+                Book Appointment
+              </Link>
+            )}
           </div>
         </div>
       </div>

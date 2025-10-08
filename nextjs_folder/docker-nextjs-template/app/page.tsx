@@ -22,7 +22,7 @@ export default async function page() {
           <p className="m-0">User List:</p>
         </div>
         <div className="flex items-center justify-center">
-          {(data.length > 0 &&
+          {((data.length ?? 0) > 0 &&
             data.map((user, index) => (
               <div
                 key={index}
