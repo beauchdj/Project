@@ -122,7 +122,7 @@ export function RegisterForm() {
     <div className="flex w-full flex-col justify-center items-center text-black h-[calc(100vh-10rem)]">
       <form
         onSubmit={handleRegister}
-        className="flex items-start flex-col bg-emerald-800/90 border-black border-2 px-12 py-8 text-black rounded-2xl w-[80%] shadow-black shadow h-[calc(100vh-10rem)] overflow-auto"
+        className="flex items-start flex-col bg-emerald-800/90 border-black border-2 px-12 py-8 text-white rounded-2xl w-[80%] shadow-black shadow h-[calc(100vh-10rem)] overflow-auto"
       >
         <div className="flex gap-1 mt-1 flex-col w-full underline">
           Account Type:

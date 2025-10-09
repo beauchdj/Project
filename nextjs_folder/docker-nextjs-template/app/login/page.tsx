@@ -22,7 +22,7 @@ export default function Page() {
     });
     if (!ret.error) {
       setIsError(false);
-      route.push("/home");
+      route.push("/");
     } else {
       setIsError(true);
     }

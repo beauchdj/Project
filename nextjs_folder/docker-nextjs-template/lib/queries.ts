@@ -11,18 +11,18 @@ export async function fetchUsers() {
     .catch((err) => console.log("ERROR: ", err));
 }
 
-// export async function fetchData() {
-//   try {
-//     const response = await fetch(
-//       "https://baconipsum.com/api/?type=all-meat&paras=8&format=json"
-//     );
-//     if (!response.ok) throw new Error(`Http error: status: ${response.status}`);
+export async function fetchData() {
+  try {
+    const response = await fetch(
+      "https://baconipsum.com/api/?type=all-meat&paras=8&format=json"
+    );
+    if (!response.ok) throw new Error(`Http error: status: ${response.status}`);
 
-//     return response;
-//   } catch (error) {
-//     console.error("Fetch failed: ", error);
-//   }
-// }
+    return response;
+  } catch (error) {
+    console.error("Fetch failed: ", error);
+  }
+}
 
 // export async function getUser(username: string): Promise<void> {
 //   const res = await pool.query(`SELECT * FROM users WHERE username = $1`, [

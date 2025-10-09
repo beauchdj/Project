@@ -14,7 +14,7 @@ export default async function HomePage() {
   // console.log("what is session: ", session, session?.user.isCustomer);
 
   if (d) {
-    json = await d.json();
+    json = await d!.json();
     length = json.length;
   }
 

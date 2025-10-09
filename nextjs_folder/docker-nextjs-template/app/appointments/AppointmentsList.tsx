@@ -13,6 +13,7 @@ type Row = {
 export default function AppointmentsList() {
   const [data, setData] = useState<Row[] | null>(null);
   const [error, setError] = useState<string | null>(null);
+
   useEffect(() => {
     fetch("/api/appointments", { method: "GET" })
       .then((response) => response.json())
