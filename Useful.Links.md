@@ -2,6 +2,8 @@
 
 [Deliverable 2: Functional Requirements](https://docs.google.com/document/d/15YNmKwkxfkvX6OTlKG83YQ5qtGbaL_ctJ_EB14hhv-4/edit?usp=sharing)
 
+[Deliverable 3: Demo turn in](https://docs.google.com/document/d/13VP6vvtAyA7qsWDeyTFrWkR66xh-C7aTvY61u7M1UcI/edit?usp=sharing)
+
 [Jira](https://cs440proj.atlassian.net/jira/software/projects/CS440/boards/1)
 
 [Draw.io Website Plan](https://drive.google.com/file/d/1MF1Otc_CCyZcYn7nrSObG02eLefP255W/view?usp=sharing)
