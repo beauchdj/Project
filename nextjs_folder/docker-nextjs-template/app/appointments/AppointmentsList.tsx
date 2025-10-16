@@ -1,27 +1,13 @@
 "use client";
-import { useEffect, useState } from "react";
 import { formatter } from "../lib/types/Formatter";
+import { Appointment } from "../lib/types/Appointment";
 
-type Row = {
-  id?: string;
-  starttime: string;
-  endtime: string;
-  service: string;
-  fullname?: string | null;
-};
-
-export default function AppointmentsList() {
-  const [data, setData] = useState<Row[] | null>(null);
-  const [error, setError] = useState<string | null>(null);
-
-  useEffect(() => {
-    fetch("/api/appointments", { method: "GET" })
-      .then((response) => response.json())
-      .then(setData)
-      .catch(setError);
-  }, []);
-
-  if (!data) {
+export default function AppointmentsList({
+  appointments,
+}: {
+  appointments: Appointment[];
+}) {
+  if (!appointments.length) {
     return (
       <div>
         <h2 className="text-lg font-semibold mb-2">Available Appointments</h2>
@@ -43,7 +29,7 @@ export default function AppointmentsList() {
             </tr>
           </thead>
           <tbody className="divide-y divide-white/10">
-            {data.map((row, i) => {
+            {appointments.map((row, i) => {
               const customer = row.fullname ?? "";
               return (
                 <tr key={row.id ?? i} className="hover:bg-white/5">
@@ -66,5 +52,3 @@ export default function AppointmentsList() {
     </div>
   );
 }
-
-/* <pre> {JSON.stringify(data)}</pre> */

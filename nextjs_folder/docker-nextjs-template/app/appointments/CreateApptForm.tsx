@@ -1,6 +1,13 @@
 "use client";
 
-export default function CreateApptForm() {
+import { Dispatch, SetStateAction } from "react";
+import { Appointment } from "../lib/types/Appointment";
+
+export default function CreateApptForm({
+  setAppointments,
+}: {
+  setAppointments: Dispatch<SetStateAction<Appointment[]>>;
+}) {
   async function onSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
 
@@ -19,7 +26,31 @@ export default function CreateApptForm() {
       }),
     });
 
-    await response.json();
+    const { apptId } = await response.json();
+
+    const start = convertToISO(formData.get("starttime") as string);
+    const end = convertToISO(formData.get("endtime") as string);
+
+    const newAppt: Appointment = {
+      id: apptId,
+      starttime: start,
+      endtime: end,
+      service: formData.get("service") as string,
+      fullname: "",
+    };
+
+    setAppointments((prev) => [...prev, newAppt]);
+  }
+
+  function convertToISO(str: string) {
+    const [hours, minutes] = str.split(":").map(Number);
+
+    const local = new Date();
+    local.setHours(hours, minutes, 0, 0);
+
+    const iso = local.toISOString();
+
+    return iso;
   }
 
   return (
