@@ -3,11 +3,7 @@ import { Booking } from "../lib/types/Booking";
 import { formatter } from "../lib/types/Formatter";
 import BookApptButton from "./BookApptButton";
 
-type Props = {
-  data: Booking[] | null;
-};
-
-export default function AvailableApptsList({ data }: Props) {
+export default function AvailableApptsList({ data }: { data: Booking[] }) {
   if (!data) {
     return (
       <div>

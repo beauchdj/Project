@@ -10,7 +10,6 @@ export default function Nav() {
     await signOut({ callbackUrl: "/" });
   };
 
-  console.log(session);
   if (status === "loading") return <Loading />;
 
   return (
