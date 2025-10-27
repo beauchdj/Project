@@ -2,7 +2,7 @@
 
 import { NextResponse } from "next/server";
 import { auth } from "@/auth";
-import { getBookedAppts, bookAppointment } from "@/app/lib/services/appointmentServices";
+import { getBookedAppts, bookAppointment, deleteBookedAppt } from "@/app/lib/services/appointmentServices";
 
 export async function POST(request: Request) {
     const session = await auth();
@@ -34,6 +34,26 @@ export async function GET(request: Request) {
     try {
         const result = await getBookedAppts(session.user.id); 
         return NextResponse.json(result, { status: 200 });
+    } catch (error) {
+        return NextResponse.json({ error: "Server Error" }, { status: 500 });
+    }
+}
+
+export async function DELETE(request: Request) {
+    const session = await auth();
+    if (!session) {
+        return NextResponse.json({error: "Unauthorized" }, { status: 401 });
+    }
+
+    const { apptId } = (await request.json()) as { apptId: string };
+
+    if (!apptId) {
+        return NextResponse.json({ error: "Missing apptId" }, { status: 400 });
+    }
+
+    try {
+        const result = await deleteBookedAppt(apptId, session.user.id);
+        return NextResponse.json(result, {status: 200 });
     } catch (error) {
         return NextResponse.json({ error: "Server Error" }, { status: 500 });
     }
