@@ -28,7 +28,7 @@ export async function createAvailabilitySlot(
 export async function getAllSpAppts(spId: string) {
   try {
     const { rows } = await pool.query(
-      `SELECT appts.starttime, appts.endtime, appts.service, clients.fullname
+      `SELECT appts.starttime, appts.endtime, appts.service, clients.fullname, appts.id
              FROM appts_avail as appts
              LEFT JOIN appt_bookings as bookings ON appts.id = bookings.apptid
              LEFT JOIN users as clients ON bookings.userid = clients.id
@@ -83,3 +83,59 @@ export async function bookAppointment(apptId: string, userId: string) {
 }
 
 export async function getBookedAppts(userId: string) {}
+
+export async function deleteBookedAppt(apptId: string, userId: string) {
+  try {
+    const result = await pool.query(
+     `DELETE FROM appt_bookings AS bookings
+      USING appts_avail AS appts
+      WHERE
+        bookings.apptid = $1
+        AND appts.id = bookings.apptid
+        AND (
+          bookings.userid = $2
+          OR appts.spid = $2
+        )
+      RETURNING bookings.id;;`,
+      [apptId, userId]
+    );
+
+    if (result.rowCount === 0) {
+      return { deleted: false };
+    }
+
+    return { 
+    deleted: true ,
+    bookingId: result.rows[0].id,
+    };
+  } catch (error) {
+    console.error("Delete Booked Appointment Error: ", error);
+    throw new Error("Delete Booked Appointment Error");
+  }
+}
+
+export async function deleteAvailAppt(apptId: string, userId: string) {
+  try {
+    const result = await pool.query(
+     `DELETE FROM appts_avail
+      WHERE
+        id = $1
+        AND
+        spid = $2
+      RETURNING id;`,
+      [apptId, userId]
+    );
+
+    if (result.rowCount === 0) {
+      return { deleted: false };
+    }
+
+    return { 
+    deleted: true ,
+    bookingId: result.rows[0].id,
+    };
+  } catch (error) {
+    console.error("Delete Appointment Error: ", error);
+    throw new Error("Delete Appointment Error");
+  }
+}
