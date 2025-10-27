@@ -58,14 +58,14 @@ export default function AppointmentsList({
                     <td className="px-3 py-2">
                       <CancelApptButton 
                         apptId={row.id!}
-                        onCancel={() => onCancelAppt(row.id!)}/>
+                        onSuccess={() => onCancelAppt(row.id!)}/>
                     </td>
                   )}
                   {!customer && (
                     <td className="px-3 py-2">
                       <DeleteApptButton 
                         apptId={row.id!}
-                        onDelete={() => onDeleteAppt(row.id!)}/>
+                        onSuccess={() => onDeleteAppt(row.id!)}/>
                     </td>
                   )}
                 </tr>
