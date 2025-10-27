@@ -19,19 +19,7 @@ export default function AppointmentWrap() {
   }
 
  async function handleCancel(apptId: string) {
-    const res = await fetch("/api/bookings", {
-      method: "DELETE",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ apptId }),
-    });
-
-    if (!res.ok) {
-      console.error("cancel failed");
-      return;
-    }
-
+    
     setAppointments((prev) =>
       prev.map((appt) =>
         appt.id === apptId ? { ...appt, fullname: "" } : appt
@@ -40,17 +28,6 @@ export default function AppointmentWrap() {
  }
 
  async function handleDelete(apptId: string) {
-  const res = await fetch("/api/appointments", {
-    method: "DELETE",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ apptId }),
-  });
-
-  if (!res.ok) {
-    console.error("delete failed");
-    return;
-  }
-
   setAppointments((prev) => prev.filter((appt) => appt.id !== apptId));
  }
 
