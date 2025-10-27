@@ -1,11 +1,17 @@
 "use client";
 import { formatter } from "../lib/types/Formatter";
 import { Appointment } from "../lib/types/Appointment";
+import CancelApptButton from "./CancelApptButton";
+import DeleteApptButton from "./DeleteApptButton";
 
 export default function AppointmentsList({
   appointments,
+  onCancelAppt,
+  onDeleteAppt,
 }: {
   appointments: Appointment[];
+  onCancelAppt: (apptId: string) => void;
+  onDeleteAppt: (apptId: string) => void;
 }) {
   if (!appointments.length) {
     return (
@@ -48,6 +54,20 @@ export default function AppointmentsList({
                   <td className="px-3 py-2">
                     {customer || <span className="opacity-60">—</span>}
                   </td>
+                  {customer && (
+                    <td className="px-3 py-2">
+                      <CancelApptButton 
+                        apptId={row.id!}
+                        onCancel={() => onCancelAppt(row.id!)}/>
+                    </td>
+                  )}
+                  {!customer && (
+                    <td className="px-3 py-2">
+                      <DeleteApptButton 
+                        apptId={row.id!}
+                        onDelete={() => onDeleteAppt(row.id!)}/>
+                    </td>
+                  )}
                 </tr>
               );
             })}
