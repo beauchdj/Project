@@ -7,6 +7,19 @@ export async function createAvailabilitySlot(
   starttime: string,
   endtime: string
 ) {
+
+  const apptConflict = await pool.query(
+    `SELECT id FROM appts_avail
+    WHERE spid = $1
+    AND tsrange(starttime, endtime, '[)') && tsrange($2, $3, '[)')
+    LIMIT 1`,
+    [`${spId}`, `${date}T${starttime}`, `${date}T${endtime}`]
+  )
+
+  if (apptConflict.rowCount) {
+    console.log("Appointment Conflict Detected");
+    throw new Error("Appointment Conflict");
+  }
   // dateTime format YYYY-MM-DDTHH:MM:SS
   const realStartTime = new Date(`${date}T${starttime}`);
   const realEndTime = new Date(`${date}T${endtime}`);
