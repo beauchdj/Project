@@ -32,7 +32,12 @@ export async function createAvailabilitySlot(
       [spId, realStartTime, realEndTime, service]
     );
     return { apptId: result.rows[0].id };
-  } catch (error) {
+  } catch (error:any) {
+
+    if (error?.code === "23P01" || error?.constraint === "appts_avail_no_overlap") {
+      console.log("DB Constraint Violation - Appointment Overlap");
+      throw new Error("CONFLICT: Appointment Overlap");
+    }
     console.log("Appointment Creation Error: ", error);
     throw new Error("Appointment Creation Error");
   }
