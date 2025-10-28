@@ -51,7 +51,10 @@ export default function CreateApptForm({
     });
 
     const { apptId } = await response.json();
-
+    if (!response.ok) {
+      setError("The appointment you are trying to create conflicts with an existing appointment.");
+      return;
+    }
     const newAppt: Appointment = {
       id: apptId,
       starttime: startTime,
