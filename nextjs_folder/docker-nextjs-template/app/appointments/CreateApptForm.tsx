@@ -1,6 +1,6 @@
 "use client";
 
-import { Dispatch, SetStateAction } from "react";
+import { Dispatch, SetStateAction, useState } from "react";
 import { Appointment } from "../lib/types/Appointment";
 
 export default function CreateApptForm({
@@ -8,10 +8,34 @@ export default function CreateApptForm({
 }: {
   setAppointments: Dispatch<SetStateAction<Appointment[]>>;
 }) {
+
+  const [error, setError] = useState<string | null>(null);
+
   async function onSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
+    setError(null);
+    const formEvent = event.currentTarget;
 
     const formData = new FormData(event.currentTarget);
+    const date = formData.get("date") as string;
+    const start = formData.get("starttime") as string;
+    const end = formData.get("endtime") as string;
+    const service = formData.get("service") as string;
+
+    //Validation
+    const today = new Date();
+    const selectedDate = new Date(date);
+    if (selectedDate < today) {
+      setError("Appointment date must be today or in the future.");
+      return;
+    }
+
+    const startTime = convertToISO(date,start);
+    const endTime = convertToISO(date,end);
+    if (startTime >= endTime) {
+      setError("End time must be after start time.");
+      return;
+    }
 
     const response = await fetch("/api/appointments", {
       method: "POST",
@@ -19,33 +43,33 @@ export default function CreateApptForm({
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        service: formData.get("service"),
-        date: formData.get("date"),
-        starttime: formData.get("starttime"),
-        endtime: formData.get("endtime"),
+        service: service,
+        date: date,
+        starttime: start,
+        endtime: end,
       }),
     });
 
     const { apptId } = await response.json();
 
-    const start = convertToISO(formData.get("starttime") as string);
-    const end = convertToISO(formData.get("endtime") as string);
-
     const newAppt: Appointment = {
       id: apptId,
-      starttime: start,
-      endtime: end,
-      service: formData.get("service") as string,
+      starttime: startTime,
+      endtime: endTime,
+      service: service,
       fullname: "",
     };
 
     setAppointments((prev) => [...prev, newAppt]);
+    formEvent.reset();
   }
 
-  function convertToISO(str: string) {
-    const [hours, minutes] = str.split(":").map(Number);
+  function convertToISO(dateStr: string, timeStr: string) {
+    const [year,month,day] = dateStr.split("-").map(Number);
+    const [hours, minutes] = timeStr.split(":").map(Number);
+   
 
-    const local = new Date();
+    const local = new Date(year, month - 1, day, hours, minutes, 0,0);
     local.setHours(hours, minutes, 0, 0);
 
     const iso = local.toISOString();
@@ -54,6 +78,7 @@ export default function CreateApptForm({
   }
 
   return (
+    <div>
     <form
       onSubmit={onSubmit}
       className="flex flex-wrap items-center gap-2 bg-emerald-800/60 p-2 rounded-lg text-sm"
@@ -96,5 +121,12 @@ export default function CreateApptForm({
         Create
       </button>
     </form>
+    
+    {error && (
+      <p className="text-red-400 mt-2 text-sm font-medium">
+        {error}
+      </p>
+    )}
+</div>
   );
 }
