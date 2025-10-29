@@ -24,9 +24,17 @@ export default function CreateApptForm({
 
     //Validation
     const today = new Date();
-    const selectedDate = new Date(date);
-    if (selectedDate < today) {
-      setError("Appointment date must be today or in the future.");
+    const selectedStart = new Date(`${date}T${start}`);
+    const oneYrFromNow = new Date();
+    oneYrFromNow.setFullYear(today.getFullYear() + 1);
+
+    if (selectedStart < today) {
+      setError("Appointment date must be later today or in the future.");
+      return;
+    }
+
+    if (selectedStart > oneYrFromNow) {
+      setError("Appointment date must be within one year from today.");
       return;
     }
 
@@ -51,7 +59,10 @@ export default function CreateApptForm({
     });
 
     const { apptId } = await response.json();
-
+    if (!response.ok) {
+      setError("The appointment you are trying to create conflicts with an existing appointment.");
+      return;
+    }
     const newAppt: Appointment = {
       id: apptId,
       starttime: startTime,

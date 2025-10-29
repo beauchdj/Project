@@ -7,6 +7,19 @@ export async function createAvailabilitySlot(
   starttime: string,
   endtime: string
 ) {
+
+  const apptConflict = await pool.query(
+    `SELECT id FROM appts_avail
+    WHERE spid = $1
+    AND tsrange(starttime, endtime, '[)') && tsrange($2, $3, '[)')
+    LIMIT 1`,
+    [`${spId}`, `${date}T${starttime}`, `${date}T${endtime}`]
+  )
+
+  if (apptConflict.rowCount) {
+    console.log("Appointment Conflict Detected");
+    throw new Error("Appointment Conflict");
+  }
   // dateTime format YYYY-MM-DDTHH:MM:SS
   const realStartTime = new Date(`${date}T${starttime}`);
   const realEndTime = new Date(`${date}T${endtime}`);
@@ -19,7 +32,12 @@ export async function createAvailabilitySlot(
       [spId, realStartTime, realEndTime, service]
     );
     return { apptId: result.rows[0].id };
-  } catch (error) {
+  } catch (error:any) {
+
+    if (error?.code === "23P01" || error?.constraint === "appts_avail_no_overlap") {
+      console.log("DB Constraint Violation - Appointment Overlap");
+      throw new Error("CONFLICT: Appointment Overlap");
+    }
     console.log("Appointment Creation Error: ", error);
     throw new Error("Appointment Creation Error");
   }
