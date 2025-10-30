@@ -1,7 +1,7 @@
 Group Members: Dan Beachaine, Gavin Stankovsky, Jackie Sobolewski (Brekke)  
 Meeting Date: 10/27/25  
 Meeting Time: 7pm  
-Members Present:  
+Members Present: Dan, Jackie in person. Gavin out sick :( reviewed and discussed async via Teams
 Upcoming Deliverables Due: Architecture Design Due Oct 30
 Next Meeting: 11/3  
 
