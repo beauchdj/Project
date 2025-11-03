@@ -2,17 +2,17 @@
 
 type Props = {
   apptId: string;
-  onBooked?: () => void;
+  onSuccess: () => void;
 };
 
-export default function BookApptButton({ apptId, onBooked }: Props) {
+export default function BookApptButton({ apptId, onSuccess }: Props) {
   async function handleClick() {
     const response = await fetch("/api/bookings", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ apptId }),
     });
-    onBooked?.();
+    onSuccess();
   }
 
   return (

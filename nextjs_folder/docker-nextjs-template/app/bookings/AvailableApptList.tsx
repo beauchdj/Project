@@ -3,7 +3,13 @@ import { Booking } from "../lib/types/Booking";
 import { formatter } from "../lib/types/Formatter";
 import BookApptButton from "./BookApptButton";
 
-export default function AvailableApptsList({ data }: { data: Booking[] }) {
+export default function AvailableApptsList({ 
+  data,
+  onBooked
+ }: { 
+    data: Booking[];
+    onBooked: (apptId: string) => void;
+}) {
   if (!data) {
     return (
       <div>
@@ -42,7 +48,9 @@ export default function AvailableApptsList({ data }: { data: Booking[] }) {
                   <td className="px-3 py-2">{row.service}</td>
                   <td className="px-3 py-2">{row.providername}</td>
                   <td className="px-3 py-2">
-                    <BookApptButton apptId={row.id} />
+                    <BookApptButton 
+                      apptId={row.id!}
+                      onSuccess={() => onBooked(row.id!)} />
                   </td>
                 </tr>
               );
