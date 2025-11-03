@@ -1,3 +1,7 @@
+/**
+ * TODO:
+ * timeZone: needs to be dynamic based off user region idk how to do yet
+ */
 export const formatter = new Intl.DateTimeFormat("en-US", {
   timeZone: "America/Chicago",
   year: "numeric",

@@ -2,17 +2,21 @@
 
 import { Session } from "next-auth";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { useEffect } from "react";
 
 // import { useState } from 'react';
-
 export default function Dropdown({ session }: { session?: Session | null }) {
-  // const [selected, setSelected] = useState('');
   let isSp = false;
   let isCustomer = false;
   if (session && session.user) {
     isSp = session.user.isSp!;
     isCustomer = session.user.isCustomer!;
   }
+  const pathname = usePathname();
+
+  useEffect(() => {}, [pathname]);
+
   return (
     <div className="group relative p-1 cursor-default flex-none">
       <div className="flex flex-col gap-0.5">

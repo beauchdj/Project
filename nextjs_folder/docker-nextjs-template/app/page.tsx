@@ -1,8 +1,8 @@
 "use server";
 
 import Link from "next/link";
-import { formatter } from "./lib/types/Formatter";
 import { auth } from "@/auth";
+import { RealTimeClock } from "./lib/components/RealTimeClock";
 
 // type User = {
 //   username: string;
@@ -18,7 +18,7 @@ export default async function page() {
       <div className="flex flex-col items-center w-[95%] bg-black/20 rounded-xl py-4 h-[80vh] shadow-black shadow-xl">
         <div className="w-full flex flex-col items-center gap-3 h-[75vh] overflow-auto">
           <span className="flex-none sm:text-3xl text-nowrap bg-clip-text text-transparent overflow-auto italic font-serif font-bold bg-gradient-to-r from-sky-200 to-sky-300">
-            Today is: {formatter.format(new Date())}
+            <RealTimeClock />
           </span>
           <span className="flex-1 flex justify-center items-center w-[80%]">
             <span className="text-center text-sm italic font-serif bg-clip-text text-transparent bg-gradient-to-r from-teal-300 to-lime-200 sm:text-2xl indent-4">
