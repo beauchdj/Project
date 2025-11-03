@@ -1,7 +1,8 @@
 "use server";
-import { User } from "next-auth";
-import { fetchUsers } from "../../lib/queries";
-import { UserList } from "./lib/user_list";
+
+import { pool } from "@/lib/db";
+import AdminView from "./lib/AdminView";
+import { Appointment } from "../lib/types/Appointment";
 
 /**
  *
@@ -14,13 +15,10 @@ import { UserList } from "./lib/user_list";
 // default: this is what tells nextjs which react component to show as the root component on this route (/demo)
 export default async function Page() {
   // const str = "hot reload";
-  const data: User[] = await fetchUsers();
   // console.log("DATA: ", data);
+  const ret = await pool.query("SELECT * FROM appts_avail");
+  console.log("GOT DATA: ", ret.rows);
+  const appts: Appointment[] = ret.rows;
 
-  return (
-    <div className="flex justify-center items-center flex-col">
-      <p>This is the demo page</p>
-      <UserList user_list={data} />
-    </div>
-  );
+  return <AdminView appt_list={appts} />;
 }

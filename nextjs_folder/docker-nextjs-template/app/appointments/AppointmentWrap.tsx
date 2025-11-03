@@ -18,18 +18,17 @@ export default function AppointmentWrap() {
     setAppointments(json);
   }
 
- async function handleCancel(apptId: string) {
-    
+  async function handleCancel(apptId: string) {
     setAppointments((prev) =>
       prev.map((appt) =>
         appt.id === apptId ? { ...appt, fullname: "" } : appt
       )
     );
- }
+  }
 
- async function handleDelete(apptId: string) {
-  setAppointments((prev) => prev.filter((appt) => appt.id !== apptId));
- }
+  async function handleDelete(apptId: string) {
+    setAppointments((prev) => prev.filter((appt) => appt.id !== apptId));
+  }
 
   return (
     <main className="max-w-full flex justify-center overflow-auto z-0">
@@ -38,10 +37,10 @@ export default function AppointmentWrap() {
           <CreateApptForm setAppointments={setAppointments} />
         </div>
         <div className="my-4 font-semibold text-lg">
-          <AppointmentsList 
+          <AppointmentsList
             appointments={appointments}
             onCancelAppt={handleCancel}
-            onDeleteAppt={handleDelete} 
+            onDeleteAppt={handleDelete}
           />
         </div>
       </div>

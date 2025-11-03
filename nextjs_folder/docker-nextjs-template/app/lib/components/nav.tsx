@@ -32,14 +32,6 @@ export default function Nav() {
       <h1 className="flex-1 w-full flex justify-center text-6xl bg-clip-text text-transparent bg-gradient-to-r from-sky-400 to-lime-400 italic font-serif ">
         Schwellness
       </h1>
-      {/* <div>Status: {status}</div> */}
-      {/* {session && <Roles session={session} />} */}
-      {/* {session && (
-        <div className="flex flex-col items-center">
-          <span className="text-lg">Welcome!</span>
-          <span>{session.user.fullname}</span>
-        </div>
-      )} */}
       {session?.user.username && (
         <button
           onClick={signOutHandler}
@@ -51,19 +43,6 @@ export default function Nav() {
     </main>
   );
 }
-
-// function Roles({ session }: { session: Session }) {
-//   return (
-//     <div className="flex flex-col text-[8px]">
-//       <div>Admin: {session?.user.isAdmin ? "true" : "false"}</div>
-//       <div>Customer {session?.user.isCustomer ? "true" : "false"}</div>
-//       <div>
-//         ServiceProvider:
-//         {session?.user.isSp ? "true" : "false"}
-//       </div>
-//     </div>
-//   );
-// }
 
 function Loading() {
   return (

@@ -25,7 +25,7 @@ export default function Dropdown({ session }: { session?: Session | null }) {
         <div className="hover-bar" />
         <div
           className={
-            "border-white border-2 shadow-black shadow-lg group-hover:flex group-hover:absolute p-4 flex-col hidden top-[1rem] left-[0.5rem] bg-emerald-700 w-fit h-fit rounded-xl z-40" // default behavior is hidden, when the group is hovered it will stay with group-hover:...
+            "border-black border-2 shadow-black shadow-lg group-hover:flex group-hover:absolute p-4 flex-col hidden top-[1rem] left-[0.5rem] bg-emerald-700 w-fit h-fit rounded-xl z-40" // default behavior is hidden, when the group is hovered it will stay with group-hover:...
           }
         >
           <Link className="nav-btn" href={"/"}>
