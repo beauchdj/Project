@@ -9,9 +9,11 @@ import { useEffect } from "react";
 export default function Dropdown({ session }: { session?: Session | null }) {
   let isSp = false;
   let isCustomer = false;
+  let isAdmin = false;
   if (session && session.user) {
     isSp = session.user.isSp!;
     isCustomer = session.user.isCustomer!;
+    isAdmin = session.user.isAdmin!;
   }
   const pathname = usePathname();
 
@@ -29,6 +31,11 @@ export default function Dropdown({ session }: { session?: Session | null }) {
             "gap-2 border-black border-2 shadow-black shadow-lg group-hover:flex group-hover:absolute p-4 flex-col hidden top-[1rem] left-[0.5rem] bg-emerald-700 w-fit h-fit rounded-xl z-40"
           }
         >
+          {isAdmin && (
+            <Link href={"/admin"} className={"nav-btn"}>
+              Admin
+            </Link>
+          )}
           <Link className="nav-btn" href={"/"}>
             Home
           </Link>
@@ -40,9 +47,6 @@ export default function Dropdown({ session }: { session?: Session | null }) {
           </Link>
           {/* Demo will become Admin panel */}
           {/* TODO: Ensure only users that are admins can see the btn */}
-          <Link href={"/admin"} className={"nav-btn"}>
-            Admin
-          </Link>
           <Link href={"/register"} className={"nav-btn"}>
             Register
           </Link>

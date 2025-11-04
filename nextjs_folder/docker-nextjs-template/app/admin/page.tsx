@@ -3,6 +3,8 @@
 import { pool } from "@/lib/db";
 import AdminView from "./lib/AdminView";
 import { Appointment } from "../lib/types/Appointment";
+import { auth } from "@/auth";
+import { redirect } from "next/navigation";
 
 /**
  *
@@ -13,6 +15,8 @@ import { Appointment } from "../lib/types/Appointment";
 // export: allow the current page, allowing other files to import this file.
 // default: this is what tells nextjs which react component to show as the root component on this route (/demo)
 export default async function Page() {
+  const session = await auth();
+  if (!session?.user || !session?.user.isAdmin) redirect("/");
   const ret = await pool.query(
     "SELECT * FROM appts_avail JOIN users on users.id = appts_avail.spid"
   );
