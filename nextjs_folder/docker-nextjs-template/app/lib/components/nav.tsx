@@ -1,6 +1,6 @@
 "use client";
 import { signOut, useSession } from "next-auth/react";
-import Dropdown from "./dropdown";
+import Dropdown from "./Dropdown";
 // import { Session } from "next-auth";
 
 export default function Nav() {

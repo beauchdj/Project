@@ -10,15 +10,12 @@ import { Appointment } from "../lib/types/Appointment";
  *  then use client components to manipulate that passed data and mirroring the client
  *  operations to the server with api calls
  */
-
 // export: allow the current page, allowing other files to import this file.
 // default: this is what tells nextjs which react component to show as the root component on this route (/demo)
 export default async function Page() {
-  // const str = "hot reload";
-  // console.log("DATA: ", data);
-  const ret = await pool.query("SELECT * FROM appts_avail");
-  console.log("GOT DATA: ", ret.rows);
+  const ret = await pool.query(
+    "SELECT * FROM appts_avail JOIN users on users.id = appts_avail.spid"
+  );
   const appts: Appointment[] = ret.rows;
-
   return <AdminView appt_list={appts} />;
 }

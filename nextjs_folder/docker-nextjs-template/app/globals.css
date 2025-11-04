@@ -30,7 +30,7 @@ body {
   overflow-hidden;
 }
 .form-btn {
-  @apply bg-emerald-400 hover:-bg-lime-300 px-2;
+  @apply bg-emerald-400 hover:bg-lime-300 px-2;
 }
 .label-col {
   @apply flex flex-col text-start w-full;

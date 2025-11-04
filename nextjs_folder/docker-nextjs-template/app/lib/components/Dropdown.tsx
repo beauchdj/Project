@@ -24,8 +24,9 @@ export default function Dropdown({ session }: { session?: Session | null }) {
         <div className="hover-bar" />
         <div className="hover-bar" />
         <div
+          // default behavior is hidden, when the group is hovered it will stay with group-hover:...
           className={
-            "border-black border-2 shadow-black shadow-lg group-hover:flex group-hover:absolute p-4 flex-col hidden top-[1rem] left-[0.5rem] bg-emerald-700 w-fit h-fit rounded-xl z-40" // default behavior is hidden, when the group is hovered it will stay with group-hover:...
+            "gap-2 border-black border-2 shadow-black shadow-lg group-hover:flex group-hover:absolute p-4 flex-col hidden top-[1rem] left-[0.5rem] bg-emerald-700 w-fit h-fit rounded-xl z-40"
           }
         >
           <Link className="nav-btn" href={"/"}>
@@ -38,9 +39,10 @@ export default function Dropdown({ session }: { session?: Session | null }) {
             Login
           </Link>
           {/* Demo will become Admin panel */}
-          {/* <Link href={"/demo"} className={"nav-btn"}>
-            Demo
-          </Link> */}
+          {/* TODO: Ensure only users that are admins can see the btn */}
+          <Link href={"/admin"} className={"nav-btn"}>
+            Admin
+          </Link>
           <Link href={"/register"} className={"nav-btn"}>
             Register
           </Link>
