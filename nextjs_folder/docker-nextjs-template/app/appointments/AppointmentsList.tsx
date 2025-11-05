@@ -1,5 +1,5 @@
 "use client";
-import { formatter } from "../lib/types/Formatter";
+// import { formatter } from "../lib/types/Formatter";
 import { Appointment } from "../lib/types/Appointment";
 import CancelApptButton from "./CancelApptButton";
 import DeleteApptButton from "./DeleteApptButton";
@@ -41,14 +41,25 @@ export default function AppointmentsList({
               return (
                 <tr key={row.id ?? i} className="hover:bg-white/5">
                   <td className="px-3 py-2 whitespace-nowrap text-xs">
-                    {new Date(row.starttime).toLocaleDateString('en-US',{weekday: 'short',month: '2-digit', day: '2-digit', year: '2-digit'})}
+                    {new Date(row.starttime).toLocaleDateString("en-US", {
+                      weekday: "short",
+                      month: "2-digit",
+                      day: "2-digit",
+                      year: "2-digit",
+                    })}
                   </td>
                   <td className="px-3 py-2 whitespace-nowrap text-xs">
-                    {new Date(row.starttime).toLocaleTimeString([],{hour: '2-digit', minute:'2-digit'})}
+                    {new Date(row.starttime).toLocaleTimeString([], {
+                      hour: "2-digit",
+                      minute: "2-digit",
+                    })}
                     {/*formatter.format(new Date(row.starttime))*/}
                   </td>
                   <td className="px-3 py-2 whitespace-nowrap text-xs">
-                     {new Date(row.endtime).toLocaleTimeString([],{hour: '2-digit', minute:'2-digit'})}
+                    {new Date(row.endtime).toLocaleTimeString([], {
+                      hour: "2-digit",
+                      minute: "2-digit",
+                    })}
                   </td>
                   <td className="px-3 py-2">{row.service}</td>
                   <td className="px-3 py-2">
@@ -56,16 +67,18 @@ export default function AppointmentsList({
                   </td>
                   {customer && (
                     <td className="px-3 py-2">
-                      <CancelApptButton 
+                      <CancelApptButton
                         apptId={row.id!}
-                        onSuccess={() => onCancelAppt(row.id!)}/>
+                        onSuccess={() => onCancelAppt(row.id!)}
+                      />
                     </td>
                   )}
                   {!customer && (
                     <td className="px-3 py-2">
-                      <DeleteApptButton 
+                      <DeleteApptButton
                         apptId={row.id!}
-                        onSuccess={() => onDeleteAppt(row.id!)}/>
+                        onSuccess={() => onDeleteAppt(row.id!)}
+                      />
                     </td>
                   )}
                 </tr>

@@ -5,6 +5,7 @@ import AdminView from "./lib/AdminView";
 import { Appointment } from "../lib/types/Appointment";
 import { auth } from "@/auth";
 import { redirect } from "next/navigation";
+import { NotificationProvider } from "../lib/components/NotificationContext";
 
 /**
  *
@@ -21,5 +22,9 @@ export default async function Page() {
     "SELECT * FROM appts_avail JOIN users on users.id = appts_avail.spid"
   );
   const appts: Appointment[] = ret.rows;
-  return <AdminView appt_list={appts} />;
+  return (
+    <NotificationProvider>
+      <AdminView appt_list={appts} />
+    </NotificationProvider>
+  );
 }

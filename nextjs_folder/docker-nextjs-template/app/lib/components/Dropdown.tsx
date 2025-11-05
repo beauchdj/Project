@@ -21,47 +21,51 @@ export default function Dropdown({ session }: { session?: Session | null }) {
 
   return (
     <div className="group relative p-1 cursor-default flex-none">
-      <div className="flex flex-col gap-0.5">
-        <div className="hover-bar" />
-        <div className="hover-bar" />
-        <div className="hover-bar" />
-        <div
-          // default behavior is hidden, when the group is hovered it will stay with group-hover:...
-          className={
-            "gap-2 border-black border-2 shadow-black shadow-lg group-hover:flex group-hover:absolute p-4 flex-col hidden top-[1rem] left-[0.5rem] bg-emerald-700 w-fit h-fit rounded-xl z-40"
-          }
-        >
-          {isAdmin && (
-            <Link href={"/admin"} className={"nav-btn"}>
-              Admin
-            </Link>
-          )}
-          <Link className="nav-btn" href={"/"}>
-            Home
+      <BarStack />
+      <div
+        // default behavior is hidden, when the group is hovered it will stay with group-hover:...
+        className={
+          "gap-2 border-black border-2 shadow-black shadow-lg group-hover:flex group-hover:absolute p-4 flex-col hidden top-[28px] left-[0.5rem] bg-emerald-700 w-fit h-fit rounded-xl z-40"
+        }
+      >
+        {isAdmin && (
+          <Link href={"/admin"} className={"nav-btn"}>
+            Admin
           </Link>
-          {/* <Link className="nav-btn" href={"/home"}>
+        )}
+        <Link className="nav-btn" href={"/"}>
+          Home
+        </Link>
+        {/* <Link className="nav-btn" href={"/home"}>
             Home
           </Link> */}
-          <Link className="nav-btn" href={"/login"}>
-            Login
+        <Link className="nav-btn" href={"/login"}>
+          Login
+        </Link>
+        <Link href={"/register"} className={"nav-btn"}>
+          Register
+        </Link>
+        {isSp && (
+          <Link href={"/appointments"} className={"nav-btn text-sm"}>
+            Create Appointment
           </Link>
-          {/* Demo will become Admin panel */}
-          {/* TODO: Ensure only users that are admins can see the btn */}
-          <Link href={"/register"} className={"nav-btn"}>
-            Register
+        )}
+        {isCustomer && (
+          <Link href={"/bookings"} className={"nav-btn text-sm"}>
+            Book Appointment
           </Link>
-          {isSp && (
-            <Link href={"/appointments"} className={"nav-btn text-sm"}>
-              Create Appointment
-            </Link>
-          )}
-          {isCustomer && (
-            <Link href={"/bookings"} className={"nav-btn text-sm"}>
-              Book Appointment
-            </Link>
-          )}
-        </div>
+        )}
       </div>
+    </div>
+  );
+}
+
+function BarStack() {
+  return (
+    <div className="flex flex-col gap-0.5">
+      <div className="hover-bar" />
+      <div className="hover-bar" />
+      <div className="hover-bar" />
     </div>
   );
 }
