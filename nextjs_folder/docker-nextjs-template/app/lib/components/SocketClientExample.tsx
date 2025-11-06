@@ -19,7 +19,7 @@ export function WebSocketClient() {
     function onConnect() {
       setIsConnected(true);
       setTransport(socket.io.engine.transport.name);
-      console.log(socket.io.engine.transport.name);
+      console.log("Transport type: ", socket.io.engine.transport.name);
 
       socket.io.engine.on("upgrade", (transport) => {
         // transport defines what type of protocol we are using to send messages, http polling or websockets
@@ -47,8 +47,9 @@ export function WebSocketClient() {
     });
 
     socket.on("notify", (response) => {
-      console.log("notify: ", response);
+      console.log("test now pls: ", response);
       setNotify((prev) => !prev);
+      console.log("SetNotify: ", notify);
     });
 
     return () => {

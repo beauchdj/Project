@@ -12,8 +12,8 @@ export default function RootLayout({
         <SessionProvider>
           {/* Pass the session provider down */}
           <Nav />
-          {children}
         </SessionProvider>
+        {children}
       </body>
     </html>
   );

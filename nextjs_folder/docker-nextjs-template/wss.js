@@ -29,10 +29,11 @@ app.prepare().then(() => {
 
     sendNotification(socket);
   });
+
   function sendNotification(socket) {
     socket.emit("notify", "notification!");
     console.log("ran Notify");
-    setTimeout(() => sendNotification(socket), 1000 * 60);
+    setTimeout(() => sendNotification(socket), 1000 * 20);
   }
 
   httpServer
@@ -41,6 +42,6 @@ app.prepare().then(() => {
       process.exit(1);
     })
     .listen(port, () => {
-      console.log(`> Ready on http://${hostname}:${port}`);
+      console.log(`> WebSocket Server Ready on http://${hostname}:${port}`);
     });
 });

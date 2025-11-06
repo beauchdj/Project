@@ -1,7 +1,9 @@
 "use client";
 import { signOut, useSession } from "next-auth/react";
 import Dropdown from "./Dropdown";
-import { useRef, useState } from "react";
+import { useEffect, useState } from "react";
+import { Session } from "next-auth";
+import { Notification } from "../types/Notification";
 // import { Session } from "next-auth";
 
 export default function Nav() {
@@ -39,7 +41,7 @@ export default function Nav() {
       </h1>
       {session?.user.username && (
         <>
-          <GlobalBell />
+          <GlobalBell session={session} />
           <button
             onClick={signOutHandler}
             className="nav-btn cursor-pointer text-sm"
@@ -79,15 +81,21 @@ function Loading() {
  * RN: Try using just the booking table and filter for appointments a few days in advance
  */
 
-function GlobalBell() {
-  const [showList, setShowList] = useState<boolean>(false);
-  const fakeList = [
-    { message: "Upcomming Appointment", who: "Stelton Blue" },
-    { message: "Upcoming Appointment", who: "Stelton Red" },
-    { message: "Upcoming Appointment", who: "Stelton Red" },
-    { message: "Upcoming Appointment", who: "Stelton Red" },
-  ];
-  const [notifications, setNotifications] = useState(fakeList);
+function GlobalBell({ session }: { session: Session | null }) {
+  /** Need to get data from db, should be a check of all users appts @ time of login/refresh...maybe not login */
+  const [showList, setShowList] = useState<boolean>(true);
+  const [notifications, setNotifications] = useState<Notification[]>([]);
+
+  useEffect(() => {
+    fetchDayOuts(session!.user.id);
+  }, []);
+
+  async function fetchDayOuts(uid: string) {
+    const res = await fetch(`/api/notifications?uid=${uid}`, { method: "GET" });
+    const json: Notification[] = await res.json();
+    setNotifications(json);
+  }
+
   return (
     <div
       className={`w-8 h-8 m-2 ${
@@ -106,25 +114,49 @@ function GlobalBell() {
         <path d="M320 64C302.3 64 288 78.3 288 96L288 99.2C215 114 160 178.6 160 256L160 277.7C160 325.8 143.6 372.5 113.6 410.1L103.8 422.3C98.7 428.6 96 436.4 96 444.5C96 464.1 111.9 480 131.5 480L508.4 480C528 480 543.9 464.1 543.9 444.5C543.9 436.4 541.2 428.6 536.1 422.3L526.3 410.1C496.4 372.5 480 325.8 480 277.7L480 256C480 178.6 425 114 352 99.2L352 96C352 78.3 337.7 64 320 64zM258 528C265.1 555.6 290.2 576 320 576C349.8 576 374.9 555.6 382 528L258 528z" />
       </svg>
       <div
+        hidden={!!!notifications.length}
         className="w-[12px] h-[12px] rounded-4xl bg-red-500 bottom-1 right-1 absolute text-white text-[8px] flex justify-center items-center indent-0.5 select-none"
-        hidden={false}
       >
         {notifications.length}
       </div>
       <div
-        className="bg-emerald-900 text-white absolute top-8 right-2 py-2 rounded border-black border-2 cursor-default w-45 h-fit max-h-25 text-xs whitespace-normal overflow-y-scroll"
+        className="bg-emerald-900 text-white absolute top-8 right-2 px-1 rounded border-black border-2 cursor-default w-85 h-fit max-h-55 text-xs whitespace-normal overflow-y-scroll z-99"
         hidden={showList}
       >
         {notifications.map((note, idx) => (
           <div
             key={idx}
-            className=" border-b-[1px] border-b-black/30 w-full px-2"
+            className="border-b-[1px] border-b-black/30 w-full flex flex-col text-emerald-300"
           >
-            <span className="text-emerald-300">{note.message} with: </span>
-            <span className="text-blue-300">{note.who}</span>
+            <span>
+              <span className="text-white">Appointment with: </span>
+              {note.providername}
+            </span>
+            <span>
+              <span className="text-white">On: </span>
+              {new Date(note.starttime).toLocaleString()}
+            </span>
+            <span>
+              <span className="text-white">Until: </span>
+              {new Date(note.endtime).toLocaleString()}
+            </span>
+            <span>
+              <span className="text-white">For: </span> {note.service}
+            </span>
+            <span>
+              <span className="text-white">Status: </span> {note.bookstatus}
+            </span>
           </div>
         ))}
       </div>
     </div>
   );
 }
+
+/**
+ * Need to run this query somewhere: gives appointments up to 1 day in advance
+ * SELECT * FROM appt_bookings
+ * JOIN appts_avail ON appts_avail.id = appt_bookings.apptid
+ * WHERE userid = '82dabe93-46b5-4d2b-aafa-25343949d0fa'
+ * AND starttime::date BETWEEN CURRENT_DATE AND CURRENT_DATE + INTERVAL '2 days';
+ */

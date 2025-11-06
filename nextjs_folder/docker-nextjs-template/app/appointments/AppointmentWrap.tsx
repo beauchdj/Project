@@ -3,6 +3,7 @@ import CreateApptForm from "./CreateApptForm";
 import AppointmentsList from "./AppointmentsList";
 import { useEffect, useState } from "react";
 import { Appointment } from "../lib/types/Appointment";
+import { addNotification } from "@/lib/queries";
 
 export default function AppointmentWrap() {
   const [appointments, setAppointments] = useState<Appointment[]>([]);
@@ -24,6 +25,7 @@ export default function AppointmentWrap() {
         appt.id === apptId ? { ...appt, fullname: "" } : appt
       )
     );
+    // addNotification(apptId);
   }
 
   async function handleDelete(apptId: string) {

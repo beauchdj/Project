@@ -69,6 +69,7 @@ export default function AdminView({ appt_list }: { appt_list: Appointment[] }) {
               type="reset"
               className="nav-btn"
               onClick={() => {
+                toggleHidden("Result's Reset");
                 setAppts(appt_list);
                 setError("");
               }}
