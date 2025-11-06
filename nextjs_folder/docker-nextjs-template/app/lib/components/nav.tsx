@@ -1,6 +1,7 @@
 "use client";
 import { signOut, useSession } from "next-auth/react";
 import Dropdown from "./Dropdown";
+import { useState } from "react";
 // import { Session } from "next-auth";
 
 export default function Nav() {
@@ -29,17 +30,23 @@ export default function Nav() {
       "
     >
       <Dropdown session={session} />
-      <h1 className="flex-1 w-full flex justify-center text-2xl md:text-6xl bg-clip-text text-transparent bg-gradient-to-r from-sky-400 to-lime-400 italic font-serif">
+      <h1
+        className={
+          "flex-1 w-full flex justify-center text-2xl md:text-6xl bg-clip-text text-transparent bg-gradient-to-r from-sky-400 to-lime-400 italic"
+        }
+      >
         Schwellness
       </h1>
-      <GlobalBell />
       {session?.user.username && (
-        <button
-          onClick={signOutHandler}
-          className="nav-btn cursor-pointer text-sm"
-        >
-          Sign Out
-        </button>
+        <>
+          <GlobalBell />
+          <button
+            onClick={signOutHandler}
+            className="nav-btn cursor-pointer text-sm"
+          >
+            Sign Out
+          </button>
+        </>
       )}
     </main>
   );
@@ -65,10 +72,25 @@ function Loading() {
     </main>
   );
 }
+/**
+ * Left working with notification bell
+ * Need to think about adding to nofication table
+ * Need to think about if we need a cron job - idk how not thinking abt it
+ * RN: Try using just the booking table and filter for appointments a few days in advance
+ */
 
 function GlobalBell() {
+  const [showList, setShowList] = useState<boolean>(false);
+  const fakeList = [
+    { message: "Upcomming Appointment", who: "Stelton Blue" },
+    { message: "Upcoming Appointment", who: "Stelton Red" },
+  ];
+  const [notifications, setNotifications] = useState(fakeList);
   return (
-    <div className="w-8 h-8 m-2 text-white hover:text-black cursor-pointer relative">
+    <div
+      className="w-8 h-8 m-2 text-white active:text-black cursor-pointer relative"
+      onClick={() => setShowList((p) => !p)}
+    >
       <svg
         xmlns="http://www.w3.org/2000/svg"
         viewBox="0 0 640 640"
@@ -81,7 +103,17 @@ function GlobalBell() {
         className="w-[12px] h-[12px] rounded-4xl bg-red-500 bottom-1 right-1 absolute text-white text-[8px] flex justify-center items-center indent-0.5"
         hidden={false}
       >
-        {""}
+        {notifications.length}
+      </div>
+      <div
+        className="bg-emerald-900 text-white absolute top-8 right-2 p-4 rounded-xl cursor-default"
+        hidden={showList}
+      >
+        {notifications.map((note, idx) => (
+          <div key={idx} className="w-64 overflow-scroll">
+            {note.message} with: {note.who}
+          </div>
+        ))}
       </div>
     </div>
   );
