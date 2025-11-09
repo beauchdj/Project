@@ -3,7 +3,7 @@
 # in the same directory as compose.yaml
 services:
   db: # Service name
-    image: postgres # 
+    image: postgres #
     container_name: db
     restart: always
     # set shared memory limit when using docker compose
@@ -28,18 +28,16 @@ services:
 
 volumes:
   pgdata:
-
-
-# To Checkout the file structure of the docker container you can 
-# 1. run `docker exect -it <service-name> bash|sh` 
+# To Checkout the file structure of the docker container you can
+# 1. run `docker exect -it <service-name> bash|sh`
 # 2. find <dir-to-start-search> -type d -name "<filename|.<extension>|direcotryname>"
-#   Types: 
+#   Types:
 #       -f: file
 #       -d: directory
 #       -s: socket
 #       -p: named pipe
-# Example: 
-# * already in the same direcotry as compose.yaml 
+# Example:
+# * already in the same direcotry as compose.yaml
 # docker exec -it db
 # find / -type d -name 'postgresql/data'
-# 
+# Read contents of file with cat
