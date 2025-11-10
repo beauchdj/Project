@@ -5,10 +5,12 @@ import CancelBookingButton from "./CancelBookingButton";
 
 export default function BookedApptsList({ 
   bookings,
-  onCancel
+  onCancel,
+  onError
 }: {
   bookings: Booking[];
   onCancel: (apptId: string) => void;
+  onError: (message:string) => void;
 }) {
 
   if (!bookings.length) {
@@ -58,7 +60,8 @@ export default function BookedApptsList({
                       <td className="px-3 py-2">
                         <CancelBookingButton 
                           bookingId={row.id!}
-                          onSuccess={() => onCancel(row.id!)}/>
+                          onSuccess={() => onCancel(row.id!)}
+                          onError={onError}/>
                       </td>
                       :
                       <td className="px-3 py-2">
