@@ -64,6 +64,7 @@ export default function BookingClient() {
         <BookedApptsList
             bookings={bookings}
             onCancel={handleCancel}
+            onError={handleError}
         />
       </div>
     </>
