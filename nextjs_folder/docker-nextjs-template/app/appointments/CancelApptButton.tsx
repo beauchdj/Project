@@ -2,19 +2,29 @@
 "use client";
 
 type Props = {
-  apptId: string;
+  bookingId: string;
   onSuccess: () => void;
+  onError: (message: string) => void;
 };
 
-export default function CancelApptButton({ apptId, onSuccess }: Props) {
+export default function CancelApptButton({ bookingId, onSuccess, onError }: Props) {
   async function handleClick() {
-   // const response = await fetch(`/api/bookings?apptId=${apptId}`, {
-    const response = await fetch(`/api/bookings/${apptId}/cancel`, {
+   try {
+    const response = await fetch(`/api/bookings/${bookingId}/cancel`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ apptId }),
+      body: JSON.stringify({ bookingId }),
     });
+
+    const data = await response.json(); //
+      if (!response.ok) {
+        onError(data.error || "Unable to cancel appointment.");
+        return;
+      }
     onSuccess();
+    } catch {
+      onError("An unexpected error occurred while cancelling this appointment.");
+    }
   }
 
   return (
