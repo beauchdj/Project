@@ -2,13 +2,13 @@
 
 
 import { NextResponse, NextRequest } from "next/server";
-import { getAllAvailAppts } from "@/app/lib/services/appointmentServices";
+import { getAllOpenAppts } from "@/app/lib/services/appointmentServices";
 
 export async function GET(request: NextRequest) {
     const category = request.nextUrl.searchParams.get("category");
    
      try {
-    const result = await getAllAvailAppts(category ?? null);
+    const result = await getAllOpenAppts(category ?? null);
     return NextResponse.json(result, { status: 200 });
   } catch {
     return NextResponse.json({ error: "Server Error" }, { status: 500 });
