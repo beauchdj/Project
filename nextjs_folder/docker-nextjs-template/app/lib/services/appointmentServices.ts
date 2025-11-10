@@ -1,5 +1,8 @@
 import { pool } from "@/lib/db";
+import { start } from "repl";
 
+// for service provider to create a new appointment slot
+//   checks that they do not have other appointment slots that conflict
 export async function createAvailabilitySlot(
   spId: string,
   service: string,
@@ -34,6 +37,7 @@ export async function createAvailabilitySlot(
     return { apptId: result.rows[0].id };
   } catch (error:any) {
 
+    // catch DB constraint violation
     if (error?.code === "23P01" || error?.constraint === "appts_avail_no_overlap") {
       console.log("DB Constraint Violation - Appointment Overlap");
       throw new Error("CONFLICT: Appointment Overlap");
@@ -43,15 +47,17 @@ export async function createAvailabilitySlot(
   }
 }
 
+// get service provider appointments
 export async function getAllSpAppts(spId: string) {
   try {
     const { rows } = await pool.query(
-      `SELECT appts.starttime, appts.endtime, appts.service, clients.fullname, appts.id
-             FROM appts_avail as appts
-             LEFT JOIN appt_bookings as bookings ON appts.id = bookings.apptid
-             LEFT JOIN users as clients ON bookings.userid = clients.id
-             WHERE appts.spid = $1
-             ORDER BY appts.starttime ASC`,
+      `SELECT a.starttime, a.endtime, a.service, c.fullname, b.bookstatus, b.id, a.id
+       FROM appts_avail AS a
+       LEFT JOIN appt_bookings as b ON b.apptid = a.id AND b.bookstatus = 'Booked'
+       Left JOIN users as c ON c.id = b.userid
+       WHERE spID = $1
+       AND a.starttime > NOW()
+       ORDER BY a.starttime asc`,
       [spId]
     );
     return rows;
@@ -60,19 +66,24 @@ export async function getAllSpAppts(spId: string) {
   }
 }
 
-export async function getAllAvailAppts(serviceCategory: string | null) {
+// returns all available appointments (cancelled or never booked) for a customer
+export async function getAllOpenAppts(serviceCategory: string | null) {
   try {
     const { rows } = await pool.query(
-      `SELECT appts.starttime, appts.endtime, appts.service, sps.providername, sps.servicecategory, clients.fullname, appts.id
-             FROM appts_avail AS appts
-             LEFT JOIN appt_bookings AS bookings ON bookings.apptid = appts.id
-             JOIN users as sps ON appts.spid = sps.id
-             LEFT JOIN users as clients ON bookings.userid = clients.id
-             WHERE bookings.apptid IS NULL AND sps.servicecategory = $1
-            `,
+      `SELECT a.starttime,a.endtime,a.service,sp.providername,a.id
+       FROM appts_avail as a
+       JOIN users as sp ON sp.id = a.spid
+       WHERE NOT EXISTS (
+          SELECT 1
+          FROM appt_bookings as b
+          WHERE b.apptid = a.id
+          AND b.bookstatus = 'Booked'
+        )
+        AND a.starttime > NOW()
+        AND sp.servicecategory = $1;
+        `,
       [serviceCategory]
     );
-    // console.log("got back: ", rows);
     return rows;
   } catch (error) {
     console.log("appointment services error: ", error);
@@ -80,51 +91,132 @@ export async function getAllAvailAppts(serviceCategory: string | null) {
   }
 }
 
-export async function bookAppointment(apptId: string, userId: string) {
+export async function bookAppointment(
+  userId: string,
+  apptId: string, 
+){
+
+  const { rows } = await pool.query(
+    `SELECT * 
+    FROM appts_avail
+    WHERE id = $1
+    `,
+    [apptId]
+  );
+ const appt = rows[0];
+
+  if (!appt) {
+    console.log("Appt does not exist");
+    throw new Error("Appt does not exist");
+  }
+
+  console.log("In book appt service");
+  console.log("Check if appt has already been booked by another customer...");
+  // Check if appointment has already been booked by another customer
   const alreadyBooked = await pool.query(
-    `SELECT id FROM appt_bookings WHERE apptid = $1 LIMIT 1`,
+    `SELECT id 
+     FROM appt_bookings 
+     WHERE apptid = $1
+     AND bookstatus = 'Booked'
+    LIMIT 1`,
     [apptId]
   );
 
   if (alreadyBooked.rowCount) {
-    throw new Error("Already Booked");
+    console.log("Already Booked");
+    throw new Error("Appointment is already Booked");
+  }
+  
+  console.log("Check if appt conflicts with another appt that this customer has already booked...");
+  // Check if appointment conflicts with another appointment that this customer has already booked
+  const bookingConflict = await pool.query(
+    `SELECT b.id FROM appt_bookings as b
+    JOIN appts_avail as a ON a.id = b.apptId
+    WHERE b.userid = $1
+    AND b.bookstatus = 'Booked'
+    AND tsrange(a.starttime, a.endtime, '[)') && tsrange($2, $3, '[)')
+    LIMIT 1`,
+    [userId, appt.starttime, appt.endtime]
+  )
+
+  if (bookingConflict.rowCount) {
+    console.log("Booking Conflict Detected");
+    throw new Error("Booking Conflict: Appointment conflicts with an existing booked appointment");
   }
 
-  const { rows } = await pool.query(
-    `INSERT INTO appt_bookings (apptid, userid, bookstatus)
-         VALUES ($1, $2, 'Booked')
+  // if no conflicts, create new booking
+  const result = await pool.query(
+    `INSERT INTO appt_bookings (apptid, userid, bookstatus,booked_at)
+         VALUES ($1, $2, 'Booked', NOW())
          Returning id`,
     [apptId, userId]
   );
 
-  return rows[0].id as string;
+  return result.rows[0].id as string;
 }
 
-export async function getBookedAppts(userId: string) {}
+export async function getBookedAppts(userId: string) {
+  try {
+    const { rows } = await pool.query(
+      `SELECT appts.starttime, appts.endtime, appts.service, sp.providername, bookings.id, bookings.bookstatus
+             FROM appts_avail as appts
+             LEFT JOIN appt_bookings as bookings ON appts.id = bookings.apptid
+             LEFT JOIN users as cust ON bookings.userid = cust.id
+             LEFT JOIN users as sp ON appts.spid = sp.id
+             WHERE bookings.userid = $1
+             AND appts.starttime > NOW()
+             ORDER BY appts.starttime ASC`,
+      [userId]
+    );
+    return rows;
+  } catch (error) {
+    throw new Error("Get Bookings Error");
+  }
+}
 
-export async function deleteBookedAppt(apptId: string, userId: string) {
+
+export async function cancelBookedAppt(bookingId: string, userId: string) {
+
+  // check that the user who is trying to cancel has permission to do so
+      // (is the customer, the service provider, or is an admin)
+
+  const query = 
+  `WITH canceller AS (
+      SELECT u.id, u.isadmin
+      FROM users as u
+      WHERE u.id = $2
+    )
+    UPDATE appt_bookings as b
+    SET bookstatus = 'Cancelled',
+        cancelled_at = NOW(),
+        cancelled_by = $2
+    FROM appts_avail as a, canceller
+    WHERE b.id = $1
+    AND a.id = b.apptId
+    AND (
+      b.userId = $2
+      OR canceller.isadmin
+      OR a.spId = $2
+    )
+    AND b.bookstatus = 'Booked'
+    RETURNING b.id,b.apptid,b.userid;`;
+
   try {
     const result = await pool.query(
-     `DELETE FROM appt_bookings AS bookings
-      USING appts_avail AS appts
-      WHERE
-        bookings.apptid = $1
-        AND appts.id = bookings.apptid
-        AND (
-          bookings.userid = $2
-          OR appts.spid = $2
-        )
-      RETURNING bookings.id;;`,
-      [apptId, userId]
+      query,
+       [bookingId,userId]
     );
 
     if (result.rowCount === 0) {
-      return { deleted: false };
+      return { ok: false };
     }
 
-    return { 
-    deleted: true ,
-    bookingId: result.rows[0].id,
+   const row = result.rows[0]
+  return { 
+    ok: true ,
+    bookingId: row.id,
+    apptId: row.apptid,
+    userId: row.userid
     };
   } catch (error) {
     console.error("Delete Booked Appointment Error: ", error);
