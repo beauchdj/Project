@@ -6,4 +6,5 @@ export type Booking = {
   servicecategory: string;
   fullname?: string;
   id: string;
+  bookstatus: string;
 };
