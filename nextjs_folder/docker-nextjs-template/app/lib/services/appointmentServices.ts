@@ -51,7 +51,7 @@ export async function createAvailabilitySlot(
 export async function getAllSpAppts(spId: string) {
   try {
     const { rows } = await pool.query(
-      `SELECT a.starttime, a.endtime, a.service, c.fullname, b.bookstatus, b.id, a.id
+      `SELECT a.starttime, a.endtime, a.service, c.fullname, b.bookstatus, b.id as bookingid, a.id
        FROM appts_avail AS a
        LEFT JOIN appt_bookings as b ON b.apptid = a.id AND b.bookstatus = 'Booked'
        Left JOIN users as c ON c.id = b.userid
