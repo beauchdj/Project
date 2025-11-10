@@ -1,5 +1,5 @@
 "use server";
-import { RegisterForm } from "./lib/register_form";
+import { RegisterForm } from "./lib/RegisterForm";
 
 export default async function Page() {
   return (
