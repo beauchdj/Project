@@ -9,8 +9,8 @@ type Props = {
 export default function CancelApptButton({ apptId, onSuccess }: Props) {
   async function handleClick() {
    // const response = await fetch(`/api/bookings?apptId=${apptId}`, {
-    const response = await fetch("/api/bookings", {
-      method: "DELETE",
+    const response = await fetch(`/api/bookings/${apptId}/cancel`, {
+      method: "PUT",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ apptId }),
     });
