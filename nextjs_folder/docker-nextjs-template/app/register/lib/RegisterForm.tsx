@@ -74,7 +74,7 @@ export function RegisterForm() {
     const isValid = validateStep4();
     if (isValid) {
       const dt: users_db = {
-        sp_type: sp_type,
+        sp_type: isSp ? sp_type : "",
         fullname: fullname,
         providername: providername,
         username: username,
@@ -82,7 +82,7 @@ export function RegisterForm() {
         isadmin: false,
         issp: isSp,
         iscustomer: isCustomer,
-        qualifications: qualifications,
+        qualifications: isSp ? qualifications : "",
         city: city,
         state: state,
         zip: zip,
@@ -102,6 +102,7 @@ export function RegisterForm() {
       await ret.json();
 
       if (ret.ok) {
+        
         setServerError(false);
         router.push("/login");
       } else {
@@ -302,9 +303,9 @@ export function RegisterForm() {
   //
   //
   return (
-    <div className="flex flex-col w-full h-screen items-center bg-[rgba(6,78,59,0.5)] text-white">
+    <div className="flex flex-col w-full h-screen items-center bg-[rgba(6,78,59,0.5)] text-slate-300">
       {/* Header + Progress */}
-      <div className="w-full max-w-2xl px-6 py-6">
+      <div className="flex-row w-full max-w-2xl px-6 py-6">
         <p className="text-sm text-gray-200 uppercase">
           Step {currentStep} of {totalSteps}
         </p>
@@ -332,290 +333,338 @@ export function RegisterForm() {
           {Math.round(progressPercent)}%
         </p>
       </div>
+      <div className="flex w-full max-w-2xl px-6 py-6 items-start justify-between gap- items-stretch ${currentStep === 4 ? 'justify-center' : 'justify-between'}">
 
-      {/* Form Body */}
-      <form
-        onKeyDown={handleKeyDown}
-        onSubmit={handleRegister}
-        className="flex items-start flex-col bg-emerald-800/90 border-black border-3 px-12 py-8 text-slate-200 rounded-2xl w-full max-w-2xl shadow-black shadow h-[calc(100vh-10rem)] overflow-auto opacity-97"
-      >
-        {/* Step 1 */}
-        {currentStep === 1 && (
-          <div className="flex gap-1 mt-1 flex-col w-full">
+        {/* Form Body */}
+        <div className="flex-grow">
+          <form
+            onKeyDown={handleKeyDown}
+            onSubmit={handleRegister}
+            className="flex flex-col items-start bg-emerald-800/90 border-black border-3 px-12 py-8 text-slate-200 rounded-2xl w-full shadow-black shadow overflow-auto opacity-97"
+          >
+            {/* Step 1 */}
+            {currentStep === 1 && (
+              <div className="flex gap-1 mt-1 flex-col w-full">
 
-            <label className="label-col">
-              Full Name
-              <input
-                type="text"
-                onChange={handleChange}
-                name="fullname"
-                value={formData.fullname}
-                placeholder="Enter your name here..."
-                className="input-element"
-                required
-              ></input>
-              {showNameError && <p className="error-text">Please enter your full name</p>}
-            </label>
+                <label className="label-col">
+                  Full Name
+                  <input
+                    type="text"
+                    onChange={handleChange}
+                    name="fullname"
+                    value={formData.fullname}
+                    placeholder="Enter your name here..."
+                    className="input-element"
+                    required
+                  ></input>
+                  {showNameError && <p className="error-text">Please enter your full name</p>}
+                </label>
 
-            Account Type:
-            <div className="flex gap-1">
-              <label className="flex items-center gap-2">
-                Customer
-                <input
-                  type="checkbox"
-                  onChange={handleChange}
-                  checked={formData.isCustomer}
-                  name="isCustomer"
-                  value="isCustomer"
-                  className="w-7 h-7 accent-sky-500 cursor-pointer"
-                  required={!isSp} // service provider = true, require = false, service provider = false, require = true
-                />
-              </label>
+                Account Type:
+                <div className="flex gap-1">
+                  <label className="flex items-center gap-2">
+                    Customer
+                    <input
+                      type="checkbox"
+                      onChange={handleChange}
+                      checked={formData.isCustomer}
+                      name="isCustomer"
+                      value="isCustomer"
+                      className="w-7 h-7 accent-sky-500 cursor-pointer"
+                      required={!isSp} // service provider = true, require = false, service provider = false, require = true
+                    />
+                  </label>
 
-              <label className="flex items-center gap-2">
-                Service Provider
-                <input
-                  type="checkbox"
-                  name="isSp"
-                  value="isSp"
-                  className="w-7 h-7 accent-emerald-500 cursor-pointer"
-                  onChange={(e) => {
-                    setIsSp(e.target.checked);
-                  }}
-                  checked={isSp}
-                ></input>
-              </label>
-            </div>
-            {typeError && <p className="error-text">Please select an account type, or both</p>}
+                  <label className="flex items-center gap-2">
+                    Service Provider
+                    <input
+                      type="checkbox"
+                      name="isSp"
+                      value="isSp"
+                      className="w-7 h-7 accent-emerald-500 cursor-pointer"
+                      onChange={(e) => {
+                        setIsSp(e.target.checked);
+                      }}
+                      checked={isSp}
+                    ></input>
+                  </label>
+                </div>
+                {typeError && <p className="error-text">Please select an account type, or both</p>}
 
 
-            {isSp && (
-              <label className="label-col">
-                Provider Name
-                <input
-                  type="text"
-                  name="providername"
-                  placeholder="Enter service name"
-                  className="input-element"
-                  onChange={handleChange}
-                  value={formData.providername}
-                  required
-                ></input>
-                {showSpNameError && <p className="error-text">Please enter your business name</p>}
-              </label>
+                {isSp && (
+                  <label className="label-col">
+                    Provider Name
+                    <input
+                      type="text"
+                      name="providername"
+                      placeholder="Enter service name"
+                      className="input-element"
+                      onChange={handleChange}
+                      value={formData.providername}
+                      required
+                    ></input>
+                    {showSpNameError && <p className="error-text">Please enter your business name</p>}
+                  </label>
+                )}
+              </div>
             )}
-          </div>
-        )}
 
-        {/* Step 2 */}
-        {currentStep === 2 && (
+            {/* Step 2 */}
+            {currentStep === 2 && (
 
-          <div className="flex flex-col gap-4 w-full">
-            <label className="label-col">
-              Email
-              <input
-                type="text"
-                name="email"
-                className="input-element"
-                placeholder="Email address"
-                onChange={handleChange}
-                value={formData.email}
-                required
-              ></input>
-              {showEmailError && <p className="error-text">Invalid Email - formatting should be: user@example.com</p>}
-            </label>
-
-            <label className="label-col">
-              Phone
-              <input
-                type="text"
-                name="phone"
-                className="input-element"
-                placeholder="Phone number"
-                onChange={handleChange}
-                value={formData.phone}
-                required
-              ></input>
-              {showPhoneError && <p className="error-text">Invalid Phone Number, use only numbers</p>}
-            </label>
-
-          </div>
-        )}
-
-        {/* Step 3 */}
-        {currentStep === 3 && (
-          <div className="flex flex-col gap-4 w-full">
-            <label className="label-col">
-              Address One
-              <input
-                type="text"
-                name="street_1"
-                className="input-element"
-                placeholder="Primary address"
-                onChange={handleChange}
-                value={formData.street_1}
-                required
-              ></input>
-              {showAddressError && <p className="error-text">Please enter a valid address</p>}
-            </label>
-
-            <label className="label-col">
-              Address Two (Optional)
-              <input
-                type="text"
-                name="street_2"
-                className="input-element"
-                placeholder="Secondary address"
-                onChange={handleChange}
-                value={formData.street_2}
-              ></input>
-            </label>
-
-            <label className="label-col">
-              City
-              <input
-                type="text"
-                name="city"
-                className="input-element"
-                placeholder="Enter your city"
-                onChange={handleChange}
-                value={formData.city}
-                required
-              ></input>
-              {showCity && <p className="error-text">City Name Should Not Have Numbers</p>}
-            </label>
-
-            <label className="label-col">
-              State
-              <input
-                type="text"
-                name="state"
-                className="input-element"
-                placeholder="Enter your state"
-                onChange={handleChange}
-                value={formData.state}
-                required
-              ></input>
-              {stateError && (
-                <p className="error-text">Please use the 2 digit abbreviation for the state</p>
-              )}
-            </label>
-
-            <label className="label-col">
-              Zip Code
-              <input
-                type="text"
-                name="zipcode"
-                className="input-element"
-                placeholder="Enter your zip code"
-                onChange={handleChange}
-                value={formData.zipcode}
-                required
-              ></input>
-              {showZip && <p className="error-text">Invalid Zip Code</p>}
-            </label>
-          </div>
-        )}
-
-        {/* Step 4 (Qualifications only if provider) */}
-        {currentStep === 4 && (
-          <div className="flex flex-col gap-4 w-full">
-            <label className="label-col">
-              Username
-              <input
-                type="text"
-                name="username"
-                placeholder="Enter a username"
-                className="input-element"
-                onChange={handleChange}
-                value={formData.username}
-                required
-              ></input>
-              {showSpNameError && <p className="error-text">Please enter a username</p>}
-            </label>
-
-            <label className="label-col">
-              Password
-              <input
-                type="password"
-                placeholder="Enter a password"
-                name="password"
-                className="input-element"
-                onChange={handleChange}
-                value={formData.password}
-                required
-              ></input>
-              {showPasswordError && <p className="error-text">Please enter a password</p>}
-
-            </label>
-            {isSp && (
-              <div className="flex flex-col text-start">
-                Service Provider Type:
-                <label className="flex gap-1 text-sm">
-                  Beauty
+              <div className="flex flex-col gap-4 w-full">
+                <label className="label-col">
+                  Email
                   <input
-                    type="radio"
-                    name="sp_type"
-                    value="beauty"
-                    className="cursor-pointer"
+                    type="text"
+                    name="email"
+                    className="input-element"
+                    placeholder="Email address"
                     onChange={handleChange}
-                    checked={formData.sp_type === "beauty"}
+                    value={formData.email}
+                    required
+                  ></input>
+                  {showEmailError && <p className="error-text">Invalid Email - formatting should be: user@example.com</p>}
+                </label>
+
+                <label className="label-col">
+                  Phone
+                  <input
+                    type="text"
+                    name="phone"
+                    className="input-element"
+                    placeholder="Phone number"
+                    onChange={handleChange}
+                    value={formData.phone}
+                    required
+                  ></input>
+                  {showPhoneError && <p className="error-text">Invalid Phone Number, use only numbers</p>}
+                </label>
+
+              </div>
+            )}
+
+            {/* Step 3 */}
+            {currentStep === 3 && (
+              <div className="flex flex-col gap-4 w-full">
+                <label className="label-col">
+                  Address One
+                  <input
+                    type="text"
+                    name="street_1"
+                    className="input-element"
+                    placeholder="Primary address"
+                    onChange={handleChange}
+                    value={formData.street_1}
+                    required
+                  ></input>
+                  {showAddressError && <p className="error-text">Please enter a valid address</p>}
+                </label>
+
+                <label className="label-col">
+                  Address Two (Optional)
+                  <input
+                    type="text"
+                    name="street_2"
+                    className="input-element"
+                    placeholder="Secondary address"
+                    onChange={handleChange}
+                    value={formData.street_2}
                   ></input>
                 </label>
-                <label className="flex gap-1 text-sm">
-                  Medical
+
+                <label className="label-col">
+                  City
                   <input
-                    type="radio"
-                    name="sp_type"
-                    value="medical"
-                    className="cursor-pointer"
+                    type="text"
+                    name="city"
+                    className="input-element"
+                    placeholder="Enter your city"
                     onChange={handleChange}
-                    checked={formData.sp_type === "medical"}
+                    value={formData.city}
+                    required
                   ></input>
+                  {showCity && <p className="error-text">City Name Should Not Have Numbers</p>}
                 </label>
-                <label className="flex gap-1 text-sm">
-                  Fitness
+
+                <label className="label-col">
+                  State
                   <input
-                    type="radio"
-                    name="sp_type"
-                    value="fitness"
-                    className="cursor-pointer"
+                    type="text"
+                    name="state"
+                    className="input-element"
+                    placeholder="Enter your state"
                     onChange={handleChange}
-                    checked={formData.sp_type === "fitness"}
+                    value={formData.state}
+                    required
                   ></input>
+                  {stateError && (
+                    <p className="error-text">Please use the 2 digit abbreviation for the state</p>
+                  )}
+                </label>
+
+                <label className="label-col">
+                  Zip Code
+                  <input
+                    type="text"
+                    name="zipcode"
+                    className="input-element"
+                    placeholder="Enter your zip code"
+                    onChange={handleChange}
+                    value={formData.zipcode}
+                    required
+                  ></input>
+                  {showZip && <p className="error-text">Invalid Zip Code</p>}
                 </label>
               </div>
             )}
-            {isSp && (
-              <label className="label-col">
-                <div className="flex justify-between items-end">
-                  <span>Qualifications:</span>
-                  <span className="text-sm">{charLimit}/255</span>
-                </div>
-                <div className="flex items-end gap-1">
-                  <textarea
-                    name="qualifications"
-                    rows={2}
-                    placeholder="Enter qualifications"
+
+            {/* Step 4 (Qualifications only if provider) */}
+            {currentStep === totalSteps && (
+              <div className="flex flex-col gap-4 w-full">
+                <label className="label-col">
+                  Username
+                  <input
+                    type="text"
+                    name="username"
+                    placeholder="Enter a username"
                     className="input-element"
-                    maxLength={255}
-                    value={formData.qualifications} // bind to state
-                    onChange={(e) => {
-                      const { name, value } = e.target;
-                      setCharLimit(value.length); // update character count
-                      setFormData((prev) => ({
-                        ...prev,
-                        [name]: value // update qualifications in formData
-                      }));
-                    }}
+                    onChange={handleChange}
+                    value={formData.username}
                     required
-                  />
-                </div>
-              </label>
+                  ></input>
+                  {showSpNameError && <p className="error-text">Please enter a username</p>}
+                </label>
+
+                <label className="label-col">
+                  Password
+                  <input
+                    type="password"
+                    placeholder="Enter a password"
+                    name="password"
+                    className="input-element"
+                    onChange={handleChange}
+                    value={formData.password}
+                    required
+                  ></input>
+                  {showPasswordError && <p className="error-text">Please enter a password</p>}
+
+                </label>
+                {isSp && (
+                  <div className="flex flex-col text-start">
+                    Service Provider Type:
+                    <label className="flex gap-1 text-sm">
+                      Beauty
+                      <input
+                        type="radio"
+                        name="sp_type"
+                        value="beauty"
+                        className="cursor-pointer"
+                        onChange={handleChange}
+                        checked={formData.sp_type === "beauty"}
+                      ></input>
+                    </label>
+                    <label className="flex gap-1 text-sm">
+                      Medical
+                      <input
+                        type="radio"
+                        name="sp_type"
+                        value="medical"
+                        className="cursor-pointer"
+                        onChange={handleChange}
+                        checked={formData.sp_type === "medical"}
+                      ></input>
+                    </label>
+                    <label className="flex gap-1 text-sm">
+                      Fitness
+                      <input
+                        type="radio"
+                        name="sp_type"
+                        value="fitness"
+                        className="cursor-pointer"
+                        onChange={handleChange}
+                        checked={formData.sp_type === "fitness"}
+                      ></input>
+                    </label>
+                  </div>
+                )}
+                {isSp && (
+                  <label className="label-col">
+                    <div className="flex justify-between items-end">
+                      <span>Qualifications:</span>
+                      <span className="text-sm">{charLimit}/255</span>
+                    </div>
+                    <div className="flex items-end gap-1">
+                      <textarea
+                        name="qualifications"
+                        rows={2}
+                        placeholder="Enter qualifications"
+                        className="input-element"
+                        maxLength={255}
+                        value={formData.qualifications}
+                        onChange={(e) => {
+                          const { name, value } = e.target;
+                          setCharLimit(value.length);
+                          setFormData((prev) => ({
+                            ...prev,
+                            [name]: value
+                          }));
+                        }}
+                        required
+                      />
+                    </div>
+                  </label>
+                )}
+                {serverError && (
+                  <div className="error-text text-center">Server Error...</div>
+                )}
+                <button
+                  type="submit"
+                  className="
+                    bg-emerald-600 text-2xl font-bold p-4 
+                    shadow-md active:shadow-none
+                    mt-8 w-full
+                    hover:bg-emerald-500 transition-colors 
+                    rounded-xl 
+                    cursor-pointer
+                  "
+                >
+                  Submit Application
+                </button>
+              </div>
             )}
-            {serverError && (
-              <div className="error-text text-center">Server Error...</div>
-            )}
+
+            {/* Static Bottom Nav */}
+            <div className="mt-auto w-5/8 flex justify-between px-10 py-4 bg-emerald-900 border-t border-4 border-black fixed bottom-0 left-1/2 transform -translate-x-1/2 rounded-t-lg">
+              <div></div>
+              {currentStep > 1 ? (
+                <button
+                  type="button"
+                  name="prev"
+                  ref={prevButtonRef}
+                  onClick={() => prevStep()}
+                  className="w-100 bg-gray-500 px-4 py-2 text-2xl rounded-lg hover:bg-gray-400 transition cursor-pointer"
+                >
+                  Previous
+                </button>
+              ) : (
+                <div></div>
+              )}
+
+              {currentStep < totalSteps ? (
+                <button
+                  type="button"
+                  ref={nextButtonRef}
+                  onClick={() => nextStep()}
+                  className="w-100 bg-sky-600 px-4 py-2 text-2xl rounded-lg hover:bg-sky-500 transition cursor-pointer"
+                >
+                  Next
+                </button>
+              ) : (
+                <div></div>
+              )}
+            </div>
             {
               /*
             <div className="">
@@ -629,48 +678,9 @@ export function RegisterForm() {
                 </a>
               </p>
             </div> */}
-          </div>
-
-        )}
-
-        {/* Static Bottom Nav */}
-        <div className="mt-auto w-5/8 h-1/6 flex justify-between px-6 py-4 bg-emerald-900 border-t border-4 border-black fixed bottom-0 left-1/2 transform -translate-x-1/2 rounded-t-lg">
-          {currentStep > 1 ? (
-            <button
-              type="button"
-              name="prev"
-              ref={prevButtonRef}
-              onClick={() => prevStep()}
-              className="w-100 bg-gray-500 px-4 py-2 text-5xl rounded-lg hover:bg-gray-400 cursor-pointer"
-            >
-              Previous
-            </button>
-          ) : (
-            <div></div>
-          )}
-
-          {currentStep < totalSteps ? (
-            <button
-              type="button"
-              ref={nextButtonRef}
-              onClick={() => nextStep()}
-              className="w-100 bg-sky-600 px-4 py-2 text-5xl rounded-lg hover:bg-sky-500 transition cursor-pointer"
-            >
-              Next
-            </button>
-          ) : (
-            <button
-              type="button"
-              ref={nextButtonRef}
-              onClick={() => nextStep()}
-              className="w-100 bg-emerald-600 px-4 py-2 text-5xl rounded-lg hover:bg-emerald-500 transition cursor-pointer"
-            >
-              Submit
-            </button>
-          )}
+          </form>
         </div>
-      </form>
-
+      </div>
     </div>
   );
 }
