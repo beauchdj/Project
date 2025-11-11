@@ -16,6 +16,9 @@ export async function GET(req: NextRequest) {
     AND starttime::date BETWEEN CURRENT_DATE AND CURRENT_DATE + INTERVAL '2 days';`,
     [uid]
   );
+  // const canceledAppts = `
+  // SELECT * FROM appts_avail JOIN users ON spid = users.id JOIN appt_bookings ON appts_avail.id = appt_bookings.apptid WHERE appts_avail.id = $1', [];
+  // `
   // console.log("NOTIFICATION ENDPOINT: ", dbResp.rows);
   return NextResponse.json(dbResp.rows, { status: 200 });
 }

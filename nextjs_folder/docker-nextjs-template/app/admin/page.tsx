@@ -18,13 +18,23 @@ import { NotificationProvider } from "../lib/components/NotificationContext";
 export default async function Page() {
   const session = await auth();
   if (!session?.user || !session?.user.isAdmin) redirect("/");
-  const ret = await pool.query(
-    "SELECT * FROM appts_avail JOIN users on users.id = appts_avail.spid"
-  );
-  const appts: Appointment[] = ret.rows;
+  const appts: Appointment[] = await getAllApptsJoinSP();
   return (
     <NotificationProvider>
       <AdminView appt_list={appts} />
     </NotificationProvider>
   );
+}
+
+async function getAllApptsJoinSP() {
+  try {
+    const ret = await pool.query(
+      "SELECT * FROM appts_avail JOIN users on users.id = appts_avail.spid"
+    );
+
+    return ret.rows;
+  } catch (error) {
+    console.log("Error in getAllApptsJoin() from /app/admin/page.tsx ", error);
+    return [];
+  }
 }

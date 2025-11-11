@@ -1,6 +1,9 @@
 "use server";
 import { pool } from "@/lib/db";
 import { NextRequest, NextResponse } from "next/server";
+/**
+ * TODO: protect this endpoint
+ */
 
 /**
  * Endpoint for notification bell
@@ -8,9 +11,9 @@ import { NextRequest, NextResponse } from "next/server";
  */
 export async function GET(
   req: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
-  const { id } = params;
+  const { id } = await params;
   const dbResp = await pool.query(
     `SELECT * FROM appt_bookings 
     JOIN appts_avail on appts_avail.id = appt_bookings.apptid 
@@ -18,7 +21,7 @@ export async function GET(
     WHERE userid = $1`,
     [id]
   );
-  console.log(dbResp);
+  // console.log(dbResp);
   // console.log("NOTIFICATION ENDPOINT: ", dbResp.rows);
   return NextResponse.json(dbResp.rows, { status: 200 });
 }

@@ -9,6 +9,7 @@ import { useNotification } from "@/app/lib/components/NotificationContext";
 export default function AdminView({ appt_list }: { appt_list: Appointment[] }) {
   const [appts, setAppts] = useState<Appointment[]>(appt_list);
   const [error, setError] = useState<string>("");
+
   const { toggleHidden } = useNotification();
 
   function submitDates(e: FormEvent<HTMLFormElement>) {

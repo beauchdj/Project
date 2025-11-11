@@ -7,7 +7,6 @@ export default function BookApptButton({ apptId }: { apptId: string }) {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ apptId }),
     });
-    window.location.reload();
   }
 
   return (

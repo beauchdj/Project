@@ -88,10 +88,10 @@ function GlobalBell({ session }: { session: Session | null }) {
   const [notifications, setNotifications] = useState<Notification[]>([]);
 
   useEffect(() => {
-    fetchDayOuts(session!.user.id);
+    fetchNotifications(session!.user.id);
   }, []);
 
-  async function fetchDayOuts(uid: string) {
+  async function fetchNotifications(uid: string) {
     const res = await fetch(`/api/notifications?uid=${uid}`, { method: "GET" });
     const json: Notification[] = await res.json();
     setNotifications(json);
@@ -120,42 +120,53 @@ function GlobalBell({ session }: { session: Session | null }) {
       }}
     >
       <Bell />
-      <div
-        hidden={!!!notifications.length}
-        className="w-[12px] h-[12px] rounded-4xl bg-red-500 bottom-1 right-1 absolute text-white text-[8px] flex justify-center items-center select-none"
-      >
-        {notifications.length}
-      </div>
-      <div
-        className="bg-emerald-900 text-white absolute top-8 right-2 px-1 rounded border-black border-2 cursor-default w-85 h-fit max-h-55 text-xs whitespace-normal overflow-y-scroll z-99"
-        hidden={showList}
-      >
-        {notifications.map((note, idx) => (
+      {notifications.length > 0 ? (
+        <>
           <div
-            key={idx}
-            className="border-b-[1px] border-b-black/30 w-full flex flex-col text-emerald-300"
+            hidden={!!!notifications.length}
+            className="w-[12px] h-[12px] rounded-4xl bg-red-500 bottom-1 right-1 absolute text-white text-[8px] flex justify-center items-center select-none"
           >
-            <span className="text-sky-400">
-              <span className="text-white">Appointment with: </span>
-              {note.providername}
-            </span>
-            <span className="text-amber-300">
-              <span className="text-white">On: </span>
-              {new Date(note.starttime).toLocaleString()}
-            </span>
-            <span className="text-amber-300">
-              <span className="text-white">Until: </span>
-              {new Date(note.endtime).toLocaleString()}
-            </span>
-            <span className="text-sky-400">
-              <span className="text-white">For: </span> {note.service}
-            </span>
-            <span className="text-lime-300">
-              <span className="text-white">Status: </span> {note.bookstatus}
-            </span>
+            {notifications.length}
           </div>
-        ))}
-      </div>
+          <div
+            className="bg-emerald-900 text-white absolute top-8 right-2 px-1 rounded border-black border-2 cursor-default w-85 h-fit max-h-55 text-xs whitespace-normal overflow-y-scroll z-99"
+            hidden={showList}
+          >
+            {notifications.map((note, idx) => (
+              <div
+                key={idx}
+                className="border-b-[1px] border-b-black/30 w-full flex flex-col text-emerald-300"
+              >
+                <span className="text-sky-400">
+                  <span className="text-white">Appointment with: </span>
+                  {note.providername}
+                </span>
+                <span className="text-amber-300">
+                  <span className="text-white">On: </span>
+                  {new Date(note.starttime).toLocaleString()}
+                </span>
+                <span className="text-amber-300">
+                  <span className="text-white">Until: </span>
+                  {new Date(note.endtime).toLocaleString()}
+                </span>
+                <span className="text-sky-400">
+                  <span className="text-white">For: </span> {note.service}
+                </span>
+                <span className="text-lime-300">
+                  <span className="text-white">Status: </span> {note.bookstatus}
+                </span>
+              </div>
+            ))}
+          </div>
+        </>
+      ) : (
+        <div
+          hidden={showList}
+          className="bg-emerald-900 text-white absolute top-8 right-2 px-1 rounded border-black border-2 cursor-default w-85 h-fit max-h-55 text-xs whitespace-normal overflow-y-scroll z-99"
+        >
+          No notifications
+        </div>
+      )}
     </div>
   );
 }
@@ -182,7 +193,7 @@ function CurrentAppointments({ userid }: { userid: string }) {
   return (
     <div
       className={`relative h-8 w-8 ${
-        showList ? "text-black" : "text-white"
+        !showList ? "text-black" : "text-white"
       } mr-2 group cursor-pointer`}
       onClick={() => {
         setShowList((p) => !p);
@@ -211,9 +222,9 @@ function CurrentAppointments({ userid }: { userid: string }) {
       </div> */}
       <div
         className="bg-emerald-900 text-white absolute top-8 right-2 px-1 rounded border-black border-2 cursor-default w-85 h-fit max-h-55 text-xs whitespace-normal overflow-y-scroll z-99"
-        hidden={!showList}
+        hidden={showList}
       >
-        <span className="sticky text-white border-b-[2px] border-r-[2px] border-black">
+        <span className="sticky text-white border-b-[2px] border-black w-full">
           All Upcoming Appointments:
         </span>
         <div className="flex flex-col max-h-[165px] overflow-auto">

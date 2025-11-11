@@ -40,14 +40,13 @@ export async function fetchData() {
 // }
 
 export async function addNotification(apptid: string): Promise<void> {
-  // const resp = await pool.query(
-  //   "UPDATE appt_bookings SET bookstatus = 'Canceled' WHERE appt_bookings.apptid = $1 RETURNING id",
-  //   [apptid]
-  // );
-  // console.log("TELLEME: ", resp);
-  // const response = await pool.query(
-  //   "INSERT INTO notifications (apptid, status) VALUES ($1, 'Canceled') RETURNING apptid",
-  //   [apptid]
-  // );
-  // console.log("ISNERT RESP: ", response);
+  try {
+    const response = await pool.query(
+      "INSERT INTO notifications (apptid, status) VALUES ($1, 'Canceled') RETURNING apptid",
+      [apptid]
+    );
+    console.log("INSERT: ", response.rows);
+  } catch (error) {
+    console.log("ERROR: addNotification(string) /lib/queries.ts ", error);
+  }
 }

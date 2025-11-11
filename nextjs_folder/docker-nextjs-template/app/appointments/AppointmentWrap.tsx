@@ -25,7 +25,7 @@ export default function AppointmentWrap() {
         appt.id === apptId ? { ...appt, fullname: "" } : appt
       )
     );
-    // addNotification(apptId);
+    await addNotification(apptId);
   }
 
   async function handleDelete(apptId: string) {
