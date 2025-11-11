@@ -18,7 +18,11 @@ export async function POST(request: Request) {
 
     try {
         const result = await bookAppointment(session.user.id, apptId);
-        return NextResponse.json({ result }, { status: 201 } );
+        if (result.ok) {
+            return NextResponse.json({ result }, { status: 201 } );
+        } else {
+            return NextResponse.json({ error: result.error },{ status: 409 } )
+        }
     } catch (error: any) {
         console.error("Booking error:", error);
         const message = error?.message || "Server Error";
