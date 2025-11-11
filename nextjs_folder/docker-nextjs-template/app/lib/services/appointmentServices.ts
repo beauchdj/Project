@@ -105,7 +105,7 @@ export async function bookAppointment(userId: string, apptId: string) {
   if (!appt) {
     throw new Error("Appt does not exist");
   }
-/*
+
   // Check if appointment has already been booked by another customer
   const alreadyBooked = await pool.query(
     `SELECT id 
@@ -120,7 +120,7 @@ export async function bookAppointment(userId: string, apptId: string) {
     console.log("Already Booked");
     throw new Error("Appointment is already Booked");
   }
-  */
+  
   // Check if appointment conflicts with another appointment that this customer has already booked
   
   const bookingConflict = await pool.query(
