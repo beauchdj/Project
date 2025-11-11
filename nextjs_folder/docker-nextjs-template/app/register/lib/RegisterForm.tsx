@@ -102,7 +102,7 @@ export function RegisterForm() {
       await ret.json();
 
       if (ret.ok) {
-        
+
         setServerError(false);
         router.push("/login");
       } else {
@@ -333,6 +333,18 @@ export function RegisterForm() {
           {Math.round(progressPercent)}%
         </p>
       </div>
+      <div className="">
+        <p className="flex col gap-1">
+          Already have an account?
+          <a
+            href={"/login"}
+            className="underline text-lime-200 hover:text-blue-200 active:text-pink-600"
+          >
+            Login
+          </a>
+        </p>
+      </div>
+
       <div className="flex w-full max-w-2xl px-6 py-6 items-start justify-between gap- items-stretch ${currentStep === 4 ? 'justify-center' : 'justify-between'}">
 
         {/* Form Body */}
@@ -665,19 +677,6 @@ export function RegisterForm() {
                 <div></div>
               )}
             </div>
-            {
-              /*
-            <div className="">
-              <p className="flex gap-1">
-                Already have an account?
-                <a
-                  href={"/login"}
-                  className="underline text-lime-200 hover:text-blue-200 active:text-pink-600"
-                >
-                  Login
-                </a>
-              </p>
-            </div> */}
           </form>
         </div>
       </div>
