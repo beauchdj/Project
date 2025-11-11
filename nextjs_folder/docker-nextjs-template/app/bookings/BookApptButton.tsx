@@ -2,17 +2,28 @@
 
 type Props = {
   apptId: string;
-  onBooked?: () => void;
+  onSuccess: () => void;
+  onError: (message: string) => void;
 };
 
-export default function BookApptButton({ apptId, onBooked }: Props) {
+export default function BookApptButton({ apptId, onSuccess, onError }: Props) {
   async function handleClick() {
-    const response = await fetch("/api/bookings", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ apptId }),
-    });
-    onBooked?.();
+    try {
+      const response = await fetch("/api/bookings", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ apptId }),
+      });
+
+      const data = await response.json(); //
+      if (!response.ok) {
+        onError(data.error || "Unable to book appointment.");
+        return;
+      }
+      onSuccess();
+    } catch {
+      onError("An unexpected error occurred while booking this appointment.");
+    }
   }
 
   return (

@@ -1,25 +1,36 @@
 "use client";
+
 import { Booking } from "../lib/types/Booking";
 import { formatter } from "../lib/types/Formatter";
 import BookApptButton from "./BookApptButton";
 
-export default function AvailableApptsList({ data }: { data: Booking[] }) {
+export default function ApptSearchResults({ 
+  data,
+  onBooked,
+  onError
+ }: { 
+    data: Booking[];
+    onBooked: (apptId: string) => void;
+    onError: (message: string) => void;
+}) {
+
   if (!data) {
     return (
       <div>
-        <h2 className="text-lg font-semibold mb-2">All Appointments</h2>
+        <h2 className="text-lg font-semibold mb-2">Available Appointments</h2>
       </div>
     );
   }
 
   return (
     <div className="">
-      <h2 className="text-lg font-semibold mb-2">All Appointments</h2>
+      <h2 className="text-lg font-semibold mb-2">Available Appointments</h2>
 
       <div className="overflow-x-auto rounded-lg border border-white/10">
         <table className="min-w-full text-sm">
           <thead className="bg-emerald-900/10">
             <tr>
+              <th className="px-3 py-2 text-left font-semibold">Date</th>
               <th className="px-3 py-2 text-left font-semibold">Start</th>
               <th className="px-3 py-2 text-left font-semibold">End</th>
               <th className="px-3 py-2 text-left font-semibold">
@@ -33,16 +44,22 @@ export default function AvailableApptsList({ data }: { data: Booking[] }) {
             {data.map((row) => {
               return (
                 <tr key={row.id} className="hover:bg-white/5">
-                  <td className="px-3 py-2 whitespace-nowrap">
-                    {formatter.format(new Date(row.starttime))}
+                  <td className="px-3 py-2 whitespace-nowrap text-xs">
+                    {new Date(row.starttime).toLocaleDateString('en-US',{weekday: 'short',month: '2-digit', day: '2-digit', year: '2-digit'})}
                   </td>
-                  <td className="px-3 py-2 whitespace-nowrap">
-                    {formatter.format(new Date(row.endtime))}
+                  <td className="px-3 py-2 whitespace-nowrap text-xs">
+                    {new Date(row.starttime).toLocaleTimeString([],{hour: '2-digit', minute:'2-digit'})}
+                  </td>
+                  <td className="px-3 py-2 whitespace-nowrap text-xs">
+                     {new Date(row.endtime).toLocaleTimeString([],{hour: '2-digit', minute:'2-digit'})}
                   </td>
                   <td className="px-3 py-2">{row.service}</td>
                   <td className="px-3 py-2">{row.providername}</td>
                   <td className="px-3 py-2">
-                    <BookApptButton apptId={row.id} />
+                    <BookApptButton 
+                      apptId={row.id!}
+                      onSuccess={() => onBooked(row.id!)}
+                      onError={onError} />
                   </td>
                 </tr>
               );

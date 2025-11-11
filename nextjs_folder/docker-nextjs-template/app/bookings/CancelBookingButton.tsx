@@ -7,9 +7,10 @@ type Props = {
   onError: (message: string) => void;
 };
 
-export default function CancelApptButton({ bookingId, onSuccess, onError }: Props) {
+export default function CancelBookingButton({ bookingId, onSuccess, onError }: Props) {
   async function handleClick() {
-   try {
+    
+    try{
     const response = await fetch(`/api/bookings/${bookingId}/cancel`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
