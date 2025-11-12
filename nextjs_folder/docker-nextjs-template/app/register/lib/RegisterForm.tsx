@@ -91,36 +91,23 @@ export function RegisterForm() {
         phone: phone,
         email: email,
       };
-
+      setCurrentStep(currentStep + 1);
       const ret = await fetch("/api/accounts", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(dt),
       });
-      // myAsyncFunction();
 
       await ret.json();
 
       if (ret.ok) {
-
         setServerError(false);
         router.push("/login");
       } else {
         setServerError(true);
+        setCurrentStep(4);
       }
-      // myAsyncFunction();
     }
-  }
-
-  function sleep(ms: number | undefined) {
-    return new Promise(resolve => setTimeout(resolve, ms));
-  }
-
-  // Example usage within an async function (e.g., a component or API route)
-  async function myAsyncFunction() {
-    console.log("Before sleep");
-    await sleep(2000); // Pause for 2 seconds (2000 milliseconds)
-    console.log("After sleep");
   }
 
   //Validation Helpers
@@ -294,21 +281,20 @@ export function RegisterForm() {
     }
   };
 
-  //
-  //
-  //
-  //
-  //
-  //
-  //
-  //
   return (
     <div className="flex flex-col w-full h-screen items-center bg-[rgba(6,78,59,0.5)] text-slate-300">
       {/* Header + Progress */}
       <div className="flex-row w-full max-w-2xl px-6 py-6">
-        <p className="text-sm text-gray-200 uppercase">
-          Step {currentStep} of {totalSteps}
-        </p>
+        {currentStep < totalSteps + 1 && (
+          <p className="text-sm text-gray-200 uppercase">
+            Step {currentStep} of {totalSteps}
+          </p>
+        )}
+        {currentStep > totalSteps && (
+          <p className="text-sm text-gray-200 uppercase">
+            Success!
+          </p>
+        )}
         <h2 className="text-2xl font-bold">Your Profile</h2>
         {currentStep == 1 && (
           <p className="text-gray-300 mb-4">Please use your full name, select your use case (or both!) and if you're a service provider, please provide a business name</p>
@@ -322,7 +308,9 @@ export function RegisterForm() {
         {currentStep == 4 && (
           <p className="text-gray-300 mb-4">Pick a username and password and you're ready to get schwell!</p>
         )}
-
+        {currentStep > totalSteps && (
+          <p className="text-gray-300 mb-4">Submitting account detailes...</p>
+        )}
         <div className="bg-gray-700 rounded-full h-4 shadow-lg">
           <div
             className="bg-gradient-to-r from-emerald-500 to-sky-500 h-4 rounded-full transition-all duration-500"
@@ -344,10 +332,8 @@ export function RegisterForm() {
           </a>
         </p>
       </div>
-
+      {/* Form */}
       <div className="flex w-full max-w-2xl px-6 py-6 items-start justify-between gap- items-stretch ${currentStep === 4 ? 'justify-center' : 'justify-between'}">
-
-        {/* Form Body */}
         <div className="flex-grow">
           <form
             onKeyDown={handleKeyDown}
@@ -566,35 +552,35 @@ export function RegisterForm() {
                 {isSp && (
                   <div className="flex flex-col text-start">
                     Service Provider Type:
-                    <label className="flex gap-1 text-sm">
+                    <label className="flex gap-3 border-white border text-md bg-gradient-to-r from-emerald-500 to-emerald-800 rounded-2xl opacity-95 p-2">
                       Beauty
                       <input
                         type="radio"
                         name="sp_type"
                         value="beauty"
-                        className="cursor-pointer"
+                        className="w-4 bg-white cursor-pointer"
                         onChange={handleChange}
                         checked={formData.sp_type === "beauty"}
                       ></input>
                     </label>
-                    <label className="flex gap-1 text-sm">
+                    <label className="flex gap-2 border-white border text-md bg-gradient-to-r from-emerald-500 to-emerald-800 rounded-2xl opacity-95 p-2">
                       Medical
                       <input
                         type="radio"
                         name="sp_type"
                         value="medical"
-                        className="cursor-pointer"
+                        className="w-4 bg-white cursor-pointer"
                         onChange={handleChange}
                         checked={formData.sp_type === "medical"}
                       ></input>
                     </label>
-                    <label className="flex gap-1 text-sm">
+                    <label className="flex gap-3 border-white border text-md bg-gradient-to-r from-emerald-500 to-emerald-800 rounded-2xl opacity-95 p-2">
                       Fitness
                       <input
                         type="radio"
                         name="sp_type"
                         value="fitness"
-                        className="cursor-pointer"
+                        className="w-4 bg-white cursor-pointer"
                         onChange={handleChange}
                         checked={formData.sp_type === "fitness"}
                       ></input>
@@ -634,12 +620,11 @@ export function RegisterForm() {
                 <button
                   type="submit"
                   className="
-                    bg-emerald-600 text-2xl font-bold p-4 
-                    shadow-md active:shadow-none
-                    mt-8 w-full
-                    hover:bg-emerald-500 transition-colors 
-                    rounded-xl 
-                    cursor-pointer
+                    text-white text-2xl font-bold rounded-full p-4 mt-8 w-full
+                    bg-gradient-to-r from-teal-500 to-emerald-600
+                    shadow-lg hover:from-teal-600 hover:to-emerald-700
+                    transition-all duration-150 transform hover:scale-105
+                    cursor-pointer hover:cursor-pointer
                   "
                 >
                   Submit Application
