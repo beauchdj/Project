@@ -18,20 +18,20 @@ export default function AppointmentWrap() {
     setAppointments(json);
   }
 
- async function handleCancel(apptId: string) {
+  async function handleCancel(apptId: string) {
     setAppointments((prev) =>
       prev.map((appt) =>
         appt.id === apptId ? { ...appt, fullname: "" } : appt
       )
     );
- }
+  }
 
- async function handleDelete(apptId: string) {
-  setAppointments((prev) => prev.filter((appt) => appt.id !== apptId));
- }
+  async function handleDelete(apptId: string) {
+    setAppointments((prev) => prev.filter((appt) => appt.id !== apptId));
+  }
   function handleError(message: string) {
     setError(message);
-    setTimeout(() => setError(null),5000);
+    setTimeout(() => setError(null), 5000);
   }
 
   return (
@@ -41,15 +41,15 @@ export default function AppointmentWrap() {
           <CreateApptForm setAppointments={setAppointments} />
         </div>
         <div className="my-4 font-semibold text-lg">
-        {error && (
-          <div className="mb-4 rounded-md bg-red-600/90 text-white px-4 py-2">
-            {error}
-          </div>
-        )}
-          <AppointmentsList 
+          {error && (
+            <div className="mb-4 rounded-md bg-red-600/90 text-white px-4 py-2">
+              {error}
+            </div>
+          )}
+          <AppointmentsList
             appointments={appointments}
             onCancelAppt={handleCancel}
-            onDeleteAppt={handleDelete} 
+            onDeleteAppt={handleDelete}
             onError={handleError}
           />
         </div>

@@ -1,4 +1,5 @@
-export const runtime = "nodejs";
+"use server";
+import { pool } from "./db";
 
 // import { pool } from "./db";
 
@@ -30,16 +31,6 @@ export async function fetchData() {
 //   ]);
 // }
 
-// export async function getPassword(username: string) {
-//   try {
-//     const ret = pool.query("SELECT * FROM users WHERE username = $1", [
-//       username,
-//     ]);
-//   } catch (error) {
-//     console.log("GOt an error in queries.ts/getPassword() ", error);
-//   }
-// }
-
 // export function isRuntime(): void {
 //   if (typeof process === "undefined") {
 //     console.log("Edge Runtime!");
@@ -47,3 +38,15 @@ export async function fetchData() {
 //     console.log("Node Runtime!");
 //   }
 // }
+
+export async function addNotification(apptid: string): Promise<void> {
+  try {
+    const response = await pool.query(
+      "INSERT INTO notifications (apptid, status) VALUES ($1, 'Canceled') RETURNING apptid",
+      [apptid]
+    );
+    console.log("INSERT: ", response.rows);
+  } catch (error) {
+    console.log("ERROR: addNotification(string) /lib/queries.ts ", error);
+  }
+}

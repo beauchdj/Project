@@ -20,7 +20,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
   session: {
     strategy: "jwt", // json-web-token, a way to hold an entire session in the users cookie, encrypts the data with our AUTH_SECRET in .env.local
     maxAge: 60 * 10, // 10 minutes
-    updateAge: 60 * 8, // after 8 minutes if a request is sent to the server, update the maxAge to 10 minutes more (rolling/updating session expiry)
+    updateAge: 60 * 4, // after 8 minutes if a request is sent to the server, update the maxAge to 10 minutes more (rolling/updating session expiry)
   },
   callbacks: {
     async jwt({ token, user }) {

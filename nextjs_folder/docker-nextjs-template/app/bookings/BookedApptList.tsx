@@ -2,17 +2,15 @@
 import { Booking } from "../lib/types/Booking";
 import CancelBookingButton from "./CancelBookingButton";
 
-
-export default function BookedApptsList({ 
+export default function BookedApptsList({
   bookings,
   onCancel,
-  onError
+  onError,
 }: {
   bookings: Booking[];
-  onCancel: (apptId: string) => void;
-  onError: (message:string) => void;
+  onCancel: (apptId: Booking) => void;
+  onError: (message: string) => void;
 }) {
-
   if (!bookings.length) {
     return (
       <div>
@@ -44,32 +42,37 @@ export default function BookedApptsList({
               return (
                 <tr key={row.id} className="hover:bg-white/5">
                   <td className="px-3 py-2 whitespace-nowrap text-xs">
-                    {new Date(row.starttime).toLocaleDateString('en-US',{weekday: 'short',month: '2-digit', day: '2-digit', year: '2-digit'})}
+                    {new Date(row.starttime!).toLocaleDateString("en-US", {
+                      weekday: "short",
+                      month: "2-digit",
+                      day: "2-digit",
+                      year: "2-digit",
+                    })}
                   </td>
                   <td className="px-3 py-2 whitespace-nowrap text-xs">
-                    {new Date(row.starttime).toLocaleTimeString([],{hour: '2-digit', minute:'2-digit'})}
+                    {new Date(row.starttime!).toLocaleTimeString([], {
+                      hour: "2-digit",
+                      minute: "2-digit",
+                    })}
                     {/*formatter.format(new Date(row.starttime))*/}
                   </td>
                   <td className="px-3 py-2 whitespace-nowrap text-xs">
-                     {new Date(row.endtime).toLocaleTimeString([],{hour: '2-digit', minute:'2-digit'})}
+                    {new Date(row.endtime!).toLocaleTimeString([], {
+                      hour: "2-digit",
+                      minute: "2-digit",
+                    })}
                   </td>
                   <td className="px-3 py-2">{row.service}</td>
                   <td className="px-3 py-2">{row.providername}</td>
-                     
-                  {(row.bookstatus == "Booked" ? 
-                      <td className="px-3 py-2">
-                        <CancelBookingButton 
-                          bookingId={row.id!}
-                          onSuccess={() => onCancel(row.id!)}
-                          onError={onError}/>
-                      </td>
-                      :
-                      <td className="px-3 py-2">
-                        Cancelled
-                      </td>
-                  )}
-                  
-                  
+
+                  <td className="px-3 py-2">
+                    <CancelBookingButton
+                      booking={row}
+                      onSuccess={() => onCancel(row)}
+                      onError={onError}
+                    />
+                  </td>
+
                   {/*!(row.bookstatus == "Cancelled") && (
                   <td className="px-3 py-2">
                     <CancelBookingButton 

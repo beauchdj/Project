@@ -1,9 +1,9 @@
-# Basic compose to start up a postgres db with adminer to alter the db
+# Basic compose.yaml to start up a postgres db with adminer to alter the db
 # container also has a volume called init.sql which will run the init.sql located
 # in the same directory as compose.yaml
 services:
-  db:
-    image: postgres
+  db: # Service name
+    image: postgres #
     container_name: db
     restart: always
     # set shared memory limit when using docker compose
@@ -19,7 +19,7 @@ services:
     ports:
       - "5432:5432"
 
-  adminer:
+  adminer: # Service name
     image: adminer
     container_name: adminer
     restart: always
@@ -28,3 +28,16 @@ services:
 
 volumes:
   pgdata:
+# To Checkout the file structure of the docker container you can
+# 1. run `docker exect -it <service-name> bash|sh`
+# 2. find <dir-to-start-search> -type d -name "<filename|.<extension>|direcotryname>"
+#   Types:
+#       -f: file
+#       -d: directory
+#       -s: socket
+#       -p: named pipe
+# Example:
+# * already in the same direcotry as compose.yaml
+# docker exec -it db
+# find / -type d -name 'postgresql/data'
+# Read contents of file with cat
