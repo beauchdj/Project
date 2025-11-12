@@ -33,7 +33,7 @@ export default function Nav() {
       <Dropdown session={session} />
       <h1
         className={
-          "flex-1 w-full flex justify-center text-2xl sm:text-6xl bg-clip-text text-transparent bg-gradient-to-r from-emerald-400 to-lime-400 italic select-none ml-10"
+          " w-full flex flex-1 justify-center text-2xl sm:text-6xl bg-clip-text text-transparent bg-gradient-to-r from-emerald-400 to-lime-400 italic select-none"
         }
       >
         Schwellness

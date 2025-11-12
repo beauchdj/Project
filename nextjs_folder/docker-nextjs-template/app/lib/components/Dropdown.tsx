@@ -31,6 +31,13 @@ export default function Dropdown({ session }: { session?: Session | null }) {
           "gap-2 border-black border-2 shadow-black shadow-lg group-hover:flex group-hover:absolute px-8 py-4 flex-col hidden top-[34px] left-[0.5rem] bg-emerald-700 w-fit h-fit rounded-xl z-40"
         }
       >
+        {session?.user.username && (
+          <span className="flex text-white items-center justify-center w-full text-center flex-col">
+            Logged in as:
+            <span>{session?.user.fullname}</span>
+          </span>
+        )}
+
         {isAdmin && (
           <Link href={"/admin"} className={"nav-btn"}>
             Admin

@@ -52,7 +52,6 @@ export async function DELETE(req: NextRequest) {
     }
     const { noteid } = await req.json();
 
-    console.log("got body: ", noteid);
     const query = await pool.query(
       "DELETE FROM notifications WHERE id = $1 RETURNING id",
       [noteid]
@@ -68,7 +67,7 @@ export async function DELETE(req: NextRequest) {
 /**
  * Inserts a notification with a userid that points to the receiver of the notification
  * @param req: body: {userid: string, apptid: string, status: 'Booked'|"Cancelled"|Upcoming }
- * @returns
+ * @returns 201 response no-content
  */
 export async function POST(req: NextRequest) {
   try {

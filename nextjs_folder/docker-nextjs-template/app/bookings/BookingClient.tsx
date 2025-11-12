@@ -11,6 +11,7 @@ export default function BookingClient() {
   // const [confirmation, setConfirmation] = useState<string | null>(null);
   const [bookings, setBookings] = useState<Booking[]>([]);
   const [error, setError] = useState<string | null>(null);
+
   //setError(null);
   const { toggleHidden } = useNotification();
   useEffect(() => {
@@ -20,7 +21,6 @@ export default function BookingClient() {
   async function fetchBookings() {
     const res = await fetch("/api/bookings", { method: "GET" });
     const json: Booking[] = await res.json();
-    console.log("from bookings: ", json);
     setBookings(json);
   }
 
@@ -46,7 +46,7 @@ export default function BookingClient() {
 
   return (
     <>
-      <SearchAppts setResults={setResults} />
+      <SearchAppts results={results} setResults={setResults} />
       <div className="mt-4">
         {/* {confirmation && (
           <div className="mb-4 rounded-md bg-emerald-600/90 text-white px-4 py-2">

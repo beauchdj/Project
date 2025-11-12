@@ -99,8 +99,14 @@ export function GlobalBell({ session }: { session: Session | null }) {
                     <span className="text-white">Until: </span>
                     {new Date(note.endtime).toLocaleString()}
                   </span>
-                  <span className="text-lime-300">
-                    <span className="text-white">Status: </span>{" "}
+                  <span
+                    className={
+                      note.status === "Cancelled"
+                        ? "text-red-500 font-bold"
+                        : "text-lime-300 font-bold"
+                    }
+                  >
+                    <span className={"text-white font-normal"}>Status: </span>{" "}
                     {note.status || note.bookstatus}
                   </span>
                 </div>
