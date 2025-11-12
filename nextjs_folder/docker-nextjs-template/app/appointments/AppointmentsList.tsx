@@ -8,10 +8,12 @@ export default function AppointmentsList({
   appointments,
   onCancelAppt,
   onDeleteAppt,
+  onError,
 }: {
   appointments: Appointment[];
-  onCancelAppt: (apptId: string) => void;
+  onCancelAppt: (bookingId: string) => void;
   onDeleteAppt: (apptId: string) => void;
+  onError: (message: string) => void;
 }) {
   if (!appointments.length) {
     return (
@@ -68,8 +70,9 @@ export default function AppointmentsList({
                   {customer && (
                     <td className="px-3 py-2">
                       <CancelApptButton
-                        apptId={row.id!}
+                        appointment={row}
                         onSuccess={() => onCancelAppt(row.id!)}
+                        onError={onError}
                       />
                     </td>
                   )}

@@ -4,4 +4,5 @@ export type Appointment = {
   endtime: string;
   service: string;
   fullname?: string | null;
+  bookingid?: string | null;
 };

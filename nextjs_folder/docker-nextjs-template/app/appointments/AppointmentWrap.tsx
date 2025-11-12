@@ -3,13 +3,12 @@ import CreateApptForm from "./CreateApptForm";
 import AppointmentsList from "./AppointmentsList";
 import { useEffect, useState } from "react";
 import { Appointment } from "../lib/types/Appointment";
-import { addNotification } from "@/lib/queries";
 
 export default function AppointmentWrap() {
   const [appointments, setAppointments] = useState<Appointment[]>([]);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    // prints in the browser console
     fetchAppointments();
   }, []);
 
@@ -25,11 +24,14 @@ export default function AppointmentWrap() {
         appt.id === apptId ? { ...appt, fullname: "" } : appt
       )
     );
-    await addNotification(apptId);
   }
 
   async function handleDelete(apptId: string) {
     setAppointments((prev) => prev.filter((appt) => appt.id !== apptId));
+  }
+  function handleError(message: string) {
+    setError(message);
+    setTimeout(() => setError(null), 5000);
   }
 
   return (
@@ -39,10 +41,16 @@ export default function AppointmentWrap() {
           <CreateApptForm setAppointments={setAppointments} />
         </div>
         <div className="my-4 font-semibold text-lg">
+          {error && (
+            <div className="mb-4 rounded-md bg-red-600/90 text-white px-4 py-2">
+              {error}
+            </div>
+          )}
           <AppointmentsList
             appointments={appointments}
             onCancelAppt={handleCancel}
             onDeleteAppt={handleDelete}
+            onError={handleError}
           />
         </div>
       </div>

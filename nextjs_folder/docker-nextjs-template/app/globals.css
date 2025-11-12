@@ -17,11 +17,12 @@ body {
 }
 
 .nav-btn {
-  @apply bg-emerald-400
+  @apply bg-emerald-500
   hover:bg-lime-300
   px-5
   py-2
   text-black
+  text-[18px]
   rounded-2xl
   text-center
   shadow-black

@@ -32,7 +32,7 @@ export async function GET(request: Request) {
     }
 
     try {
-        const result = await getAllSpAppts(session.user.id);  //currently gets all (including in the past)
+        const result = await getAllSpAppts(session.user.id);
         return NextResponse.json(result, { status: 200 });
     } catch (error) {
         return NextResponse.json({ error: "Server Error" }, { status: 500 });

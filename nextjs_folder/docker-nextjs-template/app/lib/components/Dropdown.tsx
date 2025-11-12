@@ -28,12 +28,9 @@ export default function Dropdown({ session }: { session?: Session | null }) {
       <div
         // default behavior is hidden, when the group is hovered it will stay with group-hover:...
         className={
-          "gap-2 border-black border-2 shadow-black shadow-lg group-hover:flex group-hover:absolute p-4 flex-col hidden top-[28px] left-[0.5rem] bg-emerald-700 w-fit h-fit rounded-xl z-40"
+          "gap-2 border-black border-2 shadow-black shadow-lg group-hover:flex group-hover:absolute px-8 py-4 flex-col hidden top-[34px] left-[0.5rem] bg-emerald-700 w-fit h-fit rounded-xl z-40"
         }
       >
-        <Link href={"/wss"} className={"nav-btn"}>
-          Wss_Demo
-        </Link>
         {isAdmin && (
           <Link href={"/admin"} className={"nav-btn"}>
             Admin

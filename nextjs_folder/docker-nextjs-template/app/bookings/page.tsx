@@ -1,30 +1,23 @@
-//TODO:
-// add other search filters to look for appointments
-// make category search filter a dropdown
-// add date column
-// pretty format times
-// check for conflicts when booking
-// auto-refresh available appointments and good messaging when booked (or not)
-// decide where the list of booked appointments should live
-// error handling, loading state, redirection
-
 "use server";
 import { auth } from "../../auth";
 import { redirect } from "next/navigation";
 import BookingClient from "./BookingClient";
+import { NotificationProvider } from "../lib/components/NotificationContext";
 
 export default async function Page() {
   const session = await auth();
   if (!session) redirect("/login");
 
   return (
-    <main className="flex items-center justify-center w-full">
-      <div className="w-[95%] bg-emerald-900 text-white px-4 py-4 rounded-xl">
-        <h1 className="text-lg font-semibold mb-3">
-          Find and Book Appointments
-        </h1>
-        <BookingClient />
-      </div>
-    </main>
+    <NotificationProvider>
+      <main className="flex items-center justify-center w-full">
+        <div className="w-[95%] bg-emerald-900 text-white px-4 py-4 rounded-xl">
+          <h1 className="text-lg font-semibold mb-3">
+            Find and Book Appointments
+          </h1>
+          <BookingClient />
+        </div>
+      </main>
+    </NotificationProvider>
   );
 }
