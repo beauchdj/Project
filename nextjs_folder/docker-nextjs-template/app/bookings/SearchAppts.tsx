@@ -27,9 +27,10 @@ export default function SearchAppts({
   useEffect(() => {
     const timeoutId = setTimeout(() => {
       if (search) {
-        setResults((p) =>
-          p.filter((p) => p.service.toLowerCase().includes(search))
+        const filtered = base.filter((p) =>
+          p.service.toLowerCase().includes(search)
         );
+        setResults(filtered);
       } else {
         setResults(base);
       }

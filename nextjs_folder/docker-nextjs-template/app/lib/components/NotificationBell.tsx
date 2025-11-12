@@ -68,6 +68,9 @@ export function GlobalBell({ session }: { session: Session | null }) {
           <div
             hidden={!!!notifications.length}
             className="w-[15px] h-[15px] rounded-3xl bg-red-500 bottom-1 right-1 absolute text-white text-[11px] flex justify-center items-center select-none"
+            onClick={() => {
+              setShowList((p) => !p);
+            }}
           >
             {notifications.length}
           </div>

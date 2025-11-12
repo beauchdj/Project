@@ -66,7 +66,10 @@ export async function DELETE(req: NextRequest) {
 
 /**
  * Inserts a notification with a userid that points to the receiver of the notification
- * @param req: body: {userid: string, apptid: string, status: 'Booked'|"Cancelled"|Upcoming }
+ * @param req: body:
+ * {who: "sp"|"cust" (who has cancelled the appt the cust or sp),
+ *  apptid: string (appointment associated with the notificaion),
+ *  status: 'Booked'|"Cancelled"|"Upcoming"}
  * @returns 201 response no-content
  */
 export async function POST(req: NextRequest) {
@@ -88,12 +91,13 @@ export async function POST(req: NextRequest) {
     };
 
     const curUserId = session.user.id;
+    // Selects data from appts_avail and joins appt_booking for spid and userid coorelated to notificaion/appointment
     const notifData = await pool.query(
       "SELECT starttime,endtime, appts_avail.id AS avail_id, spid, userid, service FROM appts_avail JOIN appt_bookings ON appt_bookings.apptid = appts_avail.id WHERE userid = $1 OR spid = $1;",
       [curUserId]
     );
     const notifs: NotificationData = notifData.rows[0];
-
+    // based on who parameter
     switch (who) {
       case "sp": // return customer id of appointment
         await pool.query(

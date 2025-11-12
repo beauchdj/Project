@@ -85,11 +85,11 @@ export default function AdminView({ appt_list }: { appt_list: Appointment[] }) {
         <table className="w-full border-collapse text-center">
           <thead className="bg-emerald-900 sticky top-0 text-emerald-400">
             <tr>
-              <th>Service Provider</th>
+              <th className="p-3">Service Provider</th>
               <th>Customer</th>
-              <th className="p-3">Date</th>
               <th>Service</th>
               <th>Category</th>
+              <th>Date</th>
               <th>Start</th>
               <th>End</th>
             </tr>
@@ -106,9 +106,9 @@ export default function AdminView({ appt_list }: { appt_list: Appointment[] }) {
                   >
                     <td>{appt.sp_providername}</td>
                     <td>{appt.cust_fullname}</td>
-                    <td>{dateFormatter.format(new Date(appt.starttime))}</td>
                     <td>{appt.service ?? "None"}</td>
                     <td>{appt.sp_servicecat}</td>
+                    <td>{dateFormatter.format(new Date(appt.starttime))}</td>
                     <td>{dayFormatter.format(new Date(appt.starttime))}</td>
                     <td>{dayFormatter.format(new Date(appt.endtime))}</td>
                   </tr>
