@@ -1,5 +1,4 @@
 import { pool } from "@/lib/db";
-import { start } from "repl";
 
 // for service provider to create a new appointment slot
 //   checks that they do not have other appointment slots that conflict
@@ -48,7 +47,7 @@ export async function createAvailabilitySlot(
   }
 }
 
-// get service provider appointments
+// get service provider appointments (open and booked, not cancelled)
 export async function getAllSpAppts(spId: string) {
   try {
     const { rows } = await pool.query(
@@ -93,6 +92,7 @@ export async function getAllOpenAppts(serviceCategory: string | null) {
 }
 
 export async function bookAppointment(userId: string, apptId: string) {
+  // get the appointment to be booked
   const { rows } = await pool.query(
     `SELECT * 
     FROM appts_avail
@@ -103,12 +103,9 @@ export async function bookAppointment(userId: string, apptId: string) {
   const appt = rows[0];
 
   if (!appt) {
-    console.log("Appt does not exist");
     throw new Error("Appt does not exist");
   }
 
-  console.log("In book appt service");
-  console.log("Check if appt has already been booked by another customer...");
   // Check if appointment has already been booked by another customer
   const alreadyBooked = await pool.query(
     `SELECT id 
@@ -127,7 +124,9 @@ export async function bookAppointment(userId: string, apptId: string) {
   console.log(
     "Check if appt conflicts with another appt that this customer has already booked..."
   );
+
   // Check if appointment conflicts with another appointment that this customer has already booked
+
   const bookingConflict = await pool.query(
     `SELECT b.id FROM appt_bookings as b
     JOIN appts_avail as a ON a.id = b.apptId
@@ -145,14 +144,29 @@ export async function bookAppointment(userId: string, apptId: string) {
     );
   }
   // if no conflicts, create new booking
-  const result = await pool.query(
-    `INSERT INTO appt_bookings (apptid, userid, bookstatus,booked_at)
+  try {
+    const result = await pool.query(
+      `INSERT INTO appt_bookings (apptid, userid, bookstatus,booked_at)
          VALUES ($1, $2, 'Booked', NOW())
          Returning id`,
-    [apptId, userId]
-  );
+      [apptId, userId]
+    );
 
-  return result.rows[0].id as string;
+    //return result.rows[0].id as string;
+    return { ok: true, booking: result.rows[0] };
+  } catch (err: any) {
+    if (
+      err.code === "23505" ||
+      err.constraint === "appt_bookings_one_booked_per_id"
+    ) {
+      return {
+        ok: false,
+        error: "Appointment already booked by another customer.",
+      };
+    } else {
+      throw new Error("Error creating booking");
+    }
+  }
 }
 
 export async function getBookedAppts(userId: string) {

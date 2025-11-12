@@ -77,6 +77,10 @@ CREATE TABLE public.notifications (
 );
 
 
+CREATE UNIQUE INDEX appt_bookings_one_booked_per_id
+  ON appt_bookings (apptid)
+  WHERE (bookstatus = 'Booked');
+
 INSERT INTO "users" ("id", "fullname", "hashpass", "street1", "street2", "city", "state", "zip", "phone", "email", "username", "servicecategory", "isadmin", "issp", "iscustomer", "qualifications", "providername") VALUES
 ('bb6ac427-5643-40ce-ab2b-e00c380d195b',	'Abby Anderson',	'$2b$10$oRDhJf4eCpoF9OxwhYssie5ZRg/7fTd4RfW1vhUDJQTC9bJqxxq8S',	'123 st',	'986',	'mad',	'wi',	'54664',	'123-123-1234',	'abby@gmail.com',	'abby',	'beauty',	'0',	'1',	'1',	'Graduated from The Salon Professional Academy, 2015',	'Abby Anderson Beauty'),
 ('96b74ff3-2457-4918-bfe8-f9e95659e209',	'Katie Johnson',	'$2b$10$yeUlrj1PUqy8WC9UQGN.PO.KZoiE6tYS3bMC6dzk56uen8zbCypQ2',	'123 st',	'986',	'mad',	'wi',	'54664',	'123-123-1234',	'katie@gmail.com',	'katie',	'beauty',	'0',	'1',	'1',	'Skin-care certified nurse training, 2021',	'Katie Johnson Beauty'),
