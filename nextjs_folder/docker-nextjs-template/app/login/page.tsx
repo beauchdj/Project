@@ -47,7 +47,7 @@ export default function Page() {
             className="font-extrabold italic font-serif md:text-4xl text-center
               bg-clip-text text-transparent bg-gradient-to-r from-lime-300 to-emerald-900
               drop-shadow-lg
-              transform transition-all duration-500 hover:scale-120 hover:drop-shadow-xl hover:z-20"
+              transform transition-all duration-500 hover:scale-110 hover:drop-shadow-xl hover:z-20"
           >
             Welcome to Schwellness!
           </h1>
@@ -93,7 +93,7 @@ export default function Page() {
           {/* Login box */}
           <div
             className="flex items-center justify-center bg-emerald-900 w-70 h-96 flex-shrink-0 rounded-2xl relative p-5
-                          drop-shadow-lg transform transition-all duration-1000 hover:scale-150 hover:z-50 hover:shadow-2xl"
+                          drop-shadow-lg transform transition-all duration-1000 hover:scale-110 hover:z-50 hover:shadow-2xl"
           >
             <form
               onSubmit={loginHandler}
@@ -151,7 +151,7 @@ export default function Page() {
           {/* Registration box */}
           <div
             className="flex items-center justify-center bg-emerald-900 w-70 h-40 flex-shrink-0 rounded-2xl relative
-                          drop-shadow-lg transform transition-all duration-1000 hover:scale-150 hover:drop-shadow-xl hover:z-50 hover:shadow-2xl"
+                          drop-shadow-lg transform transition-all duration-1000 hover:scale-110 hover:drop-shadow-xl hover:z-50 hover:shadow-2xl"
           >
             <p className="text-center text-xl font-extrabold italic text-white">
               Don&apos;t have an account? <br></br>

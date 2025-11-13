@@ -552,7 +552,7 @@ export function RegisterForm() {
                 {isSp && (
                   <div className="flex flex-col text-start">
                     Service Provider Type:
-                    <label className="flex gap-3 border-white border text-md bg-gradient-to-r from-emerald-500 to-emerald-800 rounded-2xl opacity-95 p-2">
+                    <label className="flex gap-3 border-white border text-md bg-gradient-to-r from-emerald-500 to-emerald-800 rounded-2xl opacity-95 p-2 cursor-pointer">
                       Beauty
                       <input
                         type="radio"
@@ -563,7 +563,7 @@ export function RegisterForm() {
                         checked={formData.sp_type === "beauty"}
                       ></input>
                     </label>
-                    <label className="flex gap-2 border-white border text-md bg-gradient-to-r from-emerald-500 to-emerald-800 rounded-2xl opacity-95 p-2">
+                    <label className="flex gap-2 border-white border text-md bg-gradient-to-r from-emerald-500 to-emerald-800 rounded-2xl opacity-95 p-2 cursor-pointer">
                       Medical
                       <input
                         type="radio"
@@ -574,7 +574,7 @@ export function RegisterForm() {
                         checked={formData.sp_type === "medical"}
                       ></input>
                     </label>
-                    <label className="flex gap-3 border-white border text-md bg-gradient-to-r from-emerald-500 to-emerald-800 rounded-2xl opacity-95 p-2">
+                    <label className="flex gap-3 border-white border text-md bg-gradient-to-r from-emerald-500 to-emerald-800 rounded-2xl opacity-95 p-2 cursor-pointer">
                       Fitness
                       <input
                         type="radio"
@@ -627,7 +627,7 @@ export function RegisterForm() {
                     cursor-pointer hover:cursor-pointer
                   "
                 >
-                  Submit Application
+                  Submit
                 </button>
               </div>
             )}
