@@ -99,8 +99,8 @@ export default function Page() {
               onSubmit={loginHandler}
               className="text-center flex flex-col items-center"
             >
-              <p className="italic font-serif mb-1 bg-clip-text text-transparent bg-gradient-to-r from-lime-300 to-emerald-600">
-                Let&apos;s get back to your Schwellness journey
+              <p className="italic font-serif mb-1 bg-clip-text text-transparent bg-gradient-to-r from-lime-300 to-emerald-600 p-2">
+                Let&apos;s get back to Schwellness!
               </p>
               <label
                 htmlFor="username"
