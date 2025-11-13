@@ -8,5 +8,6 @@ export type Appointment = {
   sp_fullname?: string | null;
   cust_fullname?: string;
   bookingid?: string | null;
+  fullname: string;
 };
 // service	starttime	endtime	sp_servicecat	sp_providername	sp_fullname	cust_fullname

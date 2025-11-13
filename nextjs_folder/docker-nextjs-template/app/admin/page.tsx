@@ -8,7 +8,6 @@ import { redirect } from "next/navigation";
 import { NotificationProvider } from "../lib/components/NotificationContext";
 
 /**
- *
  * Common nextjs pattern is fetch data on server component (page.tsx)
  *  then use client components to manipulate that passed data and mirroring the client
  *  operations to the server with api calls
@@ -19,7 +18,6 @@ export default async function Page() {
   const session = await auth();
   if (!session?.user || !session?.user.isAdmin) redirect("/");
   const appts: Appointment[] = await getAllApptsJoinSP();
-  console.log(appts);
   return (
     <NotificationProvider>
       <AdminView appt_list={appts} />
@@ -29,6 +27,7 @@ export default async function Page() {
 
 async function getAllApptsJoinSP() {
   try {
+    // TODO: Should be all appointments, only showing booked right now...
     const ret = await pool.query(
       "SELECT service,starttime,endtime,a.servicecategory AS sp_servicecat,a.providername AS sp_providername,a.fullname AS sp_fullname, b.fullname AS cust_fullname FROM appts_avail JOIN users AS a ON appts_avail.spid = a.id LEFT JOIN appt_bookings ON appts_avail.id = appt_bookings.apptid JOIN users AS b ON appt_bookings.userid = b.id;"
     );
