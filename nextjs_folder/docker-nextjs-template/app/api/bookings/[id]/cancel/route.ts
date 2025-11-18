@@ -1,8 +1,6 @@
 import { NextResponse } from "next/server";
 import { auth } from "@/auth";
-// import { cancelBookedAppt } from "@/app/lib/services/appointmentServices";
-import { pool } from "@/lib/db";
-import { Booking } from "@/app/lib/types/Booking";
+import { cancelBookedAppt } from "@/app/lib/services/appointmentServices";
 
 export async function PUT(
   request: Request,
@@ -18,8 +16,8 @@ export async function PUT(
   }
 
   try {
-    // const result = await cancelBookedAppt(id, session.user.id);
-    await pool.query("DELETE FROM appt_bookings WHERE id = $1", [id]);
+    const result = await cancelBookedAppt(id, session.user.id);
+    // await pool.query("DELETE FROM appt_bookings WHERE id = $1", [id]);
 
     return NextResponse.json({ status: 204 });
   } catch (error) {

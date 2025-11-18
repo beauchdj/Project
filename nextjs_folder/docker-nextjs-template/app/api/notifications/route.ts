@@ -56,7 +56,7 @@ export async function DELETE(req: NextRequest) {
       "DELETE FROM notifications WHERE id = $1 RETURNING id",
       [noteid]
     );
-    console.log("Delete from /api/notifications query ", query);
+    // console.log("Delete from /api/notifications query ", query);
     return NextResponse.json({ status: 204 });
   } catch (error) {
     console.log("Error in DELETE api/notifications/route.ts ", error);
