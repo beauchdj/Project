@@ -83,7 +83,7 @@ export default function AdminView({ appt_list }: { appt_list: Appointment[] }) {
       </form>
       <div className="flex flex-col gap-1 w-[75vw] md:items-center overflow-auto h-[80vh] pb-1 bg-emerald-800/80 text-white rounded-2xl border-black border-4 mr-4">
         <table className="w-full border-collapse text-center">
-          <thead className="bg-emerald-900 sticky top-0 text-emerald-400">
+          <thead className="bg-emerald-900 sticky top-0 text-white">
             <tr>
               <th className="p-3">Service Provider</th>
               <th>Customer</th>

@@ -219,7 +219,7 @@ export async function cancelBookedAppt(bookingId: string, userId: string) {
     }
 
     const row = result.rows[0];
-    console.log(row);
+    // console.log(row);
     return {
       ok: true,
       bookingId: row.id,

@@ -45,7 +45,7 @@ export async function addNotification(apptid: string): Promise<void> {
       "INSERT INTO notifications (apptid, status) VALUES ($1, 'Canceled') RETURNING apptid",
       [apptid]
     );
-    console.log("INSERT: ", response.rows);
+    // console.log("INSERT: ", response.rows);
   } catch (error) {
     console.log("ERROR: addNotification(string) /lib/queries.ts ", error);
   }
