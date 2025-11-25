@@ -2,10 +2,7 @@
 
 import AppointmentsList from "@/app/appointments/AppointmentsList";
 import BookedApptsList from "@/app/bookings/BookedApptList";
-import {
-  NotificationProvider,
-  useNotification,
-} from "@/app/lib/components/NotificationContext";
+import { useNotification } from "@/app/lib/components/NotificationContext";
 import { Appointment } from "@/app/lib/types/Appointment";
 import { Booking } from "@/app/lib/types/Booking";
 import { useParams } from "next/navigation";
@@ -14,6 +11,7 @@ import React, { useEffect, useState } from "react";
 export default function AdminUserAppointments() {
   const { id } = useParams();
   const [appointments, setAppointments] = useState<Appointment[]>([]);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [error, setError] = useState<string | null>(null);
   const [bookings, setBookings] = useState<Booking[]>([]);
   const { toggleHidden } = useNotification();
@@ -60,21 +58,20 @@ export default function AdminUserAppointments() {
   // I want to click on a user, link to this page with an id
   // I need the datashape
   return (
-    <div className="bg-emerald-800">
-      Hey {id}
-      <AppointmentsList
-        appointments={appointments}
-        onCancelAppt={handleCancel}
-        onDeleteAppt={handleDelete}
-        onError={handleError}
-      />
-      <BookedApptsList
-        bookings={bookings}
-        onCancel={handleBookingCancel}
-        onError={handleError}
-      ></BookedApptsList>
-      <button onClick={() => toggleHidden("Tester")}> Test</button>
-      <button onClick={() => toggleHidden("Updated")}> Test</button>
+    <div className=" w-full px-6">
+      <div className="bg-emerald-800 rounded-xl p-4">
+        <AppointmentsList
+          appointments={appointments}
+          onCancelAppt={handleCancel}
+          onDeleteAppt={handleDelete}
+          onError={handleError}
+        />
+        <BookedApptsList
+          bookings={bookings}
+          onCancel={handleBookingCancel}
+          onError={handleError}
+        ></BookedApptsList>
+      </div>
     </div>
   );
 }

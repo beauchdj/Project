@@ -10,8 +10,6 @@ import Link from "next/link";
 export default function AdminView({ appt_list }: { appt_list: Appointment[] }) {
   const [appts, setAppts] = useState<Appointment[]>(appt_list);
   const [error, setError] = useState<string>("");
-  console.log(appt_list, appt_list.length);
-
   const { toggleHidden } = useNotification();
 
   function submitDates(e: FormEvent<HTMLFormElement>) {
@@ -108,7 +106,11 @@ export default function AdminView({ appt_list }: { appt_list: Appointment[] }) {
                     className="border-white/10 border-b-[1px] h-14 text-white text-sm hover:bg-emerald-200/20"
                   >
                     <td>{idx + 1}</td>
-                    <td>{appt.sp_providername}</td>
+                    <td>
+                      <Link href={`/admin/${appt.sp_id}`}>
+                        {appt.sp_providername}
+                      </Link>
+                    </td>
                     <td>
                       <Link href={`/admin/${appt.cust_id}`}>
                         {appt.cust_fullname ?? "--"}

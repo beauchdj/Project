@@ -8,7 +8,7 @@ type Props = {
 export default function DeleteApptButton({ apptId, onSuccess }: Props) {
   async function handleClick() {
     // const response = await fetch(`/api/bookings?apptId=${apptId}`, {
-    const response = await fetch("/api/appointments", {
+    await fetch("/api/appointments", {
       method: "DELETE",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ apptId }),
