@@ -4,7 +4,7 @@ import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(
   req: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   const session = await auth();
   if (!session || !session.user.isSp) {
@@ -12,7 +12,7 @@ export async function GET(
   }
 
   try {
-    const { id } = params;
+    const { id } = await params;
     const result = await getAllSpAppts(id);
 
     return NextResponse.json(result, { status: 200 });

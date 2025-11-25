@@ -11,7 +11,7 @@ import { Notification } from "@/app/lib/types/Notification";
 export async function GET(req: NextRequest) {
   try {
     const session = await auth();
-    if (!session?.user) {
+    if (!session || !session?.user) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
     const url = new URL(req.url);
