@@ -5,10 +5,12 @@ import { dateFormatter, dayFormatter } from "@/app/lib/types/Formatter";
 import { FormEvent, useState } from "react";
 import { filterDate } from "./util";
 import { useNotification } from "@/app/lib/components/NotificationContext";
+import Link from "next/link";
 
 export default function AdminView({ appt_list }: { appt_list: Appointment[] }) {
   const [appts, setAppts] = useState<Appointment[]>(appt_list);
   const [error, setError] = useState<string>("");
+  console.log(appt_list, appt_list.length);
 
   const { toggleHidden } = useNotification();
 
@@ -85,6 +87,7 @@ export default function AdminView({ appt_list }: { appt_list: Appointment[] }) {
         <table className="w-full border-collapse text-center">
           <thead className="bg-emerald-900 sticky top-0 text-white">
             <tr>
+              <th>Index</th>
               <th className="p-3">Service Provider</th>
               <th>Customer</th>
               <th>Service</th>
@@ -102,10 +105,15 @@ export default function AdminView({ appt_list }: { appt_list: Appointment[] }) {
                 {appts.map((appt, idx) => (
                   <tr
                     key={idx}
-                    className="border-white/10 border-b-[1px] h-14 text-sm md:text-base hover:bg-emerald-200/20"
+                    className="border-white/10 border-b-[1px] h-14 text-white text-sm hover:bg-emerald-200/20"
                   >
+                    <td>{idx + 1}</td>
                     <td>{appt.sp_providername}</td>
-                    <td>{appt.cust_fullname}</td>
+                    <td>
+                      <Link href={`/admin/${appt.cust_id}`}>
+                        {appt.cust_fullname ?? "--"}
+                      </Link>
+                    </td>
                     <td>{appt.service ?? "None"}</td>
                     <td>{appt.sp_servicecat}</td>
                     <td>{dateFormatter.format(new Date(appt.starttime))}</td>

@@ -1,4 +1,6 @@
 export type Appointment = {
+  sp_id: string;
+  cust_id: string;
   id?: string;
   starttime: string;
   endtime: string;

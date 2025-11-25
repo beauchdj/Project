@@ -14,14 +14,14 @@ export default function BookedApptsList({
   if (!bookings.length) {
     return (
       <div>
-        <h2 className="text-lg font-semibold mb-2">My Appointments</h2>
+        <h2 className="text-lg font-semibold mb-2">My Bookings</h2>
       </div>
     );
   }
 
   return (
     <div className="">
-      <h2 className="text-lg font-semibold mb-2">My Appointments</h2>
+      <h2 className="text-lg font-semibold mb-2">My Bookings</h2>
 
       <div className="overflow-x-auto rounded-lg border border-white/10">
         <table className="min-w-full text-sm">

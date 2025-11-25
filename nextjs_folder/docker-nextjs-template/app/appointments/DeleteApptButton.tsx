@@ -1,4 +1,3 @@
-
 "use client";
 
 type Props = {
@@ -8,7 +7,7 @@ type Props = {
 
 export default function DeleteApptButton({ apptId, onSuccess }: Props) {
   async function handleClick() {
-   // const response = await fetch(`/api/bookings?apptId=${apptId}`, {
+    // const response = await fetch(`/api/bookings?apptId=${apptId}`, {
     const response = await fetch("/api/appointments", {
       method: "DELETE",
       headers: { "Content-Type": "application/json" },
@@ -18,7 +17,7 @@ export default function DeleteApptButton({ apptId, onSuccess }: Props) {
   }
 
   return (
-    <div className="flex items-center gap-2">
+    <div className="flex items-center justify-center">
       <button
         type="button"
         onClick={handleClick}
