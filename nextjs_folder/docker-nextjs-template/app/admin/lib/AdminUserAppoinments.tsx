@@ -10,6 +10,7 @@ import React, { useEffect, useState } from "react";
 
 export default function AdminUserAppointments() {
   const { id } = useParams();
+  console.log("WHat is id? :", id);
   const [appointments, setAppointments] = useState<Appointment[]>([]);
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [error, setError] = useState<string | null>(null);

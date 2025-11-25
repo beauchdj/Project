@@ -112,9 +112,13 @@ export default function AdminView({ appt_list }: { appt_list: Appointment[] }) {
                       </Link>
                     </td>
                     <td>
-                      <Link href={`/admin/${appt.cust_id}`}>
-                        {appt.cust_fullname ?? "--"}
-                      </Link>
+                      {appt.cust_id === null ? (
+                        "--"
+                      ) : (
+                        <Link href={`/admin/${appt.cust_id}`}>
+                          {appt.cust_fullname}
+                        </Link>
+                      )}
                     </td>
                     <td>{appt.service ?? "None"}</td>
                     <td>{appt.sp_servicecat}</td>
