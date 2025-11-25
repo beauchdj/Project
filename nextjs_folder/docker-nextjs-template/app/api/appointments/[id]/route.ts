@@ -2,6 +2,12 @@ import { getAllSpAppts } from "@/app/lib/services/appointmentServices";
 import { auth } from "@/auth";
 import { NextRequest, NextResponse } from "next/server";
 
+/**
+ * This was gavin created, Used for the Admin View, a slight alteration from the regular route
+ * which just uses the session's user id, this route takes a id from the path to use for
+ * fetching the Sp appointments
+ */
+
 export async function GET(
   req: NextRequest,
   { params }: { params: Promise<{ id: string }> }
