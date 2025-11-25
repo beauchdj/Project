@@ -5,7 +5,7 @@ import { NextRequest, NextResponse } from "next/server";
 /**
  * This was gavin created, Used for the Admin View, a slight alteration from the regular route
  * which just uses the session's user id, this route takes a id from the path to use for
- * fetching the Sp appointments
+ * fetching the Sp appointments.
  */
 
 export async function GET(
@@ -19,6 +19,7 @@ export async function GET(
 
   try {
     const { id } = await params;
+    // Data shape should reflect the Appointment.ts defined type
     const result = await getAllSpAppts(id); // TODO: give data from whenever, data currently is today onward
 
     return NextResponse.json(result, { status: 200 });
