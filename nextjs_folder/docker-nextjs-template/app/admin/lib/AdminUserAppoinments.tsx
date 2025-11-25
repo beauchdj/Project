@@ -10,11 +10,11 @@ import React, { useEffect, useState } from "react";
 
 export default function AdminUserAppointments() {
   const { id } = useParams();
-  console.log("WHat is id? :", id);
   const [appointments, setAppointments] = useState<Appointment[]>([]);
+  const [bookings, setBookings] = useState<Booking[]>([]);
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [error, setError] = useState<string | null>(null);
-  const [bookings, setBookings] = useState<Booking[]>([]);
+
   const { toggleHidden } = useNotification();
 
   async function handleCancel(apptId: string) {
@@ -55,9 +55,7 @@ export default function AdminUserAppointments() {
     const data: Appointment[] = await res.json();
     setAppointments(data);
   }
-  // get a userid -> look up appointments associated with the user as userid/spid?
-  // I want to click on a user, link to this page with an id
-  // I need the datashape
+
   return (
     <div className=" w-full px-6">
       <div className="bg-emerald-800 rounded-xl p-4">

@@ -19,11 +19,12 @@ export async function GET(
 
   try {
     const { id } = await params;
-    const result = await getBookedAppts(id);
+    // Data shape should reflect the Booking.ts defined type
+    const result = await getBookedAppts(id); // TODO: give data from whenever, data currently is today onward
 
     return NextResponse.json(result, { status: 200 });
   } catch (error) {
-    console.log("Error inside of api/appointments/[id]: ", error);
+    console.log("Error inside of api/bookings/[id]: ", error);
     return NextResponse.json({ error: "Server Error" }, { status: 500 });
   }
 }
