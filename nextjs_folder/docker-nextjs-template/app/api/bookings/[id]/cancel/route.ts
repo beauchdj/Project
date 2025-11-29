@@ -1,15 +1,13 @@
 import { NextResponse } from "next/server";
 import { auth } from "@/auth";
-// import { cancelBookedAppt } from "@/app/lib/services/appointmentServices";
-import { pool } from "@/lib/db";
-import { Booking } from "@/app/lib/types/Booking";
+import { cancelBookedAppt } from "@/app/lib/services/appointmentServices";
 
 export async function PUT(
   request: Request,
   { params }: { params: Promise<{ id: string }> }
 ) {
   const session = await auth();
-  if (!session) {
+  if (!session || !session.user.id) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
   const { id } = await params;
@@ -18,8 +16,8 @@ export async function PUT(
   }
 
   try {
-    // const result = await cancelBookedAppt(id, session.user.id);
-    await pool.query("DELETE FROM appt_bookings WHERE id = $1", [id]);
+    const result = await cancelBookedAppt(id, session.user.id);
+    // await pool.query("DELETE FROM appt_bookings WHERE id = $1", [id]);
 
     return NextResponse.json({ status: 204 });
   } catch (error) {

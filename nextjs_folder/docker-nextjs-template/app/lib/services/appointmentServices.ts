@@ -191,9 +191,6 @@ export async function getBookedAppts(userId: string) {
 export async function cancelBookedAppt(bookingId: string, userId: string) {
   // check that the user who is trying to cancel has permission to do so
   // (is the customer, the service provider, or is an admin)
-  // actually want to get rid of this booking and insert into notification table
-  // booking should just hold the appointments that are booked, canceled appts will become available again
-  // so: behavior should be: delete canceled booked appt on cancel, insert appointment into notifications
   const query = `WITH canceller AS (
       SELECT u.id, u.isadmin
       FROM users as u
@@ -222,6 +219,7 @@ export async function cancelBookedAppt(bookingId: string, userId: string) {
     }
 
     const row = result.rows[0];
+    // console.log(row);
     return {
       ok: true,
       bookingId: row.id,

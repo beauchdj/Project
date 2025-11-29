@@ -27,7 +27,7 @@ export default function BookApptButton({ apptId, onSuccess, onError }: Props) {
   }
 
   return (
-    <div className="flex items-center gap-2">
+    <div className="flex items-center">
       <button
         type="button"
         onClick={handleClick}

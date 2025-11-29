@@ -5,11 +5,11 @@ import { dateFormatter, dayFormatter } from "@/app/lib/types/Formatter";
 import { FormEvent, useState } from "react";
 import { filterDate } from "./util";
 import { useNotification } from "@/app/lib/components/NotificationContext";
+import Link from "next/link";
 
 export default function AdminView({ appt_list }: { appt_list: Appointment[] }) {
   const [appts, setAppts] = useState<Appointment[]>(appt_list);
   const [error, setError] = useState<string>("");
-
   const { toggleHidden } = useNotification();
 
   function submitDates(e: FormEvent<HTMLFormElement>) {
@@ -83,8 +83,9 @@ export default function AdminView({ appt_list }: { appt_list: Appointment[] }) {
       </form>
       <div className="flex flex-col gap-1 w-[75vw] md:items-center overflow-auto h-[80vh] pb-1 bg-emerald-800/80 text-white rounded-2xl border-black border-4 mr-4">
         <table className="w-full border-collapse text-center">
-          <thead className="bg-emerald-900 sticky top-0 text-emerald-400">
+          <thead className="bg-emerald-900 sticky top-0 text-white">
             <tr>
+              <th>Index</th>
               <th className="p-3">Service Provider</th>
               <th>Customer</th>
               <th>Service</th>
@@ -102,10 +103,23 @@ export default function AdminView({ appt_list }: { appt_list: Appointment[] }) {
                 {appts.map((appt, idx) => (
                   <tr
                     key={idx}
-                    className="border-white/10 border-b-[1px] h-14 text-sm md:text-base hover:bg-emerald-200/20"
+                    className="border-white/10 border-b-[1px] h-14 text-white text-sm hover:bg-emerald-200/20"
                   >
-                    <td>{appt.sp_providername}</td>
-                    <td>{appt.cust_fullname}</td>
+                    <td>{idx + 1}</td>
+                    <td>
+                      <Link href={`/admin/${appt.sp_id}`}>
+                        {appt.sp_providername}
+                      </Link>
+                    </td>
+                    <td>
+                      {appt.cust_id === null ? (
+                        "--"
+                      ) : (
+                        <Link href={`/admin/${appt.cust_id}`}>
+                          {appt.cust_fullname}
+                        </Link>
+                      )}
+                    </td>
                     <td>{appt.service ?? "None"}</td>
                     <td>{appt.sp_servicecat}</td>
                     <td>{dateFormatter.format(new Date(appt.starttime))}</td>
