@@ -56,12 +56,10 @@ export async function PUT(req: Request) {
     newpass,
     isHashed
   } = body;
-
+  
   var hashedPassword = hashpass;
-  if (!isHashed) {
+  if (newpass.length > 0) {
     hashedPassword = await bcrypt.hash(newpass, 10);
-  } else {
-    hashedPassword = hashpass;
   }
 
   try {

@@ -55,7 +55,6 @@ export function UserUpdate() {
     qualifications: "",
     providername: "",
     newpass: "",
-    isHashed: false,
   });
 
   const [oldFormData, setOldFormData] = useState({
@@ -134,11 +133,6 @@ export function UserUpdate() {
     setServerError(false);
     const isValid = validateStep4();
 
-    if (hasNewPassword()) {
-      formData.hashpass = formData.newpass;
-      formData.isHashed = false;
-    }
-
     if (isValid) {
       const res = await fetch("/api/userAiSlop", {
         method: "PUT",
@@ -157,6 +151,7 @@ export function UserUpdate() {
         setServerError(true);
         setCurrentStep(4);
       }
+      setCurrentStep(4);
     }
   }
 
@@ -260,15 +255,7 @@ export function UserUpdate() {
   ): boolean {
     var passwordTest = formData.hashpass.length > 0;
     if (passwordTest) {
-      bcrypt.compare(formData.hashpass, oldFormData.hashpass)
-        .then(result => {
-          if (!result) {
-            passwordTest = false
-          }
-        })
-        .catch(err => {
-          console.error("Error during password comparison: ", err)
-        });
+      passwordTest = bcrypt.compareSync(formData.hashpass, oldFormData.hashpass);
     }
     setShowPasswordError(!passwordTest);
     return passwordTest;
@@ -574,7 +561,7 @@ export function UserUpdate() {
                     value={formData.hashpass}
                     required
                   ></input>
-                  {showPasswordError && <p className="error-text">Please enter a password</p>}
+                  {showPasswordError && <p className="error-text">Password incorrect</p>}
                 </label>
                 <br></br>
                 <label className="label-col">
@@ -587,7 +574,6 @@ export function UserUpdate() {
                     onChange={handleChange}
                     value={formData.newpass}
                   ></input>
-                  {showPasswordError && <p className="error-text">Please enter a password</p>}
                 </label>
                 {isSp && (
                   <label className="label-col">

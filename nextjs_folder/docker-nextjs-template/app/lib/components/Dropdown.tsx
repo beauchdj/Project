@@ -69,6 +69,11 @@ export default function Dropdown({ session }: { session?: Session | null }) {
             Book Appointment
           </Link>
         )}
+        {session && (
+          <Link href={"/updateUser"} className={"nav-btn text-sm"}>
+            Update Information
+          </Link>
+        )}
       </div>
     </div>
   );
