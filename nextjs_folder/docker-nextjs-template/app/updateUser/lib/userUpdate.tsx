@@ -144,6 +144,7 @@ export function UserUpdate() {
       const data = await res.json();
 
       if (res.ok) {
+        setCurrentStep(5);
         await waitFunction();
         setServerError(false);
         router.push("/");
@@ -621,7 +622,7 @@ export function UserUpdate() {
             )}
 
             {currentStep > totalSteps && (
-              <img className="object-contain opacity-70" src="/luffy.gif" />
+              <img className="object-contain opacity-70" src="/luffybuggy.gif" />
             )}
 
             {/* Static Bottom Nav */}

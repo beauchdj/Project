@@ -54,17 +54,16 @@ export async function PUT(req: Request) {
     qualifications,
     providername,
     newpass,
-    isHashed
   } = body;
-  
-  var hashedPassword = hashpass;
+  var hashedPassword = null;
   if (newpass.length > 0) {
     hashedPassword = await bcrypt.hash(newpass, 10);
   }
 
   try {
-    await pool.query(
-      `UPDATE users
+    if (newpass.length > 0) {
+      await pool.query(
+        `UPDATE users
        SET
        issp = $1,
        iscustomer = $2,
@@ -82,24 +81,61 @@ export async function PUT(req: Request) {
        qualifications = $14,
        providername = $15
       WHERE username = $5`,
-      [
-        issp,
-        iscustomer,
-        servicecategory,
-        fullname,
-        username,
-        hashedPassword,
-        city,
-        state,
-        zip,
-        street1,
-        street2,
-        phone,
-        email,
-        qualifications,
-        providername
-      ]
-    );
+        [
+          issp,
+          iscustomer,
+          servicecategory,
+          fullname,
+          username,
+          hashedPassword,
+          city,
+          state,
+          zip,
+          street1,
+          street2,
+          phone,
+          email,
+          qualifications,
+          providername
+        ]
+      );
+    } else {
+      await pool.query(
+        `UPDATE users
+       SET
+       issp = $1,
+       iscustomer = $2,
+       servicecategory = $3,
+       fullname = $4,
+       username = $5,
+       city = $6,
+       state = $7,
+       zip = $8,
+       street1 = $9,
+       street2 = $10,
+       phone = $11,
+       email = $12,
+       qualifications = $13,
+       providername = $14
+      WHERE username = $5`,
+        [
+          issp,
+          iscustomer,
+          servicecategory,
+          fullname,
+          username,
+          city,
+          state,
+          zip,
+          street1,
+          street2,
+          phone,
+          email,
+          qualifications,
+          providername
+        ]
+      );
+    }
 
 
     return NextResponse.json({ success: true });
