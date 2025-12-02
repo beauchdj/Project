@@ -39,7 +39,7 @@ export default function AppointmentsList({
           </thead>
           <tbody className="divide-y divide-white/10">
             {appointments.map((row, i) => {
-              const customer = row.fullname ?? "";
+              const customer = row.cust_fullname ?? "";
               return (
                 <tr key={row.id ?? i} className="hover:bg-white/5">
                   <td className="px-3 py-2 whitespace-nowrap text-xs">
