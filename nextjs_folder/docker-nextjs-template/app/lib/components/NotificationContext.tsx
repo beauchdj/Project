@@ -1,6 +1,6 @@
 "use client";
 
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useRef, useState } from "react";
 
 interface NotificationContextType {
   toggleHidden: (str: string) => void;
@@ -15,19 +15,18 @@ export function NotificationProvider({
 }) {
   const [isHidden, setIsHidden] = useState<boolean>(true);
   const [message, setMessage] = useState<string>("");
+  const timeoutId = useRef<NodeJS.Timeout>(null);
 
   const toggleHidden = (str: string) => {
     setMessage(str);
     setIsHidden(false);
-    setTimeout(() => {
+    if (timeoutId.current) clearTimeout(timeoutId.current);
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    timeoutId.current = setTimeout(() => {
       setIsHidden(true);
       setMessage("");
-    }, 4000);
+    }, 3000);
   };
-
-  // const updateMessage = (str: string) => {
-  //   setMessage(str);
-  // };
 
   return (
     <NotificationContext.Provider value={{ toggleHidden }}>

@@ -13,7 +13,7 @@ export async function GET(
   { params }: { params: Promise<{ id: string }> }
 ) {
   const session = await auth();
-  if (!session?.user) {
+  if (!session || !session?.user) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
   const { id } = await params;
@@ -22,7 +22,7 @@ export async function GET(
     `SELECT * FROM appt_bookings 
     JOIN appts_avail on appts_avail.id = appt_bookings.apptid 
     JOIN users on users.id = spid
-    WHERE userid = $1`,
+    WHERE bookstatus = 'Booked' AND (userid = $1 OR spid = $1)`,
     [id]
   );
   // console.log("GOT BACK ROWS: ", dbResp.rows);

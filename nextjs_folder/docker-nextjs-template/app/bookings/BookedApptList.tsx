@@ -14,14 +14,14 @@ export default function BookedApptsList({
   if (!bookings.length) {
     return (
       <div>
-        <h2 className="text-lg font-semibold mb-2">My Appointments</h2>
+        <h2 className="text-lg font-semibold mb-2">My Bookings</h2>
       </div>
     );
   }
 
   return (
     <div className="">
-      <h2 className="text-lg font-semibold mb-2">My Appointments</h2>
+      <h2 className="text-lg font-semibold mb-2">My Bookings</h2>
 
       <div className="overflow-x-auto rounded-lg border border-white/10">
         <table className="min-w-full text-sm">
@@ -65,13 +65,25 @@ export default function BookedApptsList({
                   <td className="px-3 py-2">{row.service}</td>
                   <td className="px-3 py-2">{row.providername}</td>
 
-                  <td className="px-3 py-2">
+                  {/* <td className="px-3 py-2">
                     <CancelBookingButton
                       booking={row}
                       onSuccess={() => onCancel(row)}
                       onError={onError}
                     />
-                  </td>
+                  </td> */}
+
+                  {row.bookstatus == "Booked" ? (
+                    <td className="px-3 py-2">
+                      <CancelBookingButton
+                        booking={row}
+                        onSuccess={() => onCancel(row)}
+                        onError={onError}
+                      />
+                    </td>
+                  ) : (
+                    <td className="px-3 py-2">Cancelled</td>
+                  )}
 
                   {/*!(row.bookstatus == "Cancelled") && (
                   <td className="px-3 py-2">
