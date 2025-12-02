@@ -32,6 +32,7 @@ CREATE TABLE public.appts_avail (
     spid uuid,
     starttime timestamp NOT NULL,
     endtime timestamp NOT NULL,
+    isactive BOOLEAN NOT NULL,
     service varchar(30),
     CONSTRAINT appts_pkey PRIMARY KEY (id),
     CONSTRAINT appts_avail_spid_fkey FOREIGN KEY (spid)
