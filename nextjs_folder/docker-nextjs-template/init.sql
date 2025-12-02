@@ -67,11 +67,16 @@ CREATE TABLE public.appt_bookings (
 
 CREATE TABLE public.notifications (
     "apptid" uuid,
+    "userid" uuid,
     "status" character varying(64),
     "id" uuid DEFAULT gen_random_uuid() NOT NULL,
     CONSTRAINT "notifications_id" PRIMARY KEY ("id"),
     CONSTRAINT "notifications_apptid_fkey" FOREIGN KEY ("apptid")
-    REFERENCES appt_bookings(id)
+    REFERENCES appts_avail(id)
+    ON UPDATE CASCADE
+    ON DELETE CASCADE,
+    CONSTRAINT "notifications_userid_fkey" FOREIGN KEY ("userid")
+    REFERENCES users(id)
     ON UPDATE CASCADE
     ON DELETE CASCADE
 );
