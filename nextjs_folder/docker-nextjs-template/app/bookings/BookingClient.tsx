@@ -5,9 +5,10 @@ import ApptSearchResults from "./ApptSearchResults";
 import BookedApptsList from "./BookedApptList";
 import { Booking } from "../lib/types/Booking";
 import { useNotification } from "../lib/components/NotificationContext";
+import { Appointment } from "../lib/types/Appointment";
 
 export default function BookingClient() {
-  const [results, setResults] = useState<Booking[]>([]);
+  const [results, setResults] = useState<Appointment[]>([]);
   // const [confirmation, setConfirmation] = useState<string | null>(null);
   const [bookings, setBookings] = useState<Booking[]>([]);
   const [error, setError] = useState<string | null>(null);
@@ -20,8 +21,8 @@ export default function BookingClient() {
 
   async function fetchBookings() {
     const res = await fetch("/api/bookings", { method: "GET" });
-    const json: Booking[] = await res.json();
-    setBookings(json);
+    const json = await res.json();
+    setBookings(json.bookings);
   }
 
   async function handleBook(apptId: string) {
@@ -46,7 +47,7 @@ export default function BookingClient() {
 
   return (
     <>
-      <SearchAppts results={results} setResults={setResults} />
+      <SearchAppts setResults={setResults} />
       <div className="mt-4">
         {/* {confirmation && (
           <div className="mb-4 rounded-md bg-emerald-600/90 text-white px-4 py-2">

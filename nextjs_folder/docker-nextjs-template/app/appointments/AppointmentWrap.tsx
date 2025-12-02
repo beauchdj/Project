@@ -14,8 +14,8 @@ export default function AppointmentWrap() {
 
   async function fetchAppointments() {
     const res = await fetch("/api/appointments", { method: "GET" });
-    const json: Appointment[] = await res.json();
-    setAppointments(json);
+    const json = await res.json();
+    setAppointments(json.appointments);
   }
 
   async function handleCancel(apptId: string) {

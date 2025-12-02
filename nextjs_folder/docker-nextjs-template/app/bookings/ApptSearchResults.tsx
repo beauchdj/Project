@@ -2,13 +2,15 @@
 
 import { Booking } from "../lib/types/Booking";
 import BookApptButton from "./BookApptButton";
+import { Appointment } from "../lib/types/Appointment";
 
 export default function ApptSearchResults({
   data,
   onBooked,
   onError,
 }: {
-  data: Booking[];
+  //data: Booking[];
+  data: Appointment[];
   onBooked: (apptId: string) => void;
   onError: (message: string) => void;
 }) {
@@ -63,7 +65,7 @@ export default function ApptSearchResults({
                     })}
                   </td>
                   <td className="px-3 py-2">{row.service}</td>
-                  <td className="px-3 py-2">{row.providername}</td>
+                  <td className="px-3 py-2">{row.sp_providername}</td>
                   <td className="px-3 py-2">
                     <BookApptButton
                       apptId={row.id!}
