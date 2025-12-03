@@ -78,7 +78,7 @@ export function UserUpdate() {
   //////////////////////////////////////////////
   useEffect(() => {
     if (session?.user?.username) {
-      fetch(`/api/userAiSlop?username=${session.user.username}`)
+      fetch(`/api/userAccountUpdate?username=${session.user.username}`)
         .then(res => res.json())
         .then(data => {
           if (!data.error) {
@@ -134,7 +134,7 @@ export function UserUpdate() {
     const isValid = validateStep4();
 
     if (isValid) {
-      const res = await fetch("/api/userAiSlop", {
+      const res = await fetch("/api/userAccountUpdate", {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -175,7 +175,7 @@ export function UserUpdate() {
 
   function validateType(
   ): boolean {
-    var typeValid = isSp || formData.iscustomer;
+    var typeValid = formData.issp || formData.iscustomer;
     setTypeError(!typeValid);
     return typeValid;
   }
@@ -272,7 +272,7 @@ export function UserUpdate() {
   ): boolean {
     var nameVal = validateName();
     var spNameVal = true;
-    if (isSp) {
+    if (formData.issp) {
       spNameVal = validateSpName();
     } else {
       formData.providername = "";
@@ -419,8 +419,19 @@ export function UserUpdate() {
                   ></input>
                   {showNameError && <p className="error-text">Please enter your full name</p>}
                 </label>
+                <label className="flex items-center gap-2">
+                  Service Provider
+                  <input
+                    type="checkbox"
+                    name="issp"
+                    value="issp"
+                    className="w-7 h-7 accent-emerald-500 cursor-pointer"
+                    onChange={handleChange}
+                    checked={formData.issp}
+                  ></input>
+                </label>
 
-                {isSp && (
+                {formData.issp && (
                   <label className="label-col">
                     Change Provider Name? (Existing = {oldFormData.providername})
                     <input
@@ -576,7 +587,7 @@ export function UserUpdate() {
                     value={formData.newpass}
                   ></input>
                 </label>
-                {isSp && (
+                {formData.issp && (
                   <label className="label-col">
                     <div className="flex justify-between items-end">
                       <span>Any Qualifications to change?</span>
@@ -622,7 +633,7 @@ export function UserUpdate() {
             )}
 
             {currentStep > totalSteps && (
-              <img className="object-contain opacity-70" src="/luffybuggy.gif" />
+              <img className="object-contain opacity-70" src="/fat-luffy.gif" />
             )}
 
             {/* Static Bottom Nav */}
