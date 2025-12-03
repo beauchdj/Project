@@ -66,6 +66,23 @@ export async function getAllSpAppts(spId: string) {
   }
 }
 
+export async function getAllSpApptsAllTime(spId: string) {
+  try {
+    const { rows } = await pool.query(
+      `SELECT a.starttime, a.endtime, a.service, c.fullname, b.bookstatus, b.id as bookingid, a.id
+       FROM appts_avail AS a
+       LEFT JOIN appt_bookings as b ON b.apptid = a.id AND b.bookstatus = 'Booked'
+       Left JOIN users as c ON c.id = b.userid
+       WHERE spID = $1
+       ORDER BY a.starttime asc`,
+      [spId]
+    );
+    return rows;
+  } catch (error) {
+    console.log("Error fetching from db @getAllSpApptsAllTime(): ", error);
+  }
+}
+
 // returns all available appointments (cancelled or never booked) for a customer
 export async function getAllOpenAppts(serviceCategory: string | null) {
   try {
@@ -179,6 +196,25 @@ export async function getBookedAppts(userId: string) {
              LEFT JOIN users as sp ON appts.spid = sp.id
              WHERE bookings.userid = $1
              AND appts.starttime > NOW()
+             ORDER BY appts.starttime ASC`,
+      [userId]
+    );
+    return rows;
+  } catch (error) {
+    throw new Error("Get Bookings Error");
+  }
+}
+
+export async function getBookedApptsAllTime(userId: string) {
+  try {
+    const { rows } = await pool.query(
+      `SELECT appts.starttime, appts.endtime, appts.service, sp.providername, bookings.id, bookings.bookstatus, apptid
+             FROM appts_avail as appts
+             LEFT JOIN appt_bookings as bookings ON appts.id = bookings.apptid
+             LEFT JOIN users as cust ON bookings.userid = cust.id
+             LEFT JOIN users as sp ON appts.spid = sp.id
+             WHERE bookings.userid = $1
+             AND bookings.bookstatus != 'Cancelled'
              ORDER BY appts.starttime ASC`,
       [userId]
     );

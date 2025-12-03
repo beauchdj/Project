@@ -16,6 +16,7 @@ declare module "next-auth/jwt" {
     email?: string;
     sp_category?: string;
     fullname?: string;
+    isactive?: boolean;
   }
 }
 
@@ -36,6 +37,7 @@ declare module "next-auth" {
       qualifications?: string;
       email?: string;
       providername?: string;
+      isactive?: boolean;
       /**
        * By default, TypeScript merges new interface properties and overwrites existing ones.
        * In this case, the default session user properties will be overwritten,
@@ -56,5 +58,6 @@ declare module "next-auth" {
     qualifications?: string;
     sp_category?: string;
     providername?: string;
+    isactive?: boolean;
   }
 }

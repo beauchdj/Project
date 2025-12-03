@@ -40,15 +40,25 @@ export async function POST(request: Request) {
   }
 }
 
+/**
+ * When we deactivate a user if they are service provider
+ *  its important to cancel all appointments and cancel all
+ *  booked appointments if they are also a customer
+ */
 export async function DELETE(request: Request) {
   try {
-    const bod = await request.json();
-    const username = bod.username;
+    const { searchParams } = new URL(request.url);
+    const id = searchParams.get("id") as string;
+    const isactive = searchParams.get("isactive")!;
+    const negate: boolean = isactive[0] === "t" ? true : false;
 
-    await pool.query("DELETE FROM users WHERE username = $1", [username]);
+    await pool.query("UPDATE users SET isactive = $1 WHERE users.id = $2", [
+      !negate,
+      id,
+    ]);
 
-    return NextResponse.json(JSON.stringify({ username: username }), {
-      status: 200,
+    return NextResponse.json({
+      status: 204,
     });
   } catch (error) {
     console.log("Server API: /users DELETE ERROR", error);

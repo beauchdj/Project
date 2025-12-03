@@ -34,6 +34,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         token.isCustomer = user.isCustomer;
         token.username = user.username;
         token.fullname = user.fullname;
+        token.isactive = user.isactive;
       }
 
       return token;
@@ -49,6 +50,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         session.user.sp_category = token.sp_category;
         session.user.email = token.email!;
         session.user.fullname = token.fullname;
+        session.user.isactive = token.isactive;
       }
       return session;
     },
@@ -96,6 +98,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           username: json.username,
           sp_category: json.sp_type,
           password: json.hashpass,
+          isactive: json.isactive,
         };
 
         if (!comp || !retUser) return null;

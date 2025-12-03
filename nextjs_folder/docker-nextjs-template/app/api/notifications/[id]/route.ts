@@ -3,7 +3,8 @@ import { auth } from "@/auth";
 import { pool } from "@/lib/db";
 import { NextRequest, NextResponse } from "next/server";
 /**
- * This needs to return all appointments that are associated with the current user
+ * This needs to return all appointments for the navbar
+ * that are associated with the current user
  * @param req
  * @param param1
  * @returns

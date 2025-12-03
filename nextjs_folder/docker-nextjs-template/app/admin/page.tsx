@@ -28,11 +28,14 @@ export default async function Page() {
 
 async function getAllApptsJoinSP() {
   try {
-    // TODO: Should be all appointments, only showing booked right now...
     const ret = await pool.query(
-      "SELECT a.id AS sp_id, b.id AS cust_id, appts_avail.service, a.fullname AS sp_fullname, a.servicecategory AS sp_servicecat, a.providername AS sp_providername, b.fullname AS cust_fullname, appts_avail.starttime, appts_avail.endtime FROM appts_avail LEFT JOIN (SELECT DISTINCT apptid, userid FROM appt_bookings) AS uniq ON appts_avail.id = uniq.apptid JOIN users AS a ON appts_avail.spid = a.id LEFT JOIN users AS b on uniq.userid = b.id;"
+      `SELECT a.id AS sp_id, b.id AS cust_id, appts_avail.service, a.fullname AS sp_fullname, 
+      a.servicecategory AS sp_servicecat, a.providername AS sp_providername, b.fullname AS cust_fullname, appts_avail.starttime, appts_avail.endtime 
+        FROM appts_avail 
+        LEFT JOIN (SELECT DISTINCT apptid, userid FROM appt_bookings WHERE appt_bookings.bookstatus != 'Cancelled') AS uniq 
+        ON appts_avail.id = uniq.apptid JOIN users AS a ON appts_avail.spid = a.id 
+        LEFT JOIN users AS b on uniq.userid = b.id;`
     );
-    // appts_avail.service, a.fullname AS sp_fullname, a.servicecategory AS sp_servicecat, a.providername AS sp_providername, b.fullname AS cust_fullname, appts_avail.starttime, appts_avail.endtime
     return ret.rows;
   } catch (error) {
     console.log("Error in getAllApptsJoin() from /app/admin/page.tsx ", error);

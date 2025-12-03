@@ -1,4 +1,4 @@
-import { getBookedAppts } from "@/app/lib/services/appointmentServices";
+import { getBookedApptsAllTime } from "@/app/lib/services/appointmentServices";
 import { auth } from "@/auth";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -20,7 +20,7 @@ export async function GET(
   try {
     const { id } = await params;
     // Data shape should reflect the Booking.ts defined type
-    const result = await getBookedAppts(id); // TODO: give data from whenever, data currently is today onward
+    const result = await getBookedApptsAllTime(id); // TODO: give data from whenever, data currently is today onward
 
     return NextResponse.json(result, { status: 200 });
   } catch (error) {
