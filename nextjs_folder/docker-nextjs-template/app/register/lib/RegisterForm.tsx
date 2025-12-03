@@ -101,6 +101,7 @@ export function RegisterForm() {
       await ret.json();
 
       if (ret.ok) {
+        await waitFunction();
         setServerError(false);
         router.push("/login");
       } else {
@@ -108,6 +109,14 @@ export function RegisterForm() {
         setCurrentStep(4);
       }
     }
+  }
+
+  function sleep(ms: number | undefined) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+  }
+
+  async function waitFunction() {
+    await sleep(1300); // Pause for 2 seconds (2000 milliseconds)
   }
 
   //Validation Helpers
@@ -343,7 +352,6 @@ export function RegisterForm() {
             {/* Step 1 */}
             {currentStep === 1 && (
               <div className="flex gap-1 mt-1 flex-col w-full">
-
                 <label className="label-col">
                   Full Name
                   <input
@@ -630,6 +638,10 @@ export function RegisterForm() {
                   Submit
                 </button>
               </div>
+            )}
+
+            {currentStep > totalSteps && (
+              <img className="object-contain opacity-70" src="/luffy.gif" />
             )}
 
             {/* Static Bottom Nav */}

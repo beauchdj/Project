@@ -35,7 +35,7 @@ export default function Page() {
 
   return (
     <div className="min-h-screen relative flex items-center justify-center">
-      <div className="absolute inset-0 bg-[url('/ph1.jpg')] bg-cover bg-center blur-xs"></div>
+      <div className="absolute inset-0 bg-[url('/lanscape-nature.gif')] bg-cover bg-center blur-xs"></div>
       <div className="absolute inset-0 bg-purple-900 opacity-15"></div>
       <main className="relative z-10 flex flex-col items-center gap-10">
         {/* {Schwellness title and click function} */}
@@ -45,7 +45,7 @@ export default function Page() {
         >
           <h1
             className="font-extrabold italic font-serif md:text-4xl text-center
-              bg-clip-text text-transparent bg-gradient-to-r from-lime-300 to-emerald-900
+              bg-clip-text text-transparent bg-gradient-to-r from-lime-400 to-emerald-700
               drop-shadow-lg
               transform transition-all duration-500 hover:scale-110 hover:drop-shadow-xl hover:z-20"
           >
