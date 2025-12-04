@@ -28,9 +28,11 @@ export default function CancelBookingButton({
         }),
       });
       const response = await fetch(`/api/bookings/${booking.id}/cancel`, {
-        method: "PUT",
+        //method: "PUT",
+        method: "PATCH",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(booking.id),
+        //body: JSON.stringify(booking.id),
+        body: JSON.stringify({ status: "Cancelled"})
       });
 
       const data = await response.json(); //
