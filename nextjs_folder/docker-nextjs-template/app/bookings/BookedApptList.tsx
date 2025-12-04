@@ -65,19 +65,36 @@ export default function BookedApptsList({
                   <td className="px-3 py-2">{row.service}</td>
                   <td className="px-3 py-2">{row.providername}</td>
 
-                  <td className="px-3 py-2">
+
+                    {(row.bookstatus == "Booked" ? 
+                      <td className="px-3 py-2">
+                        <CancelBookingButton 
+                          booking={row}
+                          onSuccess={() => onCancel(row)}
+                          onError={onError}/>
+                      </td>
+                      :
+                      <td className="px-3 py-2">
+                        Cancelled
+                      </td>
+                  )}
+                  {/*<td className="px-3 py-2">
                     <CancelBookingButton
                       booking={row}
                       onSuccess={() => onCancel(row)}
                       onError={onError}
                     />
-                  </td>
+                  </td>*/}
 
                   {/*!(row.bookstatus == "Cancelled") && (
                   <td className="px-3 py-2">
                     <CancelBookingButton 
-                      bookingId={row.id!}
-                      onSuccess={() => onCancel(row.id!)}/>
+                      //bookingId={row.id!}
+                      booking={row}
+                      //onSuccess={() => onCancel(row.id!)}/>
+                       onSuccess={() => onCancel(row)}
+                      onError={onError}
+                    />
                   </td>
                   )*/}
                 </tr>
