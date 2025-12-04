@@ -15,7 +15,7 @@ export async function GET(request: Request) {
 
     const filters: AppointmentFilters = {
         serviceProviderId: searchParams.get("serviceProviderId") ?? undefined,
-        status: searchParams.get("status") as AppointmentFilters["status"] | undefined,
+        status: searchParams.get("status") as | AppointmentFilters["status"] | undefined,
         startAfter: searchParams.get("startAfter") ?? undefined,
         startBefore: searchParams.get("startBefore") ?? undefined,
         serviceCategory: searchParams.get("serviceCategory") as
