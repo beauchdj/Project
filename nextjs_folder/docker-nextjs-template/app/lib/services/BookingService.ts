@@ -147,6 +147,7 @@ import { Booking } from "../types/Booking";
             return result.rows[0];
         }
 
+    /* old version to cancel a single booking only */
     export async function cancelBooking(bookingId: string, userid:string) {
     // check that the user who is trying to cancel has permission to do so
     // (is the customer, the service provider, or is an admin)
@@ -185,6 +186,77 @@ import { Booking } from "../types/Booking";
             apptId: row.apptid,
             userId: row.userid,
             };
+        } catch (error) {
+            console.error("Cancel Booked Appointment Error: ", error);
+            throw new Error("Cancel Booked Appointment Error");
+        }
+    }
+
+    export async function cancelAllBookingsforSP(spId: string, userid:string) {
+    // check that the user who is trying to cancel has permission to do so
+    // (is the service provider, or is an admin)
+        const query = 
+            `UPDATE appt_bookings as b
+            SET bookstatus = 'Cancelled',
+                cancelled_at = NOW(),
+                cancelled_by = $2
+            FROM appts_avail as a
+            JOIN users as u ON u.id = $2
+            WHERE 
+                a.spId = $1
+                AND a.id = b.apptId
+                AND b.bookstatus = 'Booked'
+                AND a.starttime > NOW()
+                AND (
+                    u.isadmin
+                    OR a.spid = $2
+                )
+            RETURNING b.id,b.apptid,b.userid;`;
+
+        try {
+            const result = await pool.query(query, [spId, userid]);
+
+            return { ok: false,
+                     cancelledCount: result.rowCount,
+                     bookings: result.rows
+             };
+
+        } catch (error) {
+            console.error("Cancel Booked Appointment Error: ", error);
+            throw new Error("Cancel Booked Appointment Error");
+        }
+    }
+
+    export async function cancelAllBookingsforCust(custId: string, userid:string) {
+    // check that the user who is trying to cancel has permission to do so
+    // (is the customer, the service provider, or is an admin)
+        const query = 
+            `UPDATE appt_bookings as b
+            SET bookstatus = 'Cancelled',
+                cancelled_at = NOW(),
+                cancelled_by = $2
+            FROM appts_avail as a
+            JOIN users as u ON u.id = $2
+            WHERE 
+                b.userid = $1
+                AND a.id = b.apptId
+                AND b.bookstatus = 'Booked'
+                AND a.starttime > NOW()
+                AND (
+                    u.isadmin
+                    OR b.userid = $2
+                    OR a.spid = $2
+                )
+            RETURNING b.id,b.apptid,b.userid;`;
+
+        try {
+            const result = await pool.query(query, [custId, userid]);
+
+            return { ok: false,
+                     cancelledCount: result.rowCount,
+                     bookings: result.rows
+             };
+
         } catch (error) {
             console.error("Cancel Booked Appointment Error: ", error);
             throw new Error("Cancel Booked Appointment Error");
