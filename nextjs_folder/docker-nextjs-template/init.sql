@@ -77,6 +77,24 @@ CREATE TABLE public.notifications (
     ON DELETE CASCADE
 );
 
+CREATE TABLE public.notifs (
+  id uuid DEFAULT gen_random_uuid() NOT NULL,
+  sent_by uuid,
+  send_to uuid,
+  sent_at timestamp NOT NULL default NOW(),
+  msg VARCHAR(1024),
+  isActive boolean NOT NULL default true,
+  isNew boolean NOT NULL default true,
+  CONSTRAINT notifs_pkey PRIMARY KEY(id),
+  CONSTRAINT notifs_sentby_fkey FOREIGN KEY (sent_by)
+    REFERENCES users(id)
+    ON UPDATE CASCADE
+    ON DELETE CASCADE,
+  CONSTRAINT notifs_sendto_fkey FOREIGN KEY (send_to)
+    REFERENCES users(id)
+  ON UPDATE CASCADE
+  ON DELETE CASCADE
+);
 
 CREATE UNIQUE INDEX appt_bookings_one_booked_per_id
   ON appt_bookings (apptid)
