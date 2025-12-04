@@ -11,7 +11,7 @@ import { Notification } from "@/app/lib/types/Notification";
 export async function GET(req: NextRequest) {
   try {
     const session = await auth();
-    if (!session?.user) {
+    if (!session || !session?.user) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
     const url = new URL(req.url);
@@ -56,7 +56,7 @@ export async function DELETE(req: NextRequest) {
       "DELETE FROM notifications WHERE id = $1 RETURNING id",
       [noteid]
     );
-    console.log("Delete from /api/notifications query ", query);
+    // console.log("Delete from /api/notifications query ", query);
     return NextResponse.json({ status: 204 });
   } catch (error) {
     console.log("Error in DELETE api/notifications/route.ts ", error);

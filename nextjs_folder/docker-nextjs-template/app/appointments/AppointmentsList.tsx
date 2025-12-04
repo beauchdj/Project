@@ -19,6 +19,7 @@ export default function AppointmentsList({
     return (
       <div>
         <h2 className="text-lg font-semibold mb-2">Available Appointments</h2>
+        <p>None</p>
       </div>
     );
   }
@@ -35,6 +36,7 @@ export default function AppointmentsList({
               <th className="px-3 py-2 text-left font-semibold">End</th>
               <th className="px-3 py-2 text-left font-semibold">Service</th>
               <th className="px-3 py-2 text-left font-semibold">Customer</th>
+              <th>Status</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-white/10">

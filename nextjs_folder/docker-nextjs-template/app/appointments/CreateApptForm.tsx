@@ -8,7 +8,6 @@ export default function CreateApptForm({
 }: {
   setAppointments: Dispatch<SetStateAction<Appointment[]>>;
 }) {
-
   const [error, setError] = useState<string | null>(null);
 
   async function onSubmit(event: React.FormEvent<HTMLFormElement>) {
@@ -38,8 +37,8 @@ export default function CreateApptForm({
       return;
     }
 
-    const startTime = convertToISO(date,start);
-    const endTime = convertToISO(date,end);
+    const startTime = convertToISO(date, start);
+    const endTime = convertToISO(date, end);
     if (startTime >= endTime) {
       setError("End time must be after start time.");
       return;
@@ -60,7 +59,9 @@ export default function CreateApptForm({
 
     const { apptId } = await response.json();
     if (!response.ok) {
-      setError("The appointment you are trying to create conflicts with an existing appointment.");
+      setError(
+        "The appointment you are trying to create conflicts with an existing appointment."
+      );
       return;
     }
     const newAppt: Appointment = {
@@ -76,11 +77,10 @@ export default function CreateApptForm({
   }
 
   function convertToISO(dateStr: string, timeStr: string) {
-    const [year,month,day] = dateStr.split("-").map(Number);
+    const [year, month, day] = dateStr.split("-").map(Number);
     const [hours, minutes] = timeStr.split(":").map(Number);
-   
 
-    const local = new Date(year, month - 1, day, hours, minutes, 0,0);
+    const local = new Date(year, month - 1, day, hours, minutes, 0, 0);
     local.setHours(hours, minutes, 0, 0);
 
     const iso = local.toISOString();
@@ -90,54 +90,52 @@ export default function CreateApptForm({
 
   return (
     <div>
-    <form
-      onSubmit={onSubmit}
-      className="flex flex-wrap items-center gap-2 bg-emerald-800/60 p-2 rounded-lg text-sm"
-    >
-      <input
-        name="date"
-        type="date"
-        required
-        className="rounded-md px-2 py-1 text-white text-sm focus:outline-none focus:ring-2 focus:ring-emerald-400"
-      />
-      <input
-        name="starttime"
-        type="time"
-        required
-        className="rounded-md px-2 py-1 text-white text-sm focus:outline-none focus:ring-2 focus:ring-emerald-400"
-      />
-      <input
-        name="endtime"
-        type="time"
-        required
-        className="rounded-md px-2 py-1 text-white text-sm focus:outline-none focus:ring-2 focus:ring-emerald-400"
-      />
-      <input
-        name="service"
-        type="text"
-        placeholder="Service Description"
-        required
-        className="w-36 md:w-48 rounded-md px-2 py-1 text-white text-sm focus:outline-none focus:ring-2 focus:ring-emerald-400"
-      />
+      <form
+        onSubmit={onSubmit}
+        className="flex flex-wrap items-center gap-2 bg-emerald-800/60 p-2 rounded-lg text-sm"
+      >
+        <input
+          name="date"
+          type="date"
+          required
+          className="rounded-md px-2 py-1 text-white text-sm focus:outline-none focus:ring-2 focus:ring-emerald-400"
+        />
+        <input
+          name="starttime"
+          type="time"
+          required
+          className="rounded-md px-2 py-1 text-white text-sm focus:outline-none focus:ring-2 focus:ring-emerald-400"
+        />
+        <input
+          name="endtime"
+          type="time"
+          required
+          className="rounded-md px-2 py-1 text-white text-sm focus:outline-none focus:ring-2 focus:ring-emerald-400"
+        />
+        <input
+          name="service"
+          type="text"
+          placeholder="Service Description"
+          required
+          className="w-36 md:w-48 rounded-md px-2 py-1 text-white text-sm focus:outline-none focus:ring-2 focus:ring-emerald-400"
+        />
 
-      <button
-        type="submit"
-        className="
+        <button
+          type="submit"
+          className="
                     bg-emerald-600 hover:bg-emerald-500
                     text-white font-semibold
                     px-3 py-1 rounded-md
                     transition
                 disabled:opacity-50 cursor-pointer"
-      >
-        Create
-      </button>
-    </form>
-    
-    {error && (
-      <p className="text-red-400 mt-2 text-sm font-medium">
-        {error}
-      </p>
-    )}
-</div>
+        >
+          Create
+        </button>
+      </form>
+
+      {error && (
+        <p className="text-red-400 mt-2 text-sm font-medium">{error}</p>
+      )}
+    </div>
   );
 }
