@@ -1,6 +1,8 @@
 import { pool } from "@/lib/db";
 import { AppointmentFilters } from "../types/AppointmentFilters";
 import {Appointment} from "../types/Appointment";
+
+
 export async function getAppointments(filters: AppointmentFilters, userId: string) : Promise<Appointment[]> {
   /* get user to determine access */
   const { rows: userRows } = await pool.query(
@@ -113,7 +115,8 @@ export async function getAppointments(filters: AppointmentFilters, userId: strin
     LEFT JOIN users c ON c.id = b.userid
     ${whereStmt}
     ORDER BY a.starttime ASC`;
-
+    console.log("Checking query for GET appts...");
+    console.log(query);
     const { rows } = await pool.query(query,params);
     return rows;
 }
