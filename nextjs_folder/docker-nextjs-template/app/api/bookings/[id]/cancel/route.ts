@@ -25,7 +25,7 @@ export async function PATCH (request: Request, { params }: Params) {
    const booking = cancelBooking(params.id,session.user.id);
 
   return NextResponse.json(
-    {message: "PATCH booking...", bookingId: params.id, status },
+    {bookingId: params.id, status },
     {status:200 }
   );
   } catch (error: any) {
