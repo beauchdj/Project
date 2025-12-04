@@ -14,7 +14,7 @@ export default function SearchAppts({setResults,}: {
   const [search, setSearch] = useState("");
   async function updateCategory(category: string) {
     const params = new URLSearchParams();
-    if (category) params.set("serviceCategory", category);
+    if (category) params.set("serviceCategory", category.toLowerCase());
 
     params.set("status","Available");
 
