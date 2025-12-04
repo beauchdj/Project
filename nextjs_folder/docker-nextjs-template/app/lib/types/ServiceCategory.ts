@@ -1,5 +1,5 @@
 export enum ServiceCategory {
-  Beauty = "Beauty",
-  Medical = "Medical",
-  Fitness = "Fitness",
+  Beauty = "beauty",
+  Medical = "medical",
+  Fitness = "fitness",
 }
