@@ -9,12 +9,13 @@ export type users_db = {
   fullname: string;
   username: string;
   hashpass: string;
-  street_1: string;
-  street_2?: string;
+  street1: string;
+  street2?: string;
   city: string;
   state: string;
   zip: string;
   phone: string;
   email: string;
   isactive: boolean;
+  servicecategory: string;
 };

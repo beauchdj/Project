@@ -35,6 +35,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         token.username = user.username;
         token.fullname = user.fullname;
         token.isactive = user.isactive;
+        token.providername = user.providername;
       }
 
       return token;
@@ -51,6 +52,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         session.user.email = token.email!;
         session.user.fullname = token.fullname;
         session.user.isactive = token.isactive;
+        session.user.providername = token.providername;
       }
       return session;
     },
@@ -89,17 +91,19 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 
         const retUser: User = {
           id: json.id!,
-          address: json.street_1,
+          address: json.street1,
           fullname: json.fullname,
           email: json.email,
           isAdmin: json.isadmin,
           isSp: json.issp,
           isCustomer: json.iscustomer,
           username: json.username,
-          sp_category: json.sp_type,
+          sp_category: json.servicecategory,
           password: json.hashpass,
           isactive: json.isactive,
+          providername: json.providername,
         };
+        console.log("JSON :", json, " RetUser: ", retUser);
 
         if (!comp || !retUser) return null;
 

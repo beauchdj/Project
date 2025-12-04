@@ -8,12 +8,12 @@ export function UserList({ users }: { users: User[] }) {
     <div className="w-full flex justify-center items-center flex-col">
       <div className="relative flex flex-col w-3/4 md:items-center overflow-auto h-[80vh] pb-1 bg-emerald-800/80 text-white rounded-2xl border-black border-[2px]">
         <Link
-          className="z-1 hover:bg-emerald-300 active:bg-emerald-300 absolute left-4 top-4 px-2 bg-[rgb(70,207,57)] text-white rounded border-1 border-black"
+          className="z-1 hover:bg-emerald-300 active:bg-emerald-300 absolute left-4 top-4 px-2 bg-emerald-500 text-black rounded border-1 border-black"
           href={"/admin"}
         >
           Back
         </Link>
-        <div className="w-full text-center text-xl bg-emerald-900 py-1 ">
+        <div className="w-full text-center text-xl bg-emerald-900 py-1 border-b-white/20 border-b-[1px]">
           <p className="text-transparent bg-clip-text bg-gradient-to-b from-emerald-200 to-green-400 flex flex-col">
             User List
             <span className="text-xs text-red-500">
@@ -75,7 +75,7 @@ function DeleteUser({
   return (
     <button
       onClick={handleDelete}
-      className="w-12 py-1 px-2 bg-red-700 active:bg-red-500 cursor-pointer rounded text-white border-1 border-black"
+      className="w-12 py-1 px-2 bg-red-700 hover:bg-red-500 active:bg-red-500 cursor-pointer rounded text-white border-1 border-black"
     >
       {active ? <>True</> : <>False</>}
     </button>

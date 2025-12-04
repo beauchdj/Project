@@ -20,10 +20,11 @@ export default async function page({ session }: { session?: Session | null }) {
       <div className="flex flex-col items-center w-[95%] bg-black/70 rounded-xl py-4 h-[87vh] shadow-black shadow-xl mt-2 z-20">
         <div className="w-full flex flex-col items-center gap-3 h-[75vh]">
           <span className="flex-none text-4xl sm:text-5xl text-nowrap bg-clip-text text-transparent overflow-auto italic font-serif font-bold bg-gradient-to-r from-sky-200 to-sky-300">
-            <RealTimeClock />
+            <RealTimeClock />l
           </span>
           {session && (
-            <div className="flex flex-row 
+            <div
+              className="flex flex-row 
                               sm:text-3xl lg:text-4xl
                               italic font-serif font-bold
                               bg-gradient-to-r from-sky-200 to-sky-300
@@ -34,19 +35,21 @@ export default async function page({ session }: { session?: Session | null }) {
               {session?.user.isCustomer && (
                 <div className="flex-1 text-center bg-[url('/moon.gif')] bg-cover bg-center p-2 rounded-2xl">
                   <Link href="/bookings" className="visit-links">
-                    Schedule<br />Appointment
+                    Schedule
+                    <br />
+                    Appointment
                   </Link>{" "}
                 </div>
               )}
-              {(session?.user.isSp && session?.user.isCustomer) && (
-                <div className="p-5">
-                  Or
-                </div>
+              {session?.user.isSp && session?.user.isCustomer && (
+                <div className="p-5">Or</div>
               )}
               {session?.user.isSp && (
                 <div className="flex-1 text-center bg-[url('/wfall.gif')] bg-cover bg-center p-2 rounded-2xl z-10">
                   <Link href="/appointments" className="visit-links">
-                    Create<br />Appointment
+                    Create
+                    <br />
+                    Appointment
                   </Link>
                 </div>
               )}
@@ -66,7 +69,8 @@ export default async function page({ session }: { session?: Session | null }) {
           </span>
           <div>
             {!session && (
-              <div className="flex flex-row 
+              <div
+                className="flex flex-row 
                               sm:text-3xl lg:text-4xl
                               bg-clip-text text-transparent
                               italic font-serif font-bold
@@ -79,9 +83,7 @@ export default async function page({ session }: { session?: Session | null }) {
                     Login
                   </Link>{" "}
                 </div>
-                <div className="p-5">
-                  Or
-                </div>
+                <div className="p-5">Or</div>
                 <div className="flex-1 text-left bg-[url('/waves.gif')] bg-cover bg-center p-5 rounded-2xl z-10">
                   <Link href="/register" className="visit-links">
                     Register

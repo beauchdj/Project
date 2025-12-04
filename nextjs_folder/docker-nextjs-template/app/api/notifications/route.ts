@@ -40,9 +40,8 @@ export async function GET(req: NextRequest) {
   }
 }
 /**
- *
- * @param req incomding http request
- * @returns
+ * This clears a notificaion from the users bell and
+ * the notifications table
  */
 export async function DELETE(req: NextRequest) {
   try {
@@ -52,10 +51,9 @@ export async function DELETE(req: NextRequest) {
     }
     const { noteid } = await req.json();
 
-    const query = await pool.query(
-      "DELETE FROM notifications WHERE id = $1 RETURNING id",
-      [noteid]
-    );
+    await pool.query("DELETE FROM notifications WHERE id = $1 RETURNING id", [
+      noteid,
+    ]);
     // console.log("Delete from /api/notifications query ", query);
     return NextResponse.json({ status: 204 });
   } catch (error) {

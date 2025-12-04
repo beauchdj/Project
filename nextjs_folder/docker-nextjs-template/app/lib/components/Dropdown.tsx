@@ -11,6 +11,7 @@ export default function Dropdown({ session }: { session?: Session | null }) {
   let isCustomer = false;
   let isAdmin = false;
   let isLoggedIn = false;
+  console.log("GOt user? :", session?.user);
 
   if (session && session.user) {
     isSp = session.user.isSp!;
@@ -24,17 +25,33 @@ export default function Dropdown({ session }: { session?: Session | null }) {
 
   return (
     <div className="group relative p-1 cursor-default flex-none">
-      <BarStack />
+      <div className="bg-emerald-900 rounded-4xl w-8 h-8 text-zinc-100 font-bold shadow-black shadow flex justify-center items-center">
+        {session?.user ? (
+          session?.user.providername ? (
+            <>{session.user.providername[0]}</>
+          ) : (
+            <>{session?.user.fullname![0]}</>
+          )
+        ) : (
+          <BarStack />
+        )}
+      </div>
       <div
         // default behavior is hidden, when the group is hovered it will stay with group-hover:...
         className={
-          "gap-2 border-black border-2 shadow-black shadow-lg group-hover:flex group-hover:absolute px-8 py-4 flex-col hidden top-[34px] left-[0.5rem] bg-emerald-700 w-fit h-fit rounded-xl z-40"
+          "gap-2 border-black border-2 shadow-black shadow-lg group-hover:flex group-hover:absolute px-8 py-4 flex-col hidden top-[34px] left-[0.5rem] bg-emerald-800 w-fit h-fit rounded-xl z-40"
         }
       >
         {session?.user.username && (
           <span className="flex text-white items-center justify-center w-full text-center flex-col">
             Logged in as:
-            <span>{session?.user.fullname}</span>
+            <span>
+              {session?.user.isSp ? (
+                <>{session.user.providername}</>
+              ) : (
+                <>{session.user.fullname}</>
+              )}
+            </span>
           </span>
         )}
 

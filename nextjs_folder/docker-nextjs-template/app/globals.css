@@ -17,13 +17,13 @@ body {
 }
 
 .nav-btn {
-  @apply bg-emerald-500
-  hover:bg-lime-300
-  px-5
+  @apply bg-emerald-900
+  hover:bg-emerald-500
+  px-4
   py-2
-  text-black
-  text-[18px]
-  rounded-2xl
+  text-white
+  text-base
+  rounded
   text-center
   shadow-black
   shadow
@@ -45,7 +45,7 @@ body {
 }
 
 .hover-bar {
-  @apply text-black bg-gray-300 border border-black group-hover:bg-green-400 h-1.5 w-10 items-center justify-center flex rounded-2xl shrink-0;
+  @apply text-black bg-gray-300 border border-black group-hover:bg-green-400 h-1 w-5 items-center justify-center flex rounded-2xl shrink-0;
 }
 
 .error-text {

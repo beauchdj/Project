@@ -20,7 +20,7 @@ export default function Nav() {
       flex flex-row h-20 
       items-center
       justify-center
-      bg-emerald-800/80
+      bg-emerald-800
       px-6
       m-2
       rounded-2xl
@@ -44,7 +44,7 @@ export default function Nav() {
           <CurrentAppointments userid={session.user.id} />
           <button
             onClick={signOutHandler}
-            className="nav-btn cursor-pointer text-sm"
+            className="px-2 py-2 bg-emerald-900 hover:bg-emerald-800 active:bg-emerald-800 rounded cursor-pointer text-sm shadow-sm shadow-black"
           >
             Sign Out
           </button>
