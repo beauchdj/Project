@@ -43,7 +43,7 @@ export default function AdminView({ appt_list }: { appt_list: Appointment[] }) {
           onSubmit={submitDates}
           className="justify-center items-center rounded-2xl text-black flex flex-col gap-1 ml-4"
         >
-          <div className="bg-emerald-800/80 rounded-2xl p-2 flex md:items-center px-2 py-2 md:px-8 md:py-4 flex-col gap-2 overflow-auto border-[2px] border-black">
+          <div className="bg-emerald-800 rounded-2xl p-2 flex md:items-center px-2 py-2 md:px-8 md:py-4 flex-col gap-2 overflow-auto border-[2px] border-black">
             <div className="flex flex-col justify-center items-center text-white">
               <label>Start Date:</label>
               <input
@@ -86,7 +86,7 @@ export default function AdminView({ appt_list }: { appt_list: Appointment[] }) {
           </div>
         </form>
       </div>
-      <div className="flex flex-col gap-1 w-[75vw] md:items-center overflow-auto h-[80vh] pb-1 bg-emerald-800/80 text-white rounded-2xl border-black border-[2px] mr-4">
+      <div className="flex flex-col gap-1 w-[75vw] md:items-center overflow-auto h-[80vh] pb-1 bg-emerald-800/90 select-none text-white rounded-2xl border-black border-[2px] mr-4">
         <table className="w-full border-collapse text-center text-xs">
           <thead className="bg-emerald-900 sticky top-0 text-white">
             <tr>

@@ -24,8 +24,10 @@ export function UserList({ users }: { users: User[] }) {
         <table className="w-full border-collapse text-center text-xs">
           <thead className="bg-emerald-900 sticky top-0 text-white">
             <tr>
-              <th className="py-2">Full Name</th>
               <th>Type</th>
+              <th className="py-2">Full Name</th>
+              <th>Username</th>
+              <th>Provider Name</th>
               <th>Active</th>
             </tr>
           </thead>
@@ -39,8 +41,10 @@ export function UserList({ users }: { users: User[] }) {
                     key={user.id}
                     className="border-white/10 border-b-[1px] h-14 text-white text-sm hover:bg-emerald-200/20"
                   >
-                    <td>{user.fullname}</td>
                     <td>{user.issp ? <>ServiceProvider</> : <>Customer</>} </td>
+                    <td>{user.fullname}</td>
+                    <td>{user.username}</td>
+                    <td>{user.issp ? <>{user.providername}</> : <>--</>} </td>
                     <td>
                       <DeleteUser userid={user.id} isactive={user.isactive} />
                     </td>

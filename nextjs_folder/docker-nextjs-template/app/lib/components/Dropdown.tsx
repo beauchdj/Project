@@ -11,7 +11,6 @@ export default function Dropdown({ session }: { session?: Session | null }) {
   let isCustomer = false;
   let isAdmin = false;
   let isLoggedIn = false;
-  console.log("GOt user? :", session?.user);
 
   if (session && session.user) {
     isSp = session.user.isSp!;
@@ -25,7 +24,7 @@ export default function Dropdown({ session }: { session?: Session | null }) {
 
   return (
     <div className="group relative p-1 cursor-default flex-none">
-      <div className="bg-emerald-900 rounded-4xl w-8 h-8 text-zinc-100 font-bold shadow-black shadow flex justify-center items-center">
+      <div className="bg-emerald-900 rounded-4xl w-9 h-9 text-[18px] text-zinc-100 font-bold shadow-black shadow flex justify-center items-center">
         {session?.user ? (
           session?.user.providername ? (
             <>{session.user.providername[0]}</>
