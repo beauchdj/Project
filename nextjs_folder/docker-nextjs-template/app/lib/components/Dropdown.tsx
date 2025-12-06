@@ -43,6 +43,11 @@ export default function Dropdown({ session }: { session?: Session | null }) {
             Admin
           </Link>
         )}
+        {isAdmin && (
+          <Link href={"/admin/users"} className={"nav-btn"}>
+            User Management
+          </Link>
+        )}
         <Link className="nav-btn" href={"/"}>
           Home
         </Link>

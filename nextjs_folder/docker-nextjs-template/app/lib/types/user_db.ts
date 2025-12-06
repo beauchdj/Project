@@ -16,4 +16,5 @@ export type users_db = {
   zip: string;
   phone: string;
   email: string;
+  isactive?: boolean;
 };
