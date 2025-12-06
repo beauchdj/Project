@@ -46,7 +46,8 @@ export default function AdminUserAppointments() {
   }, []);
 
   async function fetchBookings() {
-    const res = await fetch(`/api/bookings/${id}`, { method: "GET" });
+    //const res = await fetch(`/api/bookings/${id}`, { method: "GET" });
+    const res = await fetch("api/bookings", { method: "GET" });
     const json: Booking[] = await res.json();
     setBookings(json);
   }
