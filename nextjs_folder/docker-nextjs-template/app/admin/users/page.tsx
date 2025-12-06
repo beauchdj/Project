@@ -47,6 +47,7 @@ export default function UsersList() {
         <thead className="bg-emerald-900">
           <tr>
             <th className="px-4 py-3 text-left font-semibold">Name</th>
+            <th className="px-4 py-3 text-left font-semibold">Created On</th>
             <th className="px-4 py-3 text-left font-semibold">Is SP</th>
             <th className="px-4 py-3 text-left font-semibold">Status</th>
             <th className="px-4 py-3 text-left font-semibold">Action</th>
@@ -59,6 +60,14 @@ export default function UsersList() {
               className="hover:bg-emerald-700 transition-colors"
             >
               <td className="px-4 py-2 text-xs">{user.fullname}</td>
+              <td className="px-4 py-2 text-xs">
+                {user.created_at ? 
+                  new Date(user.created_at).toLocaleDateString("en-US", {
+                      month: "2-digit",
+                      day: "2-digit",
+                      year: "2-digit",
+                    }) : "--" }
+                  </td>
               <td className="px-4 py-2 text-xs">
                 {user.issp ? "yes" : "no"}
               </td>
