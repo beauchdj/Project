@@ -11,7 +11,7 @@ export default function AppointmentsList({
   onError,
 }: {
   appointments: Appointment[];
-  onCancelAppt: (bookingId: string) => void;
+  onCancelAppt: (appt: Appointment) => void;
   onDeleteAppt: (apptId: string) => void;
   onError: (message: string) => void;
 }) {
@@ -73,7 +73,7 @@ export default function AppointmentsList({
                     <td className="px-3 py-2">
                       <CancelApptButton
                         appointment={row}
-                        onSuccess={() => onCancelAppt(row.id!)}
+                        onSuccess={() => onCancelAppt(row)}
                         onError={onError}
                       />
                     </td>
