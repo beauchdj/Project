@@ -1,27 +1,35 @@
 "use client";
 
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
-import { Booking } from "../lib/types/Booking";
+//import { Booking } from "../lib/types/Booking";
+import { Appointment } from "../lib/types/Appointment";
 
-export default function SearchAppts({
-  setResults,
-}: {
-  results: Booking[];
-  setResults: Dispatch<SetStateAction<Booking[]>>;
+export default function SearchAppts({setResults,}: {
+  //results: Booking[];
+  //setResults: Dispatch<SetStateAction<Booking[]>>;
+  setResults: Dispatch<SetStateAction<Appointment[]>>;
 }) {
-  const [base, setBase] = useState<Booking[]>([]);
+  //const [base, setBase] = useState<Booking[]>([]);
+  const [base, setBase] = useState<Appointment[]>([]);
   const [search, setSearch] = useState("");
   async function updateCategory(category: string) {
     const params = new URLSearchParams();
-    if (category) params.set("category", category);
+    if (category) params.set("serviceCategory", category.toLowerCase());
 
-    const response = await fetch(`/api/openings?${params.toString()}`, {
+    params.set("status","Available");
+
+    const response = await fetch(`/api/appointments?${params.toString()}`, {
       method: "GET",
     });
 
+    if(!response.ok) {
+      console.error("Failed to fetch appointment");
+      return;
+    }
+
     const data = await response.json();
-    setResults(data);
-    setBase(data);
+    setResults(data.appointments);
+    setBase(data.appointments);
   }
 
   useEffect(() => {
@@ -54,9 +62,9 @@ export default function SearchAppts({
         <option value="" className="text-black" disabled>
           -Services-
         </option>
-        <option value="medical">Medical</option>
-        <option value="fitness">Fitness</option>
-        <option value="beauty">Beauty</option>
+        <option value="Medical">Medical</option>
+        <option value="Fitness">Fitness</option>
+        <option value="Beauty">Beauty</option>
       </select>
       <input
         type="text"

@@ -8,9 +8,29 @@ export default function BookedApptsList({
   onError,
 }: {
   bookings: Booking[];
-  onCancel: (apptId: Booking) => void;
+  //onCancel: (apptId: Booking) => void;
+  onCancel: (booking: Booking) => void;
   onError: (message: string) => void;
 }) {
+
+  async function handleCancelSuccess(booking: Booking) {
+    // if cancel succeeds, send notification
+    try {
+      await fetch("/api/notifications", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          who: "cust",
+          apptid: booking.apptid,
+          status: "Cancelled",
+        })
+      });
+    } catch (err) {
+      console.error("Notification failed:, err");
+    }
+    onCancel(booking);
+  }
+
   if (!bookings.length) {
     return (
       <div>
@@ -65,31 +85,36 @@ export default function BookedApptsList({
                   <td className="px-3 py-2">{row.service}</td>
                   <td className="px-3 py-2">{row.providername}</td>
 
-                  {/* <td className="px-3 py-2">
+
+                    {(row.bookstatus == "Booked" ? 
+                      <td className="px-3 py-2">
+                        <CancelBookingButton 
+                          booking={row}
+                          onSuccess={() => handleCancelSuccess(row)}
+                          onError={onError}/>
+                      </td>
+                      :
+                      <td className="px-3 py-2">
+                        Cancelled
+                      </td>
+                  )}
+                  {/*<td className="px-3 py-2">
                     <CancelBookingButton
                       booking={row}
                       onSuccess={() => onCancel(row)}
                       onError={onError}
                     />
-                  </td> */}
-
-                  {row.bookstatus == "Booked" ? (
-                    <td className="px-3 py-2">
-                      <CancelBookingButton
-                        booking={row}
-                        onSuccess={() => onCancel(row)}
-                        onError={onError}
-                      />
-                    </td>
-                  ) : (
-                    <td className="px-3 py-2">Cancelled</td>
-                  )}
+                  </td>*/}
 
                   {/*!(row.bookstatus == "Cancelled") && (
                   <td className="px-3 py-2">
                     <CancelBookingButton 
-                      bookingId={row.id!}
-                      onSuccess={() => onCancel(row.id!)}/>
+                      //bookingId={row.id!}
+                      booking={row}
+                      //onSuccess={() => onCancel(row.id!)}/>
+                       onSuccess={() => onCancel(row)}
+                      onError={onError}
+                    />
                   </td>
                   )*/}
                 </tr>

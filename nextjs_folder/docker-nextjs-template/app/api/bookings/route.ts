@@ -1,9 +1,109 @@
-// route for customers to book an appointment and to view their booked appointments
-
 import { NextResponse } from "next/server";
 import { auth } from "@/auth";
-import { getBookedAppts, bookAppointment } from "@/app/lib/services/appointmentServices";
+import { BookingFilters } from "../../lib/types/BookingFilters";
+import { getBookings, createBooking} from "../../lib/services/BookingService";
 
+//import { getBookedAppts, bookAppointment } from "@/app/lib/services/appointmentServices";
+
+/* Supported Filters
+  customerId?: string;
+  serviceProviderId?: string;
+  status?: "Booked" | "Cancelled";
+  startAfter?: string;
+  startBefore?: string;
+  serviceCategory?: string;
+*/
+
+export async function GET(request: Request) {
+    const session = await auth();
+    if (!session) {
+        return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+
+    const { searchParams } = new URL(request.url);
+
+    const filters: BookingFilters = {
+         customerId: searchParams.get("customerId") ?? undefined,
+        serviceProviderId: searchParams.get("serviceProviderId") ?? undefined,
+        status: searchParams.get("status") as BookingFilters["status"] | undefined,
+        startAfter: searchParams.get("startAfter") ?? undefined,
+        startBefore: searchParams.get("startBefore") ?? undefined,
+        serviceId: searchParams.get("serviceId") ?? undefined,
+        serviceCategory: searchParams.get("serviceCategory") as
+            | BookingFilters["serviceCategory"]
+            | undefined,
+    };
+
+    try {
+        const bookings = await getBookings(filters, session.user.id);
+        return NextResponse.json(
+            { bookings },
+            {status: 200 }
+        );
+    } catch (error: any) {
+        console.error("Get bookings error:", error);
+        return NextResponse.json(
+            { message: "Server Error" },
+            {status: 500}
+        );
+    }
+}
+
+export async function POST(request: Request) {
+    const session = await auth();
+    if (!session) {
+        return NextResponse.json({ error: "Unauthorized" }, {status: 401 });
+    }
+
+    const { apptId } = await request.json();
+
+    if(!apptId) {
+        return NextResponse.json( 
+            { error: "Missing appointmentSlotId" },
+            { status: 400 }
+        );
+    }
+
+    try {
+        const booking = await createBooking(apptId,session.user.id);
+
+        return NextResponse.json(
+            { bookkingId: booking.id },
+            {status: 201 }
+        );
+    } catch (error: any) {
+        console.error("Create booking error:", error);
+
+            switch (error.message) {
+      case "APPT_NOT_FOUND":
+        return NextResponse.json(
+          { error: "Appointment does not exist" },
+          { status: 404 }
+        );
+
+      case "SLOT_ALREADY_BOOKED":
+        return NextResponse.json(
+          { error: "Appointment is already booked" },
+          { status: 409 }
+        );
+
+      case "BOOKING_CONFLICT":
+        return NextResponse.json(
+          { error: "Appointment conflicts with an existing booking" },
+          { status: 409 }
+        );
+
+      default:
+        return NextResponse.json(
+          { error: "Internal server error" },
+          { status: 500 }
+        );
+    }
+  }
+}
+
+
+/*
 export async function POST(request: Request) {
     const session = await auth();
     if (!session) {
@@ -44,7 +144,7 @@ export async function GET(request: Request) {
     }
 }
 
-/*
+
 export async function DELETE(request: Request) {
     const session = await auth();
     if (!session) {

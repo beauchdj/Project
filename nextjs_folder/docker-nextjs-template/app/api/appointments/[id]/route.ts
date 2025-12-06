@@ -1,6 +1,57 @@
-import { getAllSpAppts } from "@/app/lib/services/appointmentServices";
+//import { getAllSpAppts } from "@/app/lib/services/appointmentServices";
 import { auth } from "@/auth";
 import { NextRequest, NextResponse } from "next/server";
+import { updateAppointmentSlot } from "@/app/lib/services/appointmentServices";
+
+type Params = { params: { id: string } };
+
+export async function PATCH(
+  request: Request,
+  { params }: Params
+) {
+  const session = await auth();
+  if (!session) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
+  const { isActive } = await request.json();
+
+  if (typeof isActive !== "boolean") {
+    return NextResponse.json(
+      { error: "Invalid request body" },
+      { status: 400 }
+    );
+  }
+
+  try {
+    await updateAppointmentSlot(
+      params.id,
+      isActive,
+      session.user.id
+    );
+
+    return NextResponse.json(
+      { success: true },
+      { status: 200 }
+    );
+  } catch (error: any) {
+    console.error("Update appointment error:", error);
+
+    if (error.message === "FORBIDDEN") {
+      return NextResponse.json(
+        { error: "Not allowed to update this appointment" },
+        { status: 403 }
+      );
+    }
+
+    return NextResponse.json(
+      { error: "Server error" },
+      { status: 500 }
+    );
+  }
+}
+
+
 
 /**
  * This was gavin created, Used for the Admin View, a slight alteration from the regular route
@@ -20,9 +71,9 @@ export async function GET(
   try {
     const { id } = await params;
     // Data shape should reflect the Appointment.ts defined type
-    const result = await getAllSpAppts(id); // TODO: give data from whenever, data currently is today onward
+    //const result = await getAllSpAppts(id); // TODO: give data from whenever, data currently is today onward
 
-    return NextResponse.json(result, { status: 200 });
+    //return NextResponse.json(result, { status: 200 });
   } catch (error) {
     console.log("Error inside of api/appointments/[id]: ", error);
     return NextResponse.json({ error: "Server Error" }, { status: 500 });

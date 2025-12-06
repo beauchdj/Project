@@ -27,12 +27,12 @@ export default function CancelApptButton({
         }),
       });
 
-      const response = await fetch(
-        `/api/bookings/${appointment.bookingid}/cancel`,
-        {
-          method: "PUT",
+      const response = await fetch(`/api/bookings/${appointment.bookingid}/cancel`, {
+          //method: "PUT",
+          method: "PATCH",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(appointment.bookingid),
+          //body: JSON.stringify(appointment.bookingid),
+          body: JSON.stringify({status: "Cancelled"})
         }
       );
 
