@@ -4,7 +4,8 @@ export async function getNotificationsForUser(userId: string) {
     const { rows } = await pool.query(
         `SELECT id, msg as message, isactive, isnew
         FROM notifs
-        WHERE send_to = $1`,
+        WHERE send_to = $1
+        AND isactive = true`,
         [userId]);
     return rows;
 }
