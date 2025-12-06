@@ -17,4 +17,5 @@ export type users_db = {
   phone: string;
   email: string;
   isactive?: boolean;
+  created_at?: string;
 };

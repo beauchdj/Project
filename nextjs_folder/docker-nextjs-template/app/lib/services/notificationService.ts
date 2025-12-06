@@ -1,5 +1,14 @@
 import { pool } from "@/lib/db";
 
+export async function getNotificationsForUser(userId: string) {
+    const { rows } = await pool.query(
+        `SELECT id, msg as message, isactive, isnew
+        FROM notifs
+        WHERE send_to = $1`,
+        [userId]);
+    return rows;
+}
+
 export async function createCancelNotification(
     sentBy: string,
     bookingId: string
@@ -44,8 +53,8 @@ export async function createCancelNotification(
 
     //build message
     const dateStr = new Date(row.starttime).toLocaleDateString("en-US",{weekday:"short",month:"long",day:"numeric",year:"numeric",});
-    const startStr = new Date(row.starttime).toLocaleDateString([],{hour:"numeric",minute:"2-digit",});
-    const endStr = new Date(row.endtime).toLocaleDateString([],{hour:"numeric",minute:"2-digit",});
+    const startStr = new Date(row.starttime).toLocaleTimeString([],{hour:"numeric",minute:"2-digit",});
+    const endStr = new Date(row.endtime).toLocaleTimeString([],{hour:"numeric",minute:"2-digit",});
 
     const msg = `Your ${row.service} appointment for ${dateStr} from ${startStr} to ${endStr} has been cancelled by ${row.canceller_name}.`;
 
@@ -58,4 +67,15 @@ export async function createCancelNotification(
             [sentBy,sendTo,msg]
         );
     }
+}
+
+export async function updateNotificationStatus(notifId: string, isActive: boolean, isNew: boolean) {
+    const result = await pool.query(
+            `UPDATE notifs
+            SET isactive = $2, isnew = $3
+            WHERE id = $1`,
+            [notifId, isActive, isNew]
+    );
+
+    return result.rows[0];
 }
