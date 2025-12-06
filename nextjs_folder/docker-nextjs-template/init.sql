@@ -79,6 +79,10 @@ CREATE TABLE public.notifications (
     CONSTRAINT "notifications_apptid_fkey" FOREIGN KEY ("apptid")
     REFERENCES appts_avail(id)
     ON UPDATE CASCADE
+    ON DELETE CASCADE,
+    CONSTRAINT "notifications_userid_fkey" FOREIGN KEY ("userid")
+    REFERENCES users(id)
+    ON UPDATE CASCADE
     ON DELETE CASCADE
 );
 
