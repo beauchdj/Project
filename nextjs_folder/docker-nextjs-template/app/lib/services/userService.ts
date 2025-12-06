@@ -7,7 +7,7 @@ import { cancelAllBookingsforCust,cancelAllBookingsforSP } from "./BookingServic
 export async function getAllUsers() {
     const { rows } = await pool.query(
         `SELECT id, fullname, street1,street2,city,state,zip,phone,email,username,
-            servicecategory,isadmin,issp,iscustomer,qualifications,providername,isactive
+            servicecategory,isadmin,issp,iscustomer,qualifications,providername,isactive,created_at
         FROM users
         ORDER BY username`
     );
