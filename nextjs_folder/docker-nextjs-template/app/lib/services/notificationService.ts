@@ -44,9 +44,9 @@ export async function createCancelNotification(
     //determine who needs to recieve the notification
     let recipients: string[] = [];
     
-    if (row.canceller_isAdmin && !row.cannceller_isSp) {
+    if (row.canceller_isadmin) {
         recipients = [row.customer_id, row.provider_id];
-    } else if (row.canceller_isSp) {
+    } else if (row.canceller_issp) {
         recipients = [row.customer_id];
     } else {
         recipients = [row.provider_id];
