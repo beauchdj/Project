@@ -83,6 +83,10 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 
         const json: users_db = await ret.json();
 
+       if (!json.isactive) {
+          return null;
+       }
+
         const comp = await bcrypt.compare(password, json.hashpass);
 
         const retUser: User = {
