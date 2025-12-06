@@ -71,9 +71,9 @@ export async function GET(
   try {
     const { id } = await params;
     // Data shape should reflect the Appointment.ts defined type
-    const result = await getAllSpAppts(id); // TODO: give data from whenever, data currently is today onward
+    //const result = await getAllSpAppts(id); // TODO: give data from whenever, data currently is today onward
 
-    return NextResponse.json(result, { status: 200 });
+    //return NextResponse.json(result, { status: 200 });
   } catch (error) {
     console.log("Error inside of api/appointments/[id]: ", error);
     return NextResponse.json({ error: "Server Error" }, { status: 500 });

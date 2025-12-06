@@ -6,7 +6,7 @@ type Params = {
   params: { id: string };
 };
 
-export async function PATCH (request: Request, { params }: Params) {
+export async function PATCH (request: Request, { params }: {params: {id: string}}) {
   const session = await auth();
   if (!session) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });

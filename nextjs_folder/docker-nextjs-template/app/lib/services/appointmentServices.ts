@@ -28,11 +28,11 @@ export async function getAppointments(filters: AppointmentFilters, userId: strin
 
   if (!user.isadmin) {
     if (user.issp && filters.status !== "Available") {
-      // default provider view to view their own slots
+      // default provider view to view their own slots (Booked and unbooked)
       params.push(user.id)
       where.push(`a.spid = $${params.length}`);
     } else {
-      // customer view OR a provider browsing available appointments
+      // customer view OR a provider browsing available appointments (as a customer)
       where.push(`a.isactive = true`);
       where.push(
         `NOT EXISTS (
@@ -78,6 +78,7 @@ export async function getAppointments(filters: AppointmentFilters, userId: strin
         WHERE b.apptid = a.id
         AND b.bookstatus = 'Booked'
       )`);
+      //where.push(`a.starttime > now()`);
   }
 
   if (filters.status === "Booked") {

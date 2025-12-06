@@ -15,8 +15,11 @@ export default function CancelBookingButton({
   onError,
 }: Props) {
   const [cancelled, setCancelled] = useState<boolean>(false);
+
   async function handleClick() {
     try {
+      /* keep cancel pure/single functionality. notify only on success of cancellation */
+      {/*}
       // As a customer/consumer of appointments we want to send notification to Service provider
       await fetch("/api/notifications", {
         method: "POST",
@@ -26,7 +29,7 @@ export default function CancelBookingButton({
           apptid: booking.apptid,
           status: "Cancelled",
         }),
-      });
+      });*/}
       const response = await fetch(`/api/bookings/${booking.id}/cancel`, {
         //method: "PUT",
         method: "PATCH",
@@ -35,7 +38,7 @@ export default function CancelBookingButton({
         body: JSON.stringify({ status: "Cancelled"})
       });
 
-      const data = await response.json(); //
+      const data = await response.json(); 
       if (!response.ok) {
         onError(data.error || "Unable to cancel appointment.");
         return;
@@ -43,7 +46,7 @@ export default function CancelBookingButton({
       onSuccess();
       setCancelled(true);
     } catch (error) {
-      console.log("ERROR INSIDE OF CANCELBOOKINGBUTTON: ", error);
+      console.log("CancelBookingButton error:", error);
       onError(
         "An unexpected error occurred while cancelling this appointment."
       );

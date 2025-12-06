@@ -17,7 +17,7 @@ Service providers:
 - may browse available appointments from other providers by requesting status=Available
 
 Customers:
--see only available appointment slots
+-see only available appointment slots (slots are active, are not booked, and are in the future)
 
 Query parameters (all optional):
 - serviceProviderId: filter by service provider id.
@@ -116,6 +116,6 @@ Appointment slots and bookings are separate resources.
 
 Appointments are not cancelled; bookings are cancelled. If a booking is cancelled, the appointment slot may become available again.
 
-Soft-deleted appointment slots remain in the database and may appear in administrative views.
+Soft-deleted appointment slots remain in the database and may appear in admin views.
 
 Appointment data returned by GET /api/appointments matches the Appointment view type.

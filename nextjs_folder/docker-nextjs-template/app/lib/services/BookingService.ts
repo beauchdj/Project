@@ -1,6 +1,7 @@
 import { pool } from "@/lib/db";
 import { BookingFilters } from "../types/BookingFilters";
 import { Booking } from "../types/Booking";
+import { createCancelNotification } from "./notificationService";
 
     export async function getBookings(filters: BookingFilters, userId: string)  : Promise<Booking[]> {
         
@@ -147,7 +148,7 @@ import { Booking } from "../types/Booking";
             return result.rows[0];
         }
 
-    /* old version to cancel a single booking only */
+ 
     export async function cancelBooking(bookingId: string, userid:string) {
     // check that the user who is trying to cancel has permission to do so
     // (is the customer, the service provider, or is an admin)
@@ -180,6 +181,14 @@ import { Booking } from "../types/Booking";
             }
 
             const row = result.rows[0];
+
+            try{
+                await createCancelNotification(userid,bookingId);
+            } catch (err) {
+                //error silently so the cancel still goes through...
+                console.error("Cancel notification creation failed:", err);
+            }
+
             return {
             ok: true,
             bookingId: row.id,
@@ -215,6 +224,14 @@ import { Booking } from "../types/Booking";
 
         try {
             const result = await pool.query(query, [spId, userid]);
+
+            for (const row of result.rows) {
+                try {
+                    await createCancelNotification(userid,row.id);
+                } catch (err) {
+                    console.error(`Notification failed for booking ${row.id}:`,err);
+                }
+            }
 
             return { ok: false,
                      cancelledCount: result.rowCount,
@@ -252,6 +269,14 @@ import { Booking } from "../types/Booking";
         try {
             const result = await pool.query(query, [custId, userid]);
 
+            for (const row of result.rows) {
+                try {
+                    await createCancelNotification(userid,row.id);
+                } catch (err) {
+                    console.error(`Notification failed for booking ${row.id}:`,err);
+                }
+            }
+            
             return { ok: false,
                      cancelledCount: result.rowCount,
                      bookings: result.rows

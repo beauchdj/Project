@@ -8,9 +8,29 @@ export default function BookedApptsList({
   onError,
 }: {
   bookings: Booking[];
-  onCancel: (apptId: Booking) => void;
+  //onCancel: (apptId: Booking) => void;
+  onCancel: (booking: Booking) => void;
   onError: (message: string) => void;
 }) {
+
+  async function handleCancelSuccess(booking: Booking) {
+    // if cancel succeeds, send notification
+    try {
+      await fetch("/api/notifications", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          who: "cust",
+          apptid: booking.apptid,
+          status: "Cancelled",
+        })
+      });
+    } catch (err) {
+      console.error("Notification failed:, err");
+    }
+    onCancel(booking);
+  }
+
   if (!bookings.length) {
     return (
       <div>
@@ -70,7 +90,7 @@ export default function BookedApptsList({
                       <td className="px-3 py-2">
                         <CancelBookingButton 
                           booking={row}
-                          onSuccess={() => onCancel(row)}
+                          onSuccess={() => handleCancelSuccess(row)}
                           onError={onError}/>
                       </td>
                       :
