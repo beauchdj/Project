@@ -5,16 +5,24 @@
 import { NextResponse } from "next/server";
 import { pool } from "@/lib/db";
 import { User } from "next-auth";
+import { getAllUsers,createUser,updateUser } from "@/app/lib/services/userService";
+import { auth } from "@/auth";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export async function GET(request: Request) {
-  try {
-    await pool.connect();
-    const res = await pool.query("SELECT * FROM users");
+  const session = await auth();
+  if (!session?.user?.isAdmin) {
+    return NextResponse.json(
+      { error: "Forbidden" },
+      { status: 403 }
+    );
+  }
 
-    return NextResponse.json(res.rows, { status: 200 });
+  try {
+    const users = await getAllUsers();
+    return NextResponse.json(users, { status: 200 });
   } catch (error) {
-    console.error(error);
+    console.error("Get /users error:", error);
     return NextResponse.json(
       { error: "failed to fetch users" },
       { status: 500 }
@@ -22,6 +30,7 @@ export async function GET(request: Request) {
   }
 }
 
+/*
 export async function POST(request: Request) {
   try {
     const body: User & { password: string } = await request.json(); // & { password: string } adds password variable onto User object
@@ -38,8 +47,61 @@ export async function POST(request: Request) {
     console.log("/users POST ERROR: ", error);
     return NextResponse.json("failed", { status: 500 });
   }
+}*/
+
+export async function POST(request: Request) {
+  try {
+    const body = await request.json();
+    const user = await createUser(body);
+    return NextResponse.json(user, { status: 201 });
+  } catch (error) {
+    console.error("Create user error:", error);
+    return NextResponse.json(
+      { error: "Error creating user" },
+      { status: 500 }
+    );
+  }
 }
 
+export async function PATCH(request: Request) {
+  try {
+    const session = await auth();
+    if (!session?.user) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+
+    const { userId, ...updates } = await request.json();
+
+    if (!userId) {
+      return NextResponse.json({ error: "userId required" }, { status: 400 });
+    }
+
+    if (!session.user.isAdmin && session.user.id !== userId) {
+    return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+  }
+
+  const updated = await updateUser(session.user.id, {
+    id: userId,
+    ...updates,
+  });
+    return NextResponse.json(updated, { status: 200 });
+  } catch (error: any) {
+    if (error.message === "USER_NOT_FOUND") {
+      return NextResponse.json(
+        {error: "User not found" },
+        { status: 404 }
+      );
+    }
+
+    console.error("PATCH /users error:", error);
+    return NextResponse.json(
+      {error: "Failed to update user status"},
+      {status:500}
+    );
+  }
+}
+
+/* shouldnt use - only soft delete 
 export async function DELETE(request: Request) {
   try {
     const bod = await request.json();
@@ -56,4 +118,4 @@ export async function DELETE(request: Request) {
       status: 500,
     });
   }
-}
+}*/
