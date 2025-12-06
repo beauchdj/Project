@@ -17,7 +17,7 @@ export default function CancelApptButton({
     try {
       // canceling an appt from sp perspective
       // add the customer id to notification as that is who it should be sent to
-      await fetch("/api/notifications", {
+      /*await fetch("/api/notifications", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -25,7 +25,7 @@ export default function CancelApptButton({
           apptid: appointment.id,
           status: "Cancelled",
         }),
-      });
+      });*/
 
       const response = await fetch(`/api/bookings/${appointment.bookingid}/cancel`, {
           //method: "PUT",
@@ -50,7 +50,7 @@ export default function CancelApptButton({
   }
 
   return (
-    <div className="flex items-center">
+    <div className="flex items-center justify-center">
       <button
         type="button"
         onClick={handleClick}
