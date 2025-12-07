@@ -1,3 +1,8 @@
+/* Jaclyn Brekke
+*  December 2025
+*  Database service 
+*/
+
 import { pool } from "@/lib/db";
 import { User } from "@/app/lib/types/User";
 import { users_db } from "@/app/lib/types/user_db";

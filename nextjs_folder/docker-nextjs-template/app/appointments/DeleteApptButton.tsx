@@ -1,3 +1,8 @@
+/* Gavin Stankovsky, Jaclyn Brekke
+*  December 2025 (Latest)
+*  Appointment delete button functionality
+*/
+
 "use client";
 
 type Props = {

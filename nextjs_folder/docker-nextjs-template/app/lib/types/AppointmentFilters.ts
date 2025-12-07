@@ -1,3 +1,8 @@
+/* Jaclyn Brekke
+*  November 2025
+*  Database type 
+*/
+
 import { ServiceCategory } from "./ServiceCategory";
 
 export type AppointmentFilters = {

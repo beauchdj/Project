@@ -1,4 +1,8 @@
-// endpoints for service providers to create available appointments and get their appointments (all of them - booked and open)
+/* Jaclyn Brekke
+*  December 2025
+*  Endpoints for service providers to create available 
+*  appointments and get their appointments (all of them - booked and open)
+*/
 
 import { NextResponse } from "next/server";
 import { auth } from "@/auth";
@@ -103,6 +107,11 @@ export async function DELETE(
     );
   }
 }
+
+/*
+* Legacy code, may implement features or delete
+*/
+
 
 /*
 export async function GET(request: Request) {

@@ -1,3 +1,8 @@
+/* Gavin Stankovsky
+*  October 2025
+*  Database type 
+*/
+
 export type Appointment = {
   sp_id: string;
   cust_id: string;
@@ -12,4 +17,3 @@ export type Appointment = {
   bookingid?: string | null;
   fullname: string;
 };
-// service	starttime	endtime	sp_servicecat	sp_providername	sp_fullname	cust_fullname

@@ -1,3 +1,8 @@
+/* Gavin Stankovsky
+*  October 2025
+*  Gets list of users, used for testing purposes
+*/
+
 /**
  * This route is used under /demo
  *  Show casing server to client side interactions with

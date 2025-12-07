@@ -1,3 +1,8 @@
+/* Gavin Stankovsky, Jaclyn Brekke
+* December 2025 (Latest)
+* INIT file to initialize database and populate
+*/
+
 CREATE EXTENSION IF NOT EXISTS "pgcrypto";
 CREATE EXTENSION IF NOT EXISTS btree_gist;
 

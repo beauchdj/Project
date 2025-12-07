@@ -1,3 +1,8 @@
+/* Gavin Stankovsky
+*  November 2025
+*  Database type 
+*/
+
 export type Booking = {
   starttime: string;
   endtime: string;

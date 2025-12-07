@@ -1,3 +1,8 @@
+/* Jaclyn Brekke
+*  December 2025
+*  Database Service
+*/
+
 import { pool } from "@/lib/db";
 import { AppointmentFilters } from "../types/AppointmentFilters";
 import {Appointment} from "../types/Appointment";
@@ -226,6 +231,11 @@ export async function updateAppointmentSlot(
 
   return { success: true };
 }
+
+/* Source code that is not utilized but parts of it
+*  May be used in future features.
+*/
+
 
 /*
 // for service provider to create a new appointment slot

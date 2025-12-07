@@ -1,3 +1,9 @@
+/* Daniel Beauchaine
+*  October 2025
+*  Page for registration. Information is stored client side between pages,
+*  Only submitted when form is submitted
+*/
+
 "use client";
 
 import { users_db } from "@/app/lib/types/user_db";

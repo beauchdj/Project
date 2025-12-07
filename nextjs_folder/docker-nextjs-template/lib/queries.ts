@@ -1,7 +1,10 @@
+/* Gavin Stankovsky
+*  October 2025
+*  Database query handler
+*/
+
 "use server";
 import { pool } from "./db";
-
-// import { pool } from "./db";
 
 export async function fetchUsers() {
   return await fetch("http://localhost:3000/api/users")
@@ -25,27 +28,12 @@ export async function fetchData() {
   }
 }
 
-// export async function getUser(username: string): Promise<void> {
-//   const res = await pool.query(`SELECT * FROM users WHERE username = $1`, [
-//     username,
-//   ]);
-// }
-
-// export function isRuntime(): void {
-//   if (typeof process === "undefined") {
-//     console.log("Edge Runtime!");
-//   } else {
-//     console.log("Node Runtime!");
-//   }
-// }
-
 export async function addNotification(apptid: string): Promise<void> {
   try {
     const response = await pool.query(
       "INSERT INTO notifications (apptid, status) VALUES ($1, 'Canceled') RETURNING apptid",
       [apptid]
     );
-    // console.log("INSERT: ", response.rows);
   } catch (error) {
     console.log("ERROR: addNotification(string) /lib/queries.ts ", error);
   }

@@ -1,3 +1,8 @@
+/* Gavin Stankovsky
+*  October 2025
+*  Define Session and User types
+*/
+
 export const runtime = "nodejs";
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { JWT } from "next-auth/jwt";

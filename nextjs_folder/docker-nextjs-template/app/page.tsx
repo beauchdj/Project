@@ -1,14 +1,13 @@
+/* Gavin Stankovsky, Daniel Beauchaine
+*  December 2025 (Latest)
+*  Main page, uses session object to determine display
+*/
+
 "use server";
 import { Session } from "next-auth";
 import Link from "next/link";
 import { auth } from "@/auth";
 import { RealTimeClock } from "./lib/components/RealTimeClock";
-
-// type User = {
-//   username: string;
-//   password: string;
-//   id: string;
-// };
 
 export default async function page({ session }: { session?: Session | null }) {
   if (!session) {

@@ -1,3 +1,8 @@
+/* Jaclyn Brekke
+*  December 2025
+*  Database service 
+*/
+
 import { pool } from "@/lib/db";
 
 export async function getNotificationsForUser(userId: string) {

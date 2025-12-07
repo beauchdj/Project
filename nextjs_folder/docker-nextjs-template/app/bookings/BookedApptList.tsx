@@ -1,3 +1,8 @@
+/* Jaclyn Brekke
+*  November 2025
+*  Appointment List view of booked appointments
+*/
+
 "use client";
 import { Booking } from "../lib/types/Booking";
 import CancelBookingButton from "./CancelBookingButton";

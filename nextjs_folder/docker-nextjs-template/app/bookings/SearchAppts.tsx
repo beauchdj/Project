@@ -1,3 +1,8 @@
+/* Jaclyn Brekke
+*  November 2025
+*  Appointment search function
+*/
+
 "use client";
 
 import { Dispatch, SetStateAction, useEffect, useState } from "react";

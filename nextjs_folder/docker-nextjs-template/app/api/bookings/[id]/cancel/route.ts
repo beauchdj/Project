@@ -1,3 +1,8 @@
+/* Jaclyn Brekke
+*  December 2025
+*  Cancel Booking API route
+*/
+
 import { NextResponse } from "next/server";
 import { auth } from "@/auth";
 import {cancelBooking} from "../../../../lib/services/BookingService";

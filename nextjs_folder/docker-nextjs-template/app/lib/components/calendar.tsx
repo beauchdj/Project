@@ -1,3 +1,8 @@
+/* Gavin Stankovsky
+*  October 2025
+*  Calendar component 
+*/
+
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 "use client";

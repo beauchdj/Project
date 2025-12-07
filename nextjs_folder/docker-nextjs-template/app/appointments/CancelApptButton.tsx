@@ -1,3 +1,8 @@
+/* Gavin Stankovsky, Jaclyn Brekke
+*  December 2025 (Latest)
+*  Appointment cancel button function
+*/
+
 "use client";
 
 import { Appointment } from "../lib/types/Appointment";

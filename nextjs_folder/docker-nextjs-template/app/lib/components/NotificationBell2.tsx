@@ -1,3 +1,9 @@
+/* Jaclyn Brekke
+*  December 2025
+*  Notification Bell 2 component for troubleshooting alternative
+*  notification handling. 
+*/
+
 "use client";
 
 import { useEffect, useState } from "react";

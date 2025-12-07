@@ -1,3 +1,8 @@
+/* Jaclyn Brekke
+*  December 2025
+*  Jaclyn's notification database API
+*/
+
 import { NextResponse } from "next/server";
 import { auth } from "@/auth";
 import { getNotificationsForUser, updateNotificationStatus} from "../../lib/services/notificationService";

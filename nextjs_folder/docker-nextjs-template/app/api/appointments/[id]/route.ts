@@ -1,3 +1,8 @@
+/* Gavin Stankovsky, Jaclyn Brekke
+*  December 2025 (Latest)
+*  Appointment API route
+*/
+
 //import { getAllSpAppts } from "@/app/lib/services/appointmentServices";
 import { auth } from "@/auth";
 import { NextRequest, NextResponse } from "next/server";

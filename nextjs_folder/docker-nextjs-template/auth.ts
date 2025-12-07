@@ -1,3 +1,8 @@
+/* Gavin Stankovsky, Jaclyn Brekke
+*  December 2025 (Most recent)
+*  Auth handlers for nextAuth.
+*/
+
 export const runtime = "nodejs";
 /**
  * About auth.ts

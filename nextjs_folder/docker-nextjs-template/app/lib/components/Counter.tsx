@@ -1,3 +1,8 @@
+/* Gavin Stankovsky
+*  September 2025
+*  Counter component
+*/
+
 'use client';
 import { useReducer } from "react";
 
