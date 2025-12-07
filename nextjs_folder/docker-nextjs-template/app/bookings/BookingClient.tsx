@@ -1,3 +1,8 @@
+/* Jaclyn Brekke
+*  November 2025
+*  Booking helper
+*/
+
 "use client";
 import { useEffect, useState } from "react";
 import SearchAppts from "./SearchAppts";

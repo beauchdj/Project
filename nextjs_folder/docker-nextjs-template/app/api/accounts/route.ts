@@ -1,3 +1,8 @@
+/* Gavin Stankovsky
+*  December 2025 (Latest)
+*  Account handling API
+*/
+
 import { pool } from "@/lib/db";
 import { NextRequest, NextResponse } from "next/server";
 import { users_db } from "@/app/lib/types/user_db";

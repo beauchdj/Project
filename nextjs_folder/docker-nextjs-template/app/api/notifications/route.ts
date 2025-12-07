@@ -1,3 +1,8 @@
+/* Gavin Stankovsky
+*  November 2025
+*  Gavin's notification database API
+*/
+
 "use server";
 import { auth } from "@/auth";
 import { pool } from "@/lib/db";

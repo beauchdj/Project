@@ -1,3 +1,8 @@
+/* Daniel Beauchaine
+*  October 2025
+*  Login Page
+*/
+
 "use client";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";

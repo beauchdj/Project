@@ -1,3 +1,8 @@
+/* Gavin Stankovsky
+*  December 2025
+*  Bookings API Route
+*/
+
 import { getBookedAppts } from "@/app/lib/services/appointmentServices";
 import { auth } from "@/auth";
 import { NextRequest, NextResponse } from "next/server";

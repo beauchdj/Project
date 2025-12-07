@@ -1,3 +1,8 @@
+/* Gavin Stankovsky
+*  November 2025
+*  Notification Bell Component 
+*/
+
 "use client";
 
 import { Session } from "next-auth";

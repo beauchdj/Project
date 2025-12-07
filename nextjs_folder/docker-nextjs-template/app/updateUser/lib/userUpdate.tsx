@@ -1,7 +1,11 @@
+/* Daniel Beauchaine
+*  November 2025
+*  Form for user updates. Will hold user update, upon submission, form submits.
+*  Otherwise information is only saved client side in a data object
+*/
+
 "use client";
 
-import { users_db } from "@/app/lib/types/user_db";
-import { stat } from "fs";
 import { useRouter } from "next/navigation";
 import { useState, useRef, useEffect } from "react";
 import { useSession } from "next-auth/react";
@@ -262,11 +266,6 @@ export function UserUpdate() {
     return passwordTest;
   }
 
-  function hasNewPassword(
-  ): boolean {
-    return (formData.newpass.length > 0);
-  }
-
   //Pagination Validation
   function validateStep1(
   ): boolean {
@@ -301,7 +300,6 @@ export function UserUpdate() {
   }
 
   // Handle the button navigation
-
   function handleChange(e: { target: { name: string; value: string; type: string; checked: boolean } }) {
     const { name, value, type, checked } = e.target;
     setFormData((prev) => ({
@@ -332,7 +330,6 @@ export function UserUpdate() {
   };
 
   // Button Presses
-
   const handleKeyDown = (e: React.KeyboardEvent<HTMLFormElement>) => {
     if (e.key === 'Enter') {
       e.preventDefault();

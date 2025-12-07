@@ -1,3 +1,8 @@
+/* Gavin Stankovsky
+*  November 2025
+*  Main page clock 
+*/
+
 "use client";
 
 import { useEffect, useState } from "react";

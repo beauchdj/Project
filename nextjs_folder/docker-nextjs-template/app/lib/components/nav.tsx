@@ -1,10 +1,15 @@
+/* Gavin Stankovsky, Jaclyn Brekke
+*  December 2025 (Latest)
+*  Navigation top bar component 
+*/
+
+
 "use client";
 import { signOut, useSession } from "next-auth/react";
 import Dropdown from "./Dropdown";
 import { GlobalBell } from "./NotificationBell";
 import { CurrentAppointments } from "./CurrentAppointments";
 import { GlobalBell2 } from "./NotificationBell2";
-// import { Session } from "next-auth";
 
 export default function Nav() {
   const { data: session, status } = useSession();

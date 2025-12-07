@@ -1,3 +1,8 @@
+/* Gavin Stankovsky
+*  September 2025
+*  Redirect to the root page, with potential for added features if needed
+*/
+
 "use server";
 
 import { auth } from "@/auth";

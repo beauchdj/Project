@@ -1,3 +1,9 @@
+/* Jaclyn Brekke
+*  December 2025
+*  Database Service 
+*/
+
+
 import { pool } from "@/lib/db";
 import { BookingFilters } from "../types/BookingFilters";
 import { Booking } from "../types/Booking";

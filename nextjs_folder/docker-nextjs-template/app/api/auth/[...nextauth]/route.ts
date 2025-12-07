@@ -1,3 +1,8 @@
+/* Gavin Stankovsky
+*  October 2025
+*  auth handler API route
+*/
+
 export const runtime = "nodejs";
 // // app/api/auth/[...nextauth]/route.ts
 // import NextAuth from "next-auth";

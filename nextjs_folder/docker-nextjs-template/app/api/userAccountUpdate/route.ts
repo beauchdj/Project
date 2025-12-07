@@ -1,5 +1,10 @@
+/* Daniel Beauchaine
+*  November 2025
+*  This is an API route to grab a user from the database and update info
+*/
+
 /*
-THIS IS AI GENERATED CODE BY COPILOT
+THIS IS PRIMARILY AI GENERATED CODE BY COPILOT
 */
 
 import { NextRequest, NextResponse } from "next/server";

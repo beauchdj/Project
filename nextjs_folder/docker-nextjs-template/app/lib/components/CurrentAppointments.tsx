@@ -1,3 +1,8 @@
+/* Gavin Stankovsky
+*  November 2025
+*  Current Appointments Component
+*/
+
 /**
  * Need to run this query somewhere: gives appointments up to 1 day in advance
  * SELECT * FROM appt_bookings

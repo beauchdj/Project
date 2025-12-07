@@ -1,3 +1,9 @@
+/* Gavin Stankovsky
+*  November 2025
+*  Notification handling component
+*/
+
+
 "use client";
 
 import { createContext, useContext, useRef, useState } from "react";

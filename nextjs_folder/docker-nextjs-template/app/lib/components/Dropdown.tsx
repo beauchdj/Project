@@ -1,3 +1,8 @@
+/* Gavin Stankovsky, Daniel Beauchaine
+*  November 2025
+*  Dropdown Component 
+*/
+
 "use client";
 
 import { Session } from "next-auth";
@@ -5,7 +10,6 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect } from "react";
 
-// import { useState } from 'react';
 export default function Dropdown({ session }: { session?: Session | null }) {
   let isSp = false;
   let isCustomer = false;

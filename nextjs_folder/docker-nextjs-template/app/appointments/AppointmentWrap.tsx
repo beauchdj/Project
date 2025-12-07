@@ -1,3 +1,8 @@
+/* Gavin Stankovsky, Jaclyn Brekke
+*  December 2025 (Latest)
+*  Appointment wrap handler function
+*/
+
 "use client";
 import CreateApptForm from "./CreateApptForm";
 import AppointmentsList from "./AppointmentsList";

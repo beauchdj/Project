@@ -1,3 +1,8 @@
+/* Jaclyn Brekke, Gavin Stankovsky
+*  November 2025
+*  Appointment booking page
+*/
+
 "use server";
 import { auth } from "../../auth";
 import { redirect } from "next/navigation";

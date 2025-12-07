@@ -1,3 +1,8 @@
+/* Gavin Stankovsky, Jaclyn Brekke
+*  December 2025 (latest)
+*  Database type 
+*/
+
 export type users_db = {
   id?: string;
   isadmin?: boolean;

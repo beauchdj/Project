@@ -1,3 +1,8 @@
+/* Jaclyn Brekke
+*  November 2025
+*  Cancel booking button function 
+*/
+
 "use client";
 
 import { useState } from "react";

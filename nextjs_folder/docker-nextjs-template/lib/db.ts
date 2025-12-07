@@ -1,3 +1,8 @@
+/* Gavin Stankovsky
+*  October 2025
+*  Database Pool interaction with postgres
+*/
+
 export const runtime = "nodejs";
 // lib/db.ts
 import { Pool } from "pg";

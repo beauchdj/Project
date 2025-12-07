@@ -1,3 +1,8 @@
+/* Jaclyn Brekke
+*  December 2025 (Latest)
+*  Database type 
+*/
+
 export type User = {
   id: string;
   fullname: string;
