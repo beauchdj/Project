@@ -1,4 +1,4 @@
-/* Jaclyn Brekke
+/* Gavin Stankovsky
 *  December 2025
 *  Bookings API Route
 */
