@@ -13,4 +13,7 @@ export type BookingFilters = {
   startBefore?: string;
   serviceId?: string;
   serviceCategory?: ServiceCategory;
+  customerName?: string;
+  providerName?: string;
+  viewAs?: "Admin" | "Customer" | "Provider";
 };
