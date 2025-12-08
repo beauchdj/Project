@@ -194,11 +194,12 @@ export default function AdminView({
                           className={"hover:text-black"}
                           href={`/admin/${user.id}`}
                         >
-                          {user.providername ? (
+                          {/* {user.providername ? (
                             <>{user.providername}</>
                           ) : (
                             <>{user.fullname}</>
-                          )}
+                          )} */}
+                          {user.fullname}
                         </Link>
                       </td>
                       <td>{user.servicecategory ?? "Customer"}</td>

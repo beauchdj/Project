@@ -104,7 +104,7 @@ export async function countCancelledBookings(
     if (end) {
       // we have an end date as well
       const apptRet = await pool.query(
-        "SELECT count(*) FROM appt_bookings WHERE bookstatus = 'Booked' AND booked_at BETWEEN to_timestamp($1) AND to_timestamp($2);",
+        "SELECT count(*) FROM appt_bookings WHERE bookstatus = 'Cancelled' AND booked_at BETWEEN to_timestamp($1) AND to_timestamp($2);",
         [start, end]
       );
 
@@ -112,9 +112,10 @@ export async function countCancelledBookings(
     } else {
       // no end date so we can take anything after start
       const apptRet = await pool.query(
-        "SELECT count(*) FROM appt_bookings WHERE bookstatus = 'Booked' AND booked_at > to_timestamp($1);",
+        "SELECT count(*) FROM appt_bookings WHERE bookstatus = 'Cancelled' AND booked_at > to_timestamp($1);",
         [start]
       );
+      console.log("Check the cancelled: ", apptRet.rows);
 
       return [Number(apptRet.rows[0].count)];
     }
@@ -169,5 +170,5 @@ export async function countSpCategories(
  *  X total appointments booked between a date
  *  X total bookings canceled between a date
  *  X count of service providers in each category
- *  when users were created? need to adjust account data a bit.
+ *  when users were created?
  */

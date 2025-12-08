@@ -5,6 +5,7 @@ import BookedApptsList from "@/app/bookings/BookedApptList";
 import { useNotification } from "@/app/lib/components/NotificationContext";
 import { Appointment } from "@/app/lib/types/Appointment";
 import { Booking } from "@/app/lib/types/Booking";
+import Link from "next/link";
 import { useParams } from "next/navigation";
 import React, { useEffect, useState } from "react";
 
@@ -61,6 +62,12 @@ export default function AdminUserAppointments() {
 
   return (
     <div className=" w-full px-6">
+      <Link
+        className="w-full h-full flex items-center justify-center mb-1 nav-btn"
+        href={"/admin"}
+      >
+        Back
+      </Link>
       <div className="bg-emerald-800 rounded-xl p-4">
         <AppointmentsList
           appointments={appointments}

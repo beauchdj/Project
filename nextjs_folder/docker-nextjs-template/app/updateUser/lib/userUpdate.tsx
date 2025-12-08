@@ -1,8 +1,8 @@
 /* Daniel Beauchaine
-*  November 2025
-*  Form for user updates. Will hold user update, upon submission, form submits.
-*  Otherwise information is only saved client side in a data object
-*/
+ *  November 2025
+ *  Form for user updates. Will hold user update, upon submission, form submits.
+ *  Otherwise information is only saved client side in a data object
+ */
 
 "use client";
 
@@ -35,11 +35,11 @@ export function UserUpdate() {
   //Page counters and form retention
   const [currentStep, setCurrentStep] = useState(1);
   const totalSteps = 4;
-  const progressPercent = ((currentStep - 1) / (totalSteps)) * 100;
+  const progressPercent = ((currentStep - 1) / totalSteps) * 100;
   const nextButtonRef = useRef<HTMLButtonElement>(null);
   const prevButtonRef = useRef<HTMLButtonElement>(null);
   const submitButtonRef = useRef<HTMLButtonElement>(null);
-  const { data: session } = useSession()
+  const { data: session } = useSession();
   //////////////////////////////////////////////
 
   const [formData, setFormData] = useState({
@@ -83,10 +83,10 @@ export function UserUpdate() {
   useEffect(() => {
     if (session?.user?.username) {
       fetch(`/api/userAccountUpdate?username=${session.user.username}`)
-        .then(res => res.json())
-        .then(data => {
+        .then((res) => res.json())
+        .then((data) => {
           if (!data.error) {
-            setFormData(prev => ({
+            setFormData((prev) => ({
               ...prev,
               issp: data.issp,
               iscustomer: data.iscustomer,
@@ -105,7 +105,7 @@ export function UserUpdate() {
               providername: data.providername,
             }));
             setIsSp(formData.issp);
-            setOldFormData(prev => ({
+            setOldFormData((prev) => ({
               ...prev,
               issp: data.issp,
               iscustomer: data.iscustomer,
@@ -121,13 +121,12 @@ export function UserUpdate() {
               phone: data.phone,
               email: data.email,
               qualifications: data.qualifications,
-              providername: data.providername
+              providername: data.providername,
             }));
           }
         });
     }
   }, [session]);
-
 
   async function handleUpdate(e: React.FormEvent<HTMLFormElement>) {
     if (currentStep < totalSteps) {
@@ -143,7 +142,7 @@ export function UserUpdate() {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(formData)
+        body: JSON.stringify(formData),
       });
       const data = await res.json();
 
@@ -161,7 +160,7 @@ export function UserUpdate() {
   }
 
   function sleep(ms: number | undefined) {
-    return new Promise(resolve => setTimeout(resolve, ms));
+    return new Promise((resolve) => setTimeout(resolve, ms));
   }
 
   async function waitFunction() {
@@ -170,30 +169,26 @@ export function UserUpdate() {
 
   //Validation Helpers
   //Page 1
-  function validateName(
-  ): boolean {
+  function validateName(): boolean {
     var nameTest = formData.fullname.length > 0;
     setShowNameError(!nameTest);
     return nameTest;
   }
 
-  function validateType(
-  ): boolean {
+  function validateType(): boolean {
     var typeValid = formData.issp || formData.iscustomer;
     setTypeError(!typeValid);
     return typeValid;
   }
 
-  function validateSpName(
-  ): boolean {
+  function validateSpName(): boolean {
     var nameTest = formData.providername.length > 0;
     setShowSpNameError(!nameTest);
     return nameTest;
   }
 
   //Page 2
-  function validatePhone(
-  ): boolean {
+  function validatePhone(): boolean {
     const phoneRegex: RegExp = new RegExp(
       "^(\\+1)?[\\s.-]?(\\(?\\d{3}\\)?[\\s.-]?)?\\d{3}[\\s.-]?\\d{4}$"
     );
@@ -202,8 +197,7 @@ export function UserUpdate() {
     return phoneTest;
   }
 
-  function validateEmail(
-  ): boolean {
+  function validateEmail(): boolean {
     const emailRegex: RegExp = new RegExp(
       "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+.[a-zA-Z]{2,}$"
     );
@@ -213,35 +207,86 @@ export function UserUpdate() {
   }
 
   //Page 3
-  function validateAddress(
-  ): boolean {
+  function validateAddress(): boolean {
     var addressTest = formData.street1.length > 0;
     setShowAddressError(!addressTest);
     return addressTest;
   }
 
-  function validateCity(
-  ): boolean {
+  function validateCity(): boolean {
     const cityRegex: RegExp = new RegExp("^[a-zA-Z\\s'-]+$");
     const cityTest = cityRegex.test(formData.city);
     setShowCity(!cityTest);
     return cityTest;
   }
 
-  function validateState(
-  ): boolean {
+  function validateState(): boolean {
     const validStates = [
-      "AL", "AK", "AZ", "AR", "CA", "CO", "CT", "DE", "DC", "FL", "GA", "HI", "ID", "IL", "IN", "IA", "KS", "KY", "LA", "ME",
-      "MD", "MA", "MI", "MN", "MS", "MO", "MT", "NE", "NV", "NH", "NJ", "NM", "NY", "NC", "ND", "OH", "OK", "OR", "PA", "RI",
-      "SC", "SD", "TN", "TX", "UT", "VT", "VA", "WA", "WV", "WI", "WY",
-      "AS", "FM", "GU", "MH", "MP", "PW", "PR", "VI"
-    ]
-    var stateTest = validStates.includes(formData.state.toUpperCase())
+      "AL",
+      "AK",
+      "AZ",
+      "AR",
+      "CA",
+      "CO",
+      "CT",
+      "DE",
+      "DC",
+      "FL",
+      "GA",
+      "HI",
+      "ID",
+      "IL",
+      "IN",
+      "IA",
+      "KS",
+      "KY",
+      "LA",
+      "ME",
+      "MD",
+      "MA",
+      "MI",
+      "MN",
+      "MS",
+      "MO",
+      "MT",
+      "NE",
+      "NV",
+      "NH",
+      "NJ",
+      "NM",
+      "NY",
+      "NC",
+      "ND",
+      "OH",
+      "OK",
+      "OR",
+      "PA",
+      "RI",
+      "SC",
+      "SD",
+      "TN",
+      "TX",
+      "UT",
+      "VT",
+      "VA",
+      "WA",
+      "WV",
+      "WI",
+      "WY",
+      "AS",
+      "FM",
+      "GU",
+      "MH",
+      "MP",
+      "PW",
+      "PR",
+      "VI",
+    ];
+    var stateTest = validStates.includes(formData.state.toUpperCase());
     setStateError(!stateTest);
     return stateTest;
   }
-  function validateZip(
-  ): boolean {
+  function validateZip(): boolean {
     const zipRegex: RegExp = new RegExp("^\\d{5}$");
     const zipTest = zipRegex.test(formData.zip);
     setShowZip(!zipTest);
@@ -249,26 +294,26 @@ export function UserUpdate() {
   }
 
   //Page 4
-  function validateUsername(
-  ): boolean {
+  function validateUsername(): boolean {
     var usernameTest = formData.username.length > 0;
     setShowUsernameError(!usernameTest);
     return usernameTest;
   }
 
-  function validatePassword(
-  ): boolean {
+  function validatePassword(): boolean {
     var passwordTest = formData.hashpass.length > 0;
     if (passwordTest) {
-      passwordTest = bcrypt.compareSync(formData.hashpass, oldFormData.hashpass);
+      passwordTest = bcrypt.compareSync(
+        formData.hashpass,
+        oldFormData.hashpass
+      );
     }
     setShowPasswordError(!passwordTest);
     return passwordTest;
   }
 
   //Pagination Validation
-  function validateStep1(
-  ): boolean {
+  function validateStep1(): boolean {
     var nameVal = validateName();
     var spNameVal = true;
     if (formData.issp) {
@@ -279,32 +324,31 @@ export function UserUpdate() {
     return validateType() && spNameVal && nameVal;
   }
 
-  function validateStep2(
-  ): boolean {
+  function validateStep2(): boolean {
     var emailVal = validateEmail();
     return validatePhone() && emailVal;
   }
 
-  function validateStep3(
-  ): boolean {
+  function validateStep3(): boolean {
     var addrVal = validateAddress();
     var cityVal = validateCity();
     var stateVal = validateState();
     return validateZip() && addrVal && cityVal && stateVal;
   }
 
-  function validateStep4(
-  ): boolean {
+  function validateStep4(): boolean {
     var nameVal = validateUsername();
     return validatePassword() && nameVal;
   }
 
   // Handle the button navigation
-  function handleChange(e: { target: { name: string; value: string; type: string; checked: boolean } }) {
+  function handleChange(e: {
+    target: { name: string; value: string; type: string; checked: boolean };
+  }) {
     const { name, value, type, checked } = e.target;
     setFormData((prev) => ({
       ...prev,
-      [name]: type === "checkbox" ? checked : value
+      [name]: type === "checkbox" ? checked : value,
     }));
   }
 
@@ -331,7 +375,7 @@ export function UserUpdate() {
 
   // Button Presses
   const handleKeyDown = (e: React.KeyboardEvent<HTMLFormElement>) => {
-    if (e.key === 'Enter') {
+    if (e.key === "Enter") {
       e.preventDefault();
       nextButtonRef.current?.click();
     }
@@ -351,9 +395,7 @@ export function UserUpdate() {
           </p>
         )}
         {currentStep > totalSteps && (
-          <p className="text-sm text-gray-200 uppercase">
-            Success!
-          </p>
+          <p className="text-sm text-gray-200 uppercase">Success!</p>
         )}
         <h2 className="text-2xl font-bold">Updating Your Profile</h2>
         {currentStep == 1 && (
@@ -414,7 +456,9 @@ export function UserUpdate() {
                     className="input-element"
                     required
                   ></input>
-                  {showNameError && <p className="error-text">Please enter your full name</p>}
+                  {showNameError && (
+                    <p className="error-text">Please enter your full name</p>
+                  )}
                 </label>
                 <label className="flex items-center gap-2">
                   Service Provider
@@ -430,17 +474,22 @@ export function UserUpdate() {
 
                 {formData.issp && (
                   <label className="label-col">
-                    Change Provider Name? (Existing = {oldFormData.providername})
+                    Change Provider Name? (Existing = {oldFormData.providername}
+                    )
                     <input
                       type="text"
                       name="providername"
                       placeholder="Enter service name"
                       className="input-element"
                       onChange={handleChange}
-                      value={formData.providername}
+                      defaultValue={formData.providername}
                       required
                     ></input>
-                    {showSpNameError && <p className="error-text">Please enter your business name</p>}
+                    {showSpNameError && (
+                      <p className="error-text">
+                        Please enter your business name
+                      </p>
+                    )}
                   </label>
                 )}
               </div>
@@ -448,7 +497,6 @@ export function UserUpdate() {
 
             {/* Step 2 */}
             {currentStep === 2 && (
-
               <div className="flex flex-col gap-4 w-full">
                 <label className="label-col">
                   Change Email? (Existing = {oldFormData.email})
@@ -458,10 +506,14 @@ export function UserUpdate() {
                     className="input-element"
                     placeholder="Email address"
                     onChange={handleChange}
-                    value={formData.email}
+                    defaultValue={formData.email}
                     required
                   ></input>
-                  {showEmailError && <p className="error-text">Invalid Email - formatting should be: user@example.com</p>}
+                  {showEmailError && (
+                    <p className="error-text">
+                      Invalid Email - formatting should be: user@example.com
+                    </p>
+                  )}
                 </label>
 
                 <label className="label-col">
@@ -472,12 +524,15 @@ export function UserUpdate() {
                     className="input-element"
                     placeholder="Phone number"
                     onChange={handleChange}
-                    value={formData.phone}
+                    defaultValue={formData.phone}
                     required
                   ></input>
-                  {showPhoneError && <p className="error-text">Invalid Phone Number, use only numbers</p>}
+                  {showPhoneError && (
+                    <p className="error-text">
+                      Invalid Phone Number, use only numbers
+                    </p>
+                  )}
                 </label>
-
               </div>
             )}
 
@@ -495,11 +550,14 @@ export function UserUpdate() {
                     value={formData.street1}
                     required
                   ></input>
-                  {showAddressError && <p className="error-text">Please enter a valid address</p>}
+                  {showAddressError && (
+                    <p className="error-text">Please enter a valid address</p>
+                  )}
                 </label>
 
                 <label className="label-col">
-                  Change Address? (Existing Line Two (Optional) = {oldFormData.street2})
+                  Change Address? (Existing Line Two (Optional) ={" "}
+                  {oldFormData.street2})
                   <input
                     type="text"
                     name="street2"
@@ -521,7 +579,11 @@ export function UserUpdate() {
                     value={formData.city}
                     required
                   ></input>
-                  {showCity && <p className="error-text">City Name Should Not Have Numbers</p>}
+                  {showCity && (
+                    <p className="error-text">
+                      City Name Should Not Have Numbers
+                    </p>
+                  )}
                 </label>
 
                 <label className="label-col">
@@ -536,7 +598,9 @@ export function UserUpdate() {
                     required
                   ></input>
                   {stateError && (
-                    <p className="error-text">Please use the 2 digit abbreviation for the state</p>
+                    <p className="error-text">
+                      Please use the 2 digit abbreviation for the state
+                    </p>
                   )}
                 </label>
 
@@ -570,7 +634,9 @@ export function UserUpdate() {
                     value={formData.hashpass}
                     required
                   ></input>
-                  {showPasswordError && <p className="error-text">Password incorrect</p>}
+                  {showPasswordError && (
+                    <p className="error-text">Password incorrect</p>
+                  )}
                 </label>
                 <br></br>
                 <label className="label-col">
@@ -603,7 +669,7 @@ export function UserUpdate() {
                           setCharLimit(value.length);
                           setFormData((prev) => ({
                             ...prev,
-                            [name]: value
+                            [name]: value,
                           }));
                         }}
                         required
