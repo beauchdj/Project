@@ -27,14 +27,14 @@ export default function AppointmentsList({
   if (!appointments.length) {
     return (
       <div>
-        <h2 className="text-lg font-semibold mb-2">Available Appointments</h2>
+        <h2 className="text-lg font-semibold mb-2">Upcoming Appointments</h2>
         <p>None</p>
       </div>
     );
   }
   return (
     <div>
-      <h2 className="text-lg font-semibold mb-2">All Appointments</h2>
+      <h2 className="text-lg font-semibold mb-2">Upcoming Appointments</h2>
 
       <div className="overflow-x-auto rounded-lg border border-white/10">
         <table className="min-w-full text-sm">
