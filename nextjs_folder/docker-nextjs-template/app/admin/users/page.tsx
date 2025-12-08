@@ -1,3 +1,12 @@
+/*
+ * Jaclyn Brekke
+ * December 2025
+ * 
+ * I built this as a standalone page to test user activation/deactivation functionality and the cascading 
+ * effects on cancelling booked appointments *
+ * 
+ */
+
 "use client";
 
 import { useEffect, useState } from "react";
