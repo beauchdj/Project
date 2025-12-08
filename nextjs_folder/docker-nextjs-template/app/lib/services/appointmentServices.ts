@@ -1,14 +1,16 @@
 /* Jaclyn Brekke
-*  December 2025
-*  Database Service
-*/
+ *  December 2025
+ *  Database Service
+ */
 
 import { pool } from "@/lib/db";
 import { AppointmentFilters } from "../types/AppointmentFilters";
-import {Appointment} from "../types/Appointment";
+import { Appointment } from "../types/Appointment";
 
-
-export async function getAppointments(filters: AppointmentFilters, userId: string) : Promise<Appointment[]> {
+export async function getAppointments(
+  filters: AppointmentFilters,
+  userId: string
+): Promise<Appointment[]> {
   /* get user to determine access */
   const { rows: userRows } = await pool.query(
     `SELECT id, isadmin, issp
@@ -18,7 +20,7 @@ export async function getAppointments(filters: AppointmentFilters, userId: strin
   );
 
   const user = userRows[0];
-  if(!user) {
+  if (!user) {
     throw new Error("USER_NOT_FOUND");
   }
 
@@ -34,7 +36,7 @@ export async function getAppointments(filters: AppointmentFilters, userId: strin
   if (!user.isadmin) {
     if (user.issp && filters.status !== "Available") {
       // default provider view to view their own slots (Booked and unbooked)
-      params.push(user.id)
+      params.push(user.id);
       where.push(`a.spid = $${params.length}`);
     } else {
       // customer view OR a provider browsing available appointments (as a customer)
@@ -45,11 +47,11 @@ export async function getAppointments(filters: AppointmentFilters, userId: strin
           FROM appt_bookings as b
           WHERE b.apptid = a.id
           AND b.bookstatus = 'Booked')`
-        );
+      );
     }
   }
 
-   if (filters.serviceProviderId) {
+  if (filters.serviceProviderId) {
     params.push(filters.serviceProviderId);
     where.push(`a.spid = $${params.length}`);
   }
@@ -74,7 +76,7 @@ export async function getAppointments(filters: AppointmentFilters, userId: strin
     where.push(`sp.servicecategory = $${params.length}`);
   }
 
-   if (filters.status === "Available") {
+  if (filters.status === "Available") {
     where.push(`a.isactive = true`);
     where.push(`
       NOT EXISTS (
@@ -83,7 +85,7 @@ export async function getAppointments(filters: AppointmentFilters, userId: strin
         WHERE b.apptid = a.id
         AND b.bookstatus = 'Booked'
       )`);
-      //where.push(`a.starttime > now()`);
+    //where.push(`a.starttime > now()`);
   }
 
   if (filters.status === "Booked") {
@@ -102,8 +104,7 @@ export async function getAppointments(filters: AppointmentFilters, userId: strin
 
   const whereStmt = where.length ? `WHERE ${where.join(" AND ")}` : "";
 
-  const query = 
-      `SELECT
+  const query = `SELECT
         a.id AS id,
         a.starttime AS starttime,
         a.endtime AS endtime,
@@ -121,13 +122,19 @@ export async function getAppointments(filters: AppointmentFilters, userId: strin
     LEFT JOIN users c ON c.id = b.userid
     ${whereStmt}
     ORDER BY a.starttime ASC`;
-    console.log("Checking query for GET appts...");
-    console.log(query);
-    const { rows } = await pool.query(query,params);
-    return rows;
+  console.log("Checking query for GET appts...");
+  console.log(query);
+  const { rows } = await pool.query(query, params);
+  return rows;
 }
 
-export async function createAppointmentSlot(spId: string, service: string, date: string, starttime: string, endtime: string) {
+export async function createAppointmentSlot(
+  spId: string,
+  service: string,
+  date: string,
+  starttime: string,
+  endtime: string
+) {
   const start = new Date(`${date}T${starttime}`);
   const end = new Date(`${date}T${endtime}`);
 
@@ -138,7 +145,7 @@ export async function createAppointmentSlot(spId: string, service: string, date:
     AND tsrange(starttime, endtime, '[)')
       && tsrange($2, $3, '[)')
       Limit 1`,
-      [spId,start,end]
+    [spId, start, end]
   );
   if (conflict.rowCount) {
     throw new Error("APPOINTMENT_CONFLICT");
@@ -146,7 +153,7 @@ export async function createAppointmentSlot(spId: string, service: string, date:
 
   try {
     const result = await pool.query(
-       `INSERT INTO appts_avail (spid, starttime, endtime, service, isactive)
+      `INSERT INTO appts_avail (spid, starttime, endtime, service, isactive)
        VALUES ($1, $2, $3, $4, true)
        RETURNING id`,
       [spId, start, end, service]
@@ -164,10 +171,7 @@ export async function createAppointmentSlot(spId: string, service: string, date:
   }
 }
 
-export async function deleteAppointmentSlot(
-  apptId: string,
-  userId: string
-) {
+export async function deleteAppointmentSlot(apptId: string, userId: string) {
   // check for existing bookings
   const bookings = await pool.query(
     `SELECT 1
@@ -233,9 +237,8 @@ export async function updateAppointmentSlot(
 }
 
 /* Source code that is not utilized but parts of it
-*  May be used in future features.
-*/
-
+ *  May be used in future features.
+ */
 
 /*
 // for service provider to create a new appointment slot

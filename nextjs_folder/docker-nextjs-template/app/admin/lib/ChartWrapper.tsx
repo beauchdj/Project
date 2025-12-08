@@ -19,6 +19,7 @@ export default function ChartWrapper({
         labels: chartData.labels,
         datasets: [
           {
+            maxBarThickness: 50,
             label: chartData.label,
             data: chartData.data,
             borderWidth: 1,
@@ -46,6 +47,11 @@ export default function ChartWrapper({
             labels: {
               color: "#ffffff",
             },
+          },
+          title: {
+            display: true,
+            text: chartData.title,
+            color: "#ffffff",
           },
         },
       },

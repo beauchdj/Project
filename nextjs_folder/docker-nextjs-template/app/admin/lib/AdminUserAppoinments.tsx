@@ -9,7 +9,7 @@ import { useParams } from "next/navigation";
 import React, { useEffect, useState } from "react";
 
 export default function AdminUserAppointments() {
-  const { id } = useParams();
+  const { id } = useParams(); // the id of who we clicked on?
   const [appointments, setAppointments] = useState<Appointment[]>([]);
   const [bookings, setBookings] = useState<Booking[]>([]);
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -46,13 +46,15 @@ export default function AdminUserAppointments() {
   }, []);
 
   async function fetchBookings() {
-    //const res = await fetch(`/api/bookings/${id}`, { method: "GET" });
-    const res = await fetch("api/bookings", { method: "GET" });
+    const res = await fetch(`/api/bookings/${id}`, {
+      method: "GET",
+    });
     const json: Booking[] = await res.json();
     setBookings(json);
   }
   async function fetchAppointments(id: string): Promise<void> {
-    const res = await fetch(`/api/appointments/${id}`, { method: "GET" });
+    // const res = await fetch(`/api/appointments/${id}`, { method: "GET" });
+    const res = await fetch(`/api/appointments/${id}`);
     const data: Appointment[] = await res.json();
     setAppointments(data);
   }

@@ -1,5 +1,6 @@
 "use client";
 import { MyChartData } from "@/app/api/admin/route";
+import { useNotification } from "@/app/lib/components/NotificationContext";
 import { Dispatch, FormEvent, SetStateAction } from "react";
 // random add
 
@@ -14,12 +15,16 @@ export default function DataForm({
   setChartData: Dispatch<SetStateAction<MyChartData[]>>;
   setShowCharts: Dispatch<SetStateAction<boolean>>;
 }) {
+  const { toggleHidden } = useNotification();
   async function submitData(e: FormEvent<HTMLFormElement>) {
     try {
       e.preventDefault();
       const formdata = new FormData(e.currentTarget);
       const start = formdata.get("start") as string;
       const end = formdata.get("end") as string;
+
+      if (end && new Date(end).getTime() < new Date(start).getTime())
+        throw new Error("Bad Dates");
       setStart(start);
       setEnd(end);
       const queryParams = end ? `start=${start}&end=${end}` : `start=${start}`;
@@ -34,9 +39,8 @@ export default function DataForm({
       }
       setShowCharts(true);
     } catch (error) {
-      console.log("we got an error: ", error);
       if (error instanceof Error) {
-        console.log("Error in submitDates for DataForm: ", error);
+        toggleHidden("Unsatisfactory Dates Given");
       }
     }
   }

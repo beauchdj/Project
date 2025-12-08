@@ -73,7 +73,6 @@ CREATE TABLE public.appt_bookings (
       ON DELETE CASCADE
 );
 
-/*
 CREATE TABLE public.notifications (
     "apptid" uuid,
     "userid" uuid,
@@ -87,12 +86,8 @@ CREATE TABLE public.notifications (
     CONSTRAINT "notifications_apptid_fkey" FOREIGN KEY ("apptid")
     REFERENCES appts_avail(id)
     ON UPDATE CASCADE
-    ON DELETE CASCADE,
-    CONSTRAINT "notifications_userid_fkey" FOREIGN KEY ("userid")
-    REFERENCES users(id)
-    ON UPDATE CASCADE
     ON DELETE CASCADE
-);*/
+);
 
 CREATE TABLE public.notifs (
   id uuid DEFAULT gen_random_uuid() NOT NULL,

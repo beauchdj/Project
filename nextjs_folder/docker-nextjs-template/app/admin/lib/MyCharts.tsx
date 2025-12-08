@@ -20,17 +20,14 @@ export default function MyCharts({
   setShowCharts: Dispatch<SetStateAction<boolean>>;
   chartData: MyChartData[];
 }) {
-  // useEffect(() => {
-  // }, [chartData]);
   return (
     <div
-      className="bg-emerald-900 absolute h-[80vh] w-full rounded"
+      className="bg-emerald-900 absolute h-full w-[95%] rounded border-2 border-black mx-4"
       hidden={!showCharts}
     >
       <h1 className="text-center w-full">
-        {end ? (
+        {end.split(" ")[0] !== "Invalid" ? (
           <>
-            {" "}
             Data Generated From {start} To {end}
           </>
         ) : (
@@ -46,7 +43,7 @@ export default function MyCharts({
           ))}
         <button
           onClick={() => setShowCharts(false)}
-          className="absolute text-white top-0 left-4 z-1 bg-emerald-600 px-2 rounded hover:bg-emerald-300 cursor-pointer"
+          className="absolute text-white top-0 left-4 z-1 bg-emerald-600 px-4 py-2 rounded hover:bg-emerald-300 cursor-pointer"
         >
           Back
         </button>

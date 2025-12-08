@@ -1,7 +1,7 @@
 /* Gavin Stankovsky, Jaclyn Brekke
-*  December 2025 (Latest)
-*  Appointment wrap handler function
-*/
+ *  December 2025 (Latest)
+ *  Appointment wrap handler function
+ */
 
 "use client";
 import CreateApptForm from "./CreateApptForm";
@@ -33,6 +33,7 @@ export default function AppointmentWrap() {
 
   async function handleDelete(apptId: string) {
     setAppointments((prev) => prev.filter((appt) => appt.id !== apptId));
+    // TODO should set the active field to false?
   }
   function handleError(message: string) {
     setError(message);

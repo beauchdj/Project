@@ -16,6 +16,7 @@ export type MyChartData = {
   label: string;
   xAxis: string;
   yAxis: string;
+  title: string;
 };
 
 export async function GET(req: NextRequest) {
@@ -54,6 +55,7 @@ export async function GET(req: NextRequest) {
         labels: ["Service Providers", "Customers"],
         xAxis: "Users",
         yAxis: "Registered Users",
+        title: "Number Of Registered Users",
       },
       {
         type: "bar",
@@ -63,6 +65,7 @@ export async function GET(req: NextRequest) {
         labels: ["Appointments"],
         xAxis: "",
         yAxis: "Created Appointments",
+        title: "Number Of Created Appointments",
       },
       {
         type: "bar",
@@ -72,6 +75,7 @@ export async function GET(req: NextRequest) {
         labels: ["Booked Appointments"],
         xAxis: "",
         yAxis: "Number of Bookings",
+        title: "Number of Booked Appointments",
       },
       {
         type: "bar",
@@ -81,6 +85,7 @@ export async function GET(req: NextRequest) {
         labels: ["Cancelled Appointments"],
         xAxis: "",
         yAxis: "Number of Cancellations",
+        title: "Number of Cancelled Appointments",
       },
       {
         type: "bar",
@@ -90,6 +95,7 @@ export async function GET(req: NextRequest) {
         labels: ["Beauty", "Fitness", "Medical"],
         xAxis: "ServiceProvider Types",
         yAxis: "Number of ServiceProviders",
+        title: "Service Provider Type Distribution",
       },
     ];
     // send chart data

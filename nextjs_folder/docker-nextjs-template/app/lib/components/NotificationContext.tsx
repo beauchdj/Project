@@ -1,8 +1,7 @@
 /* Gavin Stankovsky
-*  November 2025
-*  Notification handling component
-*/
-
+ *  November 2025
+ *  Notification handling component
+ */
 
 "use client";
 
@@ -51,7 +50,7 @@ function Notification({
 }) {
   return (
     <div
-      className="w-45 h-20 bg-pink-800 text-white rounded-3xl absolute bottom-10 right-10 flex justify-center items-center text-center overflow-auto border-2 border-black"
+      className="w-45 h-20 bg-pink-800 text-white rounded-3xl absolute bottom-10 right-10 flex justify-center items-center text-center overflow-auto border-2 border-black z-4"
       hidden={isHidden}
     >
       {message}
