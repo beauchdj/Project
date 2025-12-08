@@ -18,7 +18,14 @@ export default function AppointmentWrap() {
   }, []);
 
   async function fetchAppointments() {
-    const res = await fetch("/api/appointments", { method: "GET" });
+    const params = new URLSearchParams();
+    params.set("startAfter", new Date().toISOString());
+    const res = await fetch(`/api/appointments?${params.toString()}`, { method: "GET" });
+
+     if (!res.ok) {
+        console.error("Failed to fetch appointments");
+        return;
+      }
     const json = await res.json();
     setAppointments(json.appointments);
   }
