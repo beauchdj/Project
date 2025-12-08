@@ -1,7 +1,7 @@
 /* Gavin Stankovsky, Jaclyn Brekke
-*  December 2025 (Latest)
-*  Appointment list form
-*/
+ *  December 2025 (Latest)
+ *  Appointment list form
+ */
 
 "use client";
 // import { formatter } from "../lib/types/Formatter";

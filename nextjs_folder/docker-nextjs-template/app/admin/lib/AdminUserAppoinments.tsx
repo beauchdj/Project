@@ -17,10 +17,10 @@ export default function AdminUserAppointments() {
 
   const { toggleHidden } = useNotification();
 
-  async function handleCancel(apptId: string) {
+  async function handleCancel(appt: Appointment) {
     setAppointments((prev) =>
-      prev.map((appt) =>
-        appt.id === apptId ? { ...appt, fullname: "" } : appt
+      prev.map((a) =>
+        a.id === appt.id ? { ...a, cust_fullname: "", bookingid: null } : a
       )
     );
     toggleHidden("Appointment Cancelled");
