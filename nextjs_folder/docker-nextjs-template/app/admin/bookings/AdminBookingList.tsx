@@ -180,8 +180,8 @@ export default function AdminBookingList() {
                       minute: "2-digit",
                     })}
                </td>
-              <td className="px-4 py-2 text-xs">{booking.bookstatus || "Available"}</td>
-              <td className="px-4 py-2 text-xs">{booking.isactive ? "active" : "deleted"}</td>
+              <td className="px-4 py-2 text-xs">{booking.isactive? booking.bookstatus || "Available" : "Unavailable"}</td>
+              <td className="px-4 py-2 text-xs">{booking.isactive ? "Active" : "Deleted"}</td>
               <td className="px-4 py-2">
                 {booking.bookstatus === "Booked" ? (
                   <button
