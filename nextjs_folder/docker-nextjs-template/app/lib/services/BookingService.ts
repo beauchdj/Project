@@ -33,15 +33,36 @@ import { createCancelNotification } from "./notificationService";
             -Service providers can see records where spId = user.id
             -Customers can see records where userId = user.id
         */
-        if (!user.isadmin) { 
-            if (user.issp) {
+        if (!filters.viewAs) {
+            filters.viewAs = user.isadmin ? "Admin" : user.issp ? "Provider" : "Customer";
+        }
+
+        switch (filters.viewAs) {
+            case "Admin":
+                if (!user.isadmin) {
+                    throw new Error("NOT_AUTHORIZED_ADMIN_VIEW");
+                }
+                break;
+
+            case "Provider":
+                if (!user.isadmin && !user.issp) {
+                throw new Error("NOT_AUTHORIZED_PROVIDER_VIEW");
+            }
+            // Restrict provider to THEIR appointments only
+            if (!filters.serviceProviderId) {
                 params.push(user.id);
                 where.push(`a.spid = $${params.length}`);
-            } else {
-                params.push(user.id);
-                where.push(`b.userid = $${params.length}`);
             }
-        }
+            break;
+
+            case "Customer":
+                // Everyone can be a customer
+                if (!filters.customerId) {
+                    params.push(user.id);
+                    where.push(`b.userid = $${params.length}`);
+                }
+                break;
+            }
 
         /* add filters from query params */
         if (filters.customerId) {
@@ -73,6 +94,15 @@ import { createCancelNotification } from "./notificationService";
             where.push(`sp.servicecategory = $${params.length}`);
         }
 
+        if (filters.customerName) {
+            params.push(`%${filters.customerName}%`);
+             where.push(`c.fullname ILIKE $${params.length}`);
+        }
+
+        if (filters.providerName) {
+            params.push(`%${filters.providerName}%`);
+            where.push(`sp.providername ILIKE $${params.length}`);
+        }
         const whereStmt = where.length > 0 ? `WHERE ${where.join(" AND ")}` : "";
 
         const query = 
@@ -86,7 +116,8 @@ import { createCancelNotification } from "./notificationService";
                 b.id AS id,
                 b.bookstatus,
                 a.id AS apptid,
-                b.userid
+                b.userid,
+                a.isactive
               FROM appts_avail as a
               JOIN users sp ON sp.id = a.spid
               LEFT JOIN appt_bookings b ON b.apptid = a.id
@@ -156,8 +187,6 @@ import { createCancelNotification } from "./notificationService";
 
  
     export async function cancelBooking(bookingId: string, userid:string) {
-    // check that the user who is trying to cancel has permission to do so
-    // (is the customer, the service provider, or is an admin)
         const query = 
             `WITH canceller AS (
             SELECT u.id, u.isadmin
