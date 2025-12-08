@@ -18,6 +18,7 @@ export default function SearchAppts({setResults,}: {
     if (category) params.set("serviceCategory", category.toLowerCase());
 
     params.set("status","Available");
+    params.set("startAfter", new Date().toISOString());
 
     const response = await fetch(`/api/appointments?${params.toString()}`, {
       method: "GET",

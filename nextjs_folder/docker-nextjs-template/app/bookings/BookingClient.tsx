@@ -23,9 +23,19 @@ export default function BookingClient() {
   }, []);
 
   async function fetchBookings() {
-    const res = await fetch("/api/bookings?viewAs=Customer", { method: "GET" });
-    const json = await res.json();
-    setBookings(json.bookings);
+     const params = new URLSearchParams();
+
+      params.set("viewAs", "Customer");
+      params.set("startAfter", new Date().toISOString());
+    
+      const res = await fetch(`/api/bookings?${params.toString()}`, {method: "GET",});
+    
+       if (!res.ok) {
+        console.error("Failed to fetch bookings");
+        return;
+      }
+      const json = await res.json();
+      setBookings(json.bookings);
   }
 
   async function handleBook(apptId: string) {
