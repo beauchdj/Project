@@ -1,7 +1,7 @@
 /* Jaclyn Brekke
-*  November 2025
-*  Appointment List view of booked appointments
-*/
+ *  November 2025
+ *  Appointment List view of booked appointments
+ */
 
 "use client";
 import { Booking } from "../lib/types/Booking";
@@ -17,7 +17,6 @@ export default function BookedApptsList({
   onCancel: (booking: Booking) => void;
   onError: (message: string) => void;
 }) {
-
   async function handleCancelSuccess(booking: Booking) {
     // if cancel succeeds, send notification
     try {
@@ -28,7 +27,7 @@ export default function BookedApptsList({
           who: "cust",
           apptid: booking.apptid,
           status: "Cancelled",
-        })
+        }),
       });
     } catch (err) {
       console.error("Notification failed:, err");
@@ -63,9 +62,9 @@ export default function BookedApptsList({
             </tr>
           </thead>
           <tbody className="divide-y divide-white/10">
-            {bookings.map((row) => {
+            {bookings.map((row, idx) => {
               return (
-                <tr key={row.id} className="hover:bg-white/5">
+                <tr key={idx} className="hover:bg-white/5">
                   <td className="px-3 py-2 whitespace-nowrap text-xs">
                     {new Date(row.starttime!).toLocaleDateString("en-US", {
                       weekday: "short",
@@ -90,18 +89,16 @@ export default function BookedApptsList({
                   <td className="px-3 py-2">{row.service}</td>
                   <td className="px-3 py-2">{row.providername}</td>
 
-
-                    {(row.bookstatus == "Booked" ? 
-                      <td className="px-3 py-2">
-                        <CancelBookingButton 
-                          booking={row}
-                          onSuccess={() => handleCancelSuccess(row)}
-                          onError={onError}/>
-                      </td>
-                      :
-                      <td className="px-3 py-2">
-                        Cancelled
-                      </td>
+                  {row.bookstatus == "Booked" ? (
+                    <td className="px-3 py-2">
+                      <CancelBookingButton
+                        booking={row}
+                        onSuccess={() => handleCancelSuccess(row)}
+                        onError={onError}
+                      />
+                    </td>
+                  ) : (
+                    <td className="px-3 py-2">Cancelled</td>
                   )}
                   {/*<td className="px-3 py-2">
                     <CancelBookingButton

@@ -3,9 +3,13 @@ import { MyChartData } from "@/app/api/admin/route";
 import { Dispatch, FormEvent, SetStateAction } from "react";
 
 export default function DataForm({
+  setStart,
+  setEnd,
   setChartData,
   setShowCharts,
 }: {
+  setStart: Dispatch<SetStateAction<string>>;
+  setEnd: Dispatch<SetStateAction<string>>;
   setChartData: Dispatch<SetStateAction<MyChartData[]>>;
   setShowCharts: Dispatch<SetStateAction<boolean>>;
 }) {
@@ -15,15 +19,17 @@ export default function DataForm({
       const formdata = new FormData(e.currentTarget);
       const start = formdata.get("start") as string;
       const end = formdata.get("end") as string;
+      setStart(start);
+      setEnd(end);
       const queryParams = end ? `start=${start}&end=${end}` : `start=${start}`;
       const res = await fetch(`/api/admin?${queryParams}`);
       const data = await res.json();
-      console.log("Ran the function: ", data);
 
       if (res.ok) {
         setChartData(data);
       } else {
         console.log("Fetch failed for dataform");
+        return;
       }
       setShowCharts(true);
     } catch (error) {
@@ -51,10 +57,6 @@ export default function DataForm({
             name="start"
             className="border-lime-200 border-2 rounded w-fit"
             required
-            // min={new Date().toISOString().slice(0, 10)}
-            // max={new Date(new Date().setFullYear(new Date().getFullYear() + 1))
-            //   .toISOString()
-            //   .slice(0, 10)}
           />
           <label>End Date:</label>
           <input

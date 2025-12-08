@@ -23,7 +23,7 @@ export default function ChartWrapper({
             data: chartData.data,
             borderWidth: 1,
             borderRadius: 8,
-            backgroundColor: "#ffffff",
+            backgroundColor: chartData.bgColors,
           },
         ],
       },
@@ -32,16 +32,17 @@ export default function ChartWrapper({
           x: {
             grid: { color: "#000000" },
             ticks: { color: "#ffffff" },
-            title: { display: true, text: chartData.xAxis, color: "#ffff00" },
+            title: { display: true, text: chartData.xAxis, color: "#ffffff" },
           },
           y: {
             grid: { color: "#000000" },
             ticks: { color: "#ffffff" },
-            title: { display: true, text: chartData.yAxis, color: "#ffff00" },
+            title: { display: true, text: chartData.yAxis, color: "#ffffff" },
           },
         },
         plugins: {
           legend: {
+            display: false,
             labels: {
               color: "#ffffff",
             },
@@ -54,8 +55,8 @@ export default function ChartWrapper({
   }, [chartData]);
 
   return (
-    <div className="bg-emerald-700 absolute h-[80vh] w-[90vw]">
-      <canvas ref={canvasRef} className="bg-emerald-700" />
+    <div className="w-fit h-fit">
+      <canvas ref={canvasRef} />
     </div>
   );
 }

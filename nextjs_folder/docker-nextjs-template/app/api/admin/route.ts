@@ -1,8 +1,10 @@
-<<<<<<< HEAD
-import { countSpAndCust } from "@/app/lib/services/chartServices";
-=======
-import { countSpAndCust } from "@/app/lib/services/adminServices";
->>>>>>> 283f772 (admin view addition of data charts, starting with just making a list of data configurations, need unique data sets now!)
+import {
+  countApptsBooked,
+  countApptsCreated,
+  countCancelledBookings,
+  countSpAndCust,
+  countSpCategories,
+} from "@/app/lib/services/chartServices";
 import { auth } from "@/auth";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -17,48 +19,85 @@ export type MyChartData = {
 };
 
 export async function GET(req: NextRequest) {
-  const session = await auth();
-  if (!session || !session.user.isAdmin)
-    return new NextResponse("Unauthorized", { status: 401 });
+  try {
+    const session = await auth();
+    if (!session || !session.user.isAdmin)
+      return new NextResponse("Unauthorized", { status: 401 });
+    // pull query params
+    const url = new URL(req.url);
+    const params = url.searchParams;
+    const start = params.get("start");
+    const end = params.get("end");
+    const starttime: number = new Date(start + "T00:00:00").getTime() / 1000;
+    const endtime: number = new Date(end + "T00:00:00").getTime() / 1000;
+    // collect data
+    const spCustCounts: number[] | null = await countSpAndCust(
+      starttime,
+      endtime
+    );
 
-  const url = new URL(req.url);
-  const params = url.searchParams;
-  const start = params.get("start");
-  const end = params.get("end");
-<<<<<<< HEAD
-  const starttime: number = new Date(start + "T00:00:00").getTime();
-  const endtime: number = new Date(end + "T00:00:00").getTime();
-  console.log("Start time: ", starttime, endtime);
+    const apptsCreated = await countApptsCreated(starttime, endtime);
+    const apptsBooked = await countApptsBooked(starttime, endtime);
+    const apptsCancelled = await countCancelledBookings(starttime, endtime);
+    const spCategories = await countSpCategories(starttime, endtime);
 
-  console.log(start, end);
-  const res: number[] | null = await countSpAndCust(starttime, endtime);
-=======
-
-  console.log(start, end);
-  const res: number[] | null = await countSpAndCust();
->>>>>>> 283f772 (admin view addition of data charts, starting with just making a list of data configurations, need unique data sets now!)
-  const countChart: MyChartData[] = [
-    {
-      type: "bar",
-      data: res ?? [0, 0],
-<<<<<<< HEAD
-      bgColors: ["#ffffff", "#000000"],
-=======
-      bgColors: ["#ffffff"],
->>>>>>> 283f772 (admin view addition of data charts, starting with just making a list of data configurations, need unique data sets now!)
-      label: "Users",
-      labels: ["Service Providers", "Customers"],
-      xAxis: "Users",
-      yAxis: "Registered Users",
-    },
-  ];
-
-  if (!res) return NextResponse.json("Invalid response", { status: 400 });
-
-  return NextResponse.json(countChart, { status: 200 });
+    // check data responses
+    if (!spCustCounts)
+      return NextResponse.json("Invalid response", { status: 400 });
+    // create array of chart data
+    const countChart: MyChartData[] = [
+      {
+        type: "bar",
+        data: spCustCounts ?? [0, 0],
+        bgColors: ["#ffffff", "#000000"],
+        label: "Users",
+        labels: ["Service Providers", "Customers"],
+        xAxis: "Users",
+        yAxis: "Registered Users",
+      },
+      {
+        type: "bar",
+        data: apptsCreated ?? [0],
+        bgColors: ["#FFFC61"],
+        label: "Appointments",
+        labels: ["Appointments"],
+        xAxis: "",
+        yAxis: "Created Appointments",
+      },
+      {
+        type: "bar",
+        data: apptsBooked ?? [0],
+        bgColors: ["#61FF68"],
+        label: "Booked Appointments",
+        labels: ["Booked Appointments"],
+        xAxis: "",
+        yAxis: "Number of Bookings",
+      },
+      {
+        type: "bar",
+        data: apptsCancelled ?? [0],
+        bgColors: ["#FF2121"],
+        label: "Cancelled Bookings",
+        labels: ["Cancelled Appointments"],
+        xAxis: "",
+        yAxis: "Number of Cancellations",
+      },
+      {
+        type: "bar",
+        data: spCategories ?? [0, 0, 0],
+        bgColors: ["#ff9cf4"],
+        label: "Service Providers",
+        labels: ["Beauty", "Fitness", "Medical"],
+        xAxis: "ServiceProvider Types",
+        yAxis: "Number of ServiceProviders",
+      },
+    ];
+    // send chart data
+    return NextResponse.json(countChart, { status: 200 });
+  } catch (error) {
+    console.log("Error in /api/admin GET ", error);
+    return NextResponse.json("Server Error", { status: 500 });
+  }
 }
-<<<<<<< HEAD
 
 //
-=======
->>>>>>> 283f772 (admin view addition of data charts, starting with just making a list of data configurations, need unique data sets now!)

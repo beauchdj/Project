@@ -12,6 +12,8 @@ import { MyChartData } from "@/app/api/admin/route";
 
 export default function AdminView({ appt_list }: { appt_list: Appointment[] }) {
   const [appts, setAppts] = useState<Appointment[]>(appt_list);
+  const [start, setStart] = useState<string>("");
+  const [end, setEnd] = useState<string>("");
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [error, setError] = useState<string>("");
   const [showCharts, setShowCharts] = useState<boolean>(false);
@@ -62,10 +64,6 @@ export default function AdminView({ appt_list }: { appt_list: Appointment[] }) {
                 name="start"
                 className="border-lime-200 border-2 rounded w-fit"
                 required
-                // min={new Date().toISOString().slice(0, 10)}
-                // max={new Date(new Date().setFullYear(new Date().getFullYear() + 1))
-                //   .toISOString()
-                //   .slice(0, 10)}
               />
               <label>End Date:</label>
               <input
@@ -92,7 +90,12 @@ export default function AdminView({ appt_list }: { appt_list: Appointment[] }) {
             </div>
           </div>
         </form>
-        <DataForm setShowCharts={setShowCharts} setChartData={setChartData} />
+        <DataForm
+          setStart={setStart}
+          setEnd={setEnd}
+          setShowCharts={setShowCharts}
+          setChartData={setChartData}
+        />
       </div>
       <div className="flex flex-col gap-1 w-[75vw] md:items-center overflow-auto h-[80vh] pb-1 bg-emerald-800/90 text-white rounded-2xl border-black border- mr-4">
         <table className="w-full border-collapse text-center">
@@ -146,16 +149,13 @@ export default function AdminView({ appt_list }: { appt_list: Appointment[] }) {
         </table>
       </div>
 
-      {/* <ChartWrapper
-        data={[4, 5]}
-        type={"bar"}
-        labels={["Service Provider", "Customer"]}
-        bgColors={["#000000", "#ffffff"]}
-        label={"Hey"}
-        xAxis="Users"
-        yAxis="Total Registered"
-      /> */}
-      <MyCharts showCharts={showCharts} chartData={chartData} />
+      <MyCharts
+        start={new Date(start).toLocaleDateString()}
+        end={new Date(end).toLocaleDateString()}
+        setShowCharts={setShowCharts}
+        showCharts={showCharts}
+        chartData={chartData}
+      />
     </main>
   );
 }
