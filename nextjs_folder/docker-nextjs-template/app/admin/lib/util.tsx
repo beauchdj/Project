@@ -15,6 +15,7 @@ export const filterDate = (
   }
   let updated: Appointment[] = [];
   // filter if only given startdate
+  console.log("CHekc: ", enddate, !enddate);
   if (!enddate) {
     updated = appt_list.filter((appt) => {
       const apptStart = new Date(appt.starttime);
@@ -25,7 +26,7 @@ export const filterDate = (
         0,
         0
       ).getTime();
-      if (startNum === startdate) return appt;
+      if (startNum >= startdate) return appt;
     });
   } else {
     // filter dates
