@@ -16,7 +16,7 @@
 
 import { NextResponse } from "next/server";
 import { auth } from "@/auth";
-import { getAppointments, createAppointmentSlot,deleteAppointmentSlot } from "@/app/lib/services/appointmentServices";
+import { getAppointments, createAppointmentSlot } from "@/app/lib/services/appointmentServices";
 import {AppointmentFilters} from "../../lib/types/AppointmentFilters";
 
 /************** GET /api/appointments *****************************************************************
