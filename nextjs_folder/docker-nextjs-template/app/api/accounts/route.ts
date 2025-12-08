@@ -1,7 +1,7 @@
 /* Gavin Stankovsky
-*  December 2025 (Latest)
-*  Account handling API
-*/
+ *  December 2025 (Latest)
+ *  Account handling API
+ */
 
 import { pool } from "@/lib/db";
 import { NextRequest, NextResponse } from "next/server";
@@ -51,12 +51,9 @@ export async function POST(response: Response) {
 }
 
 export async function GET(req: NextRequest) {
-  // should change this to a get with path parameter/query param
   const url = new URL(req.url);
   const params = url.searchParams;
   const username = params.get("username");
-  // console.log("this is the url: ", url);
-  // console.log("what username: ", username);
 
   const res = await pool.query("SELECT * FROM users WHERE username = $1", [
     username,

@@ -15,23 +15,19 @@ export default function MyCharts({
   chartData: MyChartData[];
 }) {
   useEffect(() => {
-    console.log("Bro what inside MyChart.tsx: ", chartData);
+    console.log("Bro what: ", chartData);
   }, [chartData]);
   return (
     <div
       className="bg-emerald-700 absolute h-[80vh] w-[90vw]"
       hidden={!showCharts}
     >
-      {chartData.length && (
-        <>
-          {chartData &&
-            chartData.map((p: MyChartData, index) => (
-              <div key={index}>
-                <ChartWrapper chartData={p} />
-              </div>
-            ))}
-        </>
-      )}
+      {chartData &&
+        chartData.map((p: MyChartData, index) => (
+          <div key={index}>
+            <ChartWrapper chartData={p} />
+          </div>
+        ))}
     </div>
   );
 }

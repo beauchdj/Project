@@ -62,6 +62,10 @@ export default function AdminView({ appt_list }: { appt_list: Appointment[] }) {
                 name="start"
                 className="border-lime-200 border-2 rounded w-fit"
                 required
+                // min={new Date().toISOString().slice(0, 10)}
+                // max={new Date(new Date().setFullYear(new Date().getFullYear() + 1))
+                //   .toISOString()
+                //   .slice(0, 10)}
               />
               <label>End Date:</label>
               <input

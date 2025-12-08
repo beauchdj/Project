@@ -1,6 +1,5 @@
 "use server";
 
-import { pool } from "@/lib/db";
 import AdminView from "./lib/AdminView";
 import { Appointment } from "../lib/types/Appointment";
 import { auth } from "@/auth";

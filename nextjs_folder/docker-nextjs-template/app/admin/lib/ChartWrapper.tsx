@@ -23,7 +23,7 @@ export default function ChartWrapper({
             data: chartData.data,
             borderWidth: 1,
             borderRadius: 8,
-            backgroundColor: chartData.bgColors,
+            backgroundColor: "#ffffff",
           },
         ],
       },
@@ -54,7 +54,7 @@ export default function ChartWrapper({
   }, [chartData]);
 
   return (
-    <div className="h-fit w-fit">
+    <div className="bg-emerald-700 absolute h-[80vh] w-[90vw]">
       <canvas ref={canvasRef} className="bg-emerald-700" />
     </div>
   );
