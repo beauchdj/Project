@@ -2,7 +2,10 @@
 *  December 2025
 *  Notification Bell 2 component for troubleshooting alternative
 *  notification handling. 
-
+* 
+* This version only displays notifications for cancelled appointments
+* Mostly reused and modified Gavins NotificationBell code, but modified the fetches
+*/
 "use client";
 
 import { useEffect, useState } from "react";
@@ -94,4 +97,3 @@ export function GlobalBell2() {
     </div>
   );
 }
-*/
