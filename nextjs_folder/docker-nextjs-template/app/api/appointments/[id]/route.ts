@@ -2,11 +2,25 @@
 *  December 2025 (Latest)
 *  Appointment API route
 */
-
-//import { getAllSpAppts } from "@/app/lib/services/appointmentServices";
 import { auth } from "@/auth";
 import { NextRequest, NextResponse } from "next/server";
 import { updateAppointmentSlot } from "@/app/lib/services/appointmentServices";
+
+/************* PATCH /api/appointments/:id**********************************************************
+* Jaclyn Brekke
+* Updates an appointment slot.
+* To be used only for soft deletes (marking an appointment inactive).
+* 
+* Request body: {"isActive": false} 
+*
+* Successful response (200):
+* 
+* Errors:
+  - 400 Invalid request body
+  - 401 Unauthorized
+  - 403 User not allowed to update this appointment
+  - 500 Server error
+****************************************************************************************************************/
 
 type Params = { params: { id: string } };
 
