@@ -1,18 +1,42 @@
+/*****************************************************************************************************************
+ * Jaclyn Brekke
+ * December 2025
+ * 
+ * Bookings API
+ * 
+ * General Notes:
+ * All bookings endpoints require authentication. 
+ * If the user is not authenticated, the API will return HTTP 401 Unauthorized.
+ * Authorization rules are enforced by the backend. 
+ * Clients cannot bypass role-based restrictions using query parameters.
+ * Bookings are never deleted from the database. Cancelling a booking preserves history.
+*************************************************************************************************************************/
 import { NextResponse } from "next/server";
 import { auth } from "@/auth";
 import { BookingFilters } from "../../lib/types/BookingFilters";
 import { getBookings, createBooking} from "../../lib/services/BookingService";
 
-//import { getBookedAppts, bookAppointment } from "@/app/lib/services/appointmentServices";
+/*************************GET /api/bookings***************************************************************
+* Returns a list of bookings visible to the authenticated user.
+    - Admins can see all bookings.
+    - Service providers can see bookings for appointment slots they own.
+    - Customers can see bookings they have made.
 
-/* Supported Filters
-  customerId?: string;
-  serviceProviderId?: string;
-  status?: "Booked" | "Cancelled";
-  startAfter?: string;
-  startBefore?: string;
-  serviceCategory?: string;
-*/
+ * Supported query parameters (all optional):
+    - viewAs: "Admin", "Provider", or "Customer" to specify the perspective for filtering
+    - customerId: filter by customer id
+    - serviceProviderId: filter by service provider id
+    - status: "Booked" or "Cancelled"
+    - startAfter: ISO datetime string; include bookings starting at or after this time
+    - startBefore: ISO datetime string; include bookings starting at or before this time
+    - serviceId: filter by service
+    - serviceCategory: "Beauty", "Medical", or "Fitness"
+    - customerName: filter by customer name (partial match)
+    - providerName: filter by service provider name (partial match)
+ * Example:
+    - GET /api/bookings?status=Booked&serviceCategory=Medical
+ * Successful response (200): The response body contains an object with a bookings array. Each booking has the shape of the BookingView
+**********************************************************************************************************************/
 
 export async function GET(request: Request) {
     const session = await auth();
@@ -21,9 +45,13 @@ export async function GET(request: Request) {
     }
 
     const { searchParams } = new URL(request.url);
-
+    const paramsViewAs = searchParams.get("viewAs");
+    let viewAs: BookingFilters["viewAs"];
+    if (paramsViewAs === "Admin" || paramsViewAs === "Provider" || paramsViewAs === "Customer") {
+        viewAs = paramsViewAs;
+    }
     const filters: BookingFilters = {
-         customerId: searchParams.get("customerId") ?? undefined,
+        customerId: searchParams.get("customerId") ?? undefined,
         serviceProviderId: searchParams.get("serviceProviderId") ?? undefined,
         status: searchParams.get("status") as BookingFilters["status"] | undefined,
         startAfter: searchParams.get("startAfter") ?? undefined,
@@ -32,6 +60,9 @@ export async function GET(request: Request) {
         serviceCategory: searchParams.get("serviceCategory") as
             | BookingFilters["serviceCategory"]
             | undefined,
+        customerName: searchParams.get("customerName") ?? undefined,
+        providerName: searchParams.get("providerName") ?? undefined,
+        viewAs,
     };
 
     try {
@@ -48,7 +79,29 @@ export async function GET(request: Request) {
         );
     }
 }
+/*************************POST /api/bookings***************************************************************
+* Creates a new booking for an appointment slot.
+* Only authenticated users may call this endpoint. 
+* The backend will reject the request if the appointment does not exist, is already booked, or conflicts with another booking by the same customer.
 
+* Request body:
+    apptId: appointment slot id (required)
+
+* Example:
+    POST /api/bookings
+    Content-Type: application/json
+    {"apptId": "uuid"}
+
+ * Successful response (201): {"bookingId": "new-booking-id"}
+
+ * Errors:
+    400 Missing apptId
+    401 Unauthorized
+    404 Appointment does not exist
+    409 Appointment already booked
+    409 Booking conflicts with an existing booking
+    500 Server error
+***********************************************************************************************************************/
 export async function POST(request: Request) {
     const session = await auth();
     if (!session) {
@@ -103,65 +156,4 @@ export async function POST(request: Request) {
 }
 
 
-/*
-export async function POST(request: Request) {
-    const session = await auth();
-    if (!session) {
-        return NextResponse.json({ error: "Unauthorized" }, { status: 401 });   
-    }
 
-    const { apptId } = (await request.json());
-
-    if (!apptId) {
-        return NextResponse.json({ error: "Missing apptId" }, { status: 400 });
-    }
-
-    try {
-        const result = await bookAppointment(session.user.id, apptId);
-        if (result.ok) {
-            return NextResponse.json({ result }, { status: 201 } );
-        } else {
-            return NextResponse.json({ error: result.error },{ status: 409 } )
-        }
-    } catch (error: any) {
-        console.error("Booking error:", error);
-        const message = error?.message || "Server Error";
-        return NextResponse.json({ error: message }, { status: 400 });  
-    }
-}
-
-export async function GET(request: Request) {
-    const session = await auth();
-    if (!session) {
-        return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-    }
-
-    try {
-        const result = await getBookedAppts(session.user.id); 
-        return NextResponse.json(result, { status: 200 });
-    } catch (error) {
-        return NextResponse.json({ error: "Server Error" }, { status: 500 });
-    }
-}
-
-
-export async function DELETE(request: Request) {
-    const session = await auth();
-    if (!session) {
-        return NextResponse.json({error: "Unauthorized" }, { status: 401 });
-    }
-
-    const { bookingId } = (await request.json()) as { bookingId: string };
-
-    if (!bookingId) {
-        return NextResponse.json({ error: "Missing bookingId" }, { status: 400 });
-    }
-
-    try {
-        const result = await deleteBookedAppt(bookingId, session.user.id);
-        return NextResponse.json(result, {status: 200 });
-    } catch (error) {
-        return NextResponse.json({ error: "Server Error" }, { status: 500 });
-    }
-}
-    */

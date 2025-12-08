@@ -4,12 +4,12 @@
 */
 import { auth } from "@/auth";
 import { NextRequest, NextResponse } from "next/server";
-import { updateAppointmentSlot } from "@/app/lib/services/appointmentServices";
+import { getAppointments, updateAppointmentSlot } from "@/app/lib/services/appointmentServices";
 
 /************* PATCH /api/appointments/:id**********************************************************
 * Jaclyn Brekke
-* Updates an appointment slot.
-* To be used only for soft deletes (marking an appointment inactive).
+* Updates an appointment slot for soft deletes (marking an appointment inactive).
+*   (alternative to deleting an appointment)
 * 
 * Request body: {"isActive": false} 
 *
@@ -20,8 +20,7 @@ import { updateAppointmentSlot } from "@/app/lib/services/appointmentServices";
   - 401 Unauthorized
   - 403 User not allowed to update this appointment
   - 500 Server error
-****************************************************************************************************************/
-
+*************************************************************************************************************/
 type Params = { params: { id: string } };
 
 export async function PATCH(
@@ -33,9 +32,9 @@ export async function PATCH(
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
-  const { isActive } = await request.json();
+  const { isactive } = await request.json();
 
-  if (typeof isActive !== "boolean") {
+  if (typeof isactive !== "boolean") {
     return NextResponse.json(
       { error: "Invalid request body" },
       { status: 400 }
@@ -45,7 +44,7 @@ export async function PATCH(
   try {
     await updateAppointmentSlot(
       params.id,
-      isActive,
+      isactive,
       session.user.id
     );
 
@@ -55,6 +54,13 @@ export async function PATCH(
     );
   } catch (error: any) {
     console.error("Update appointment error:", error);
+    
+    if (error.message === "APPOINTMENT_CONFLICT") {
+      return NextResponse.json(
+        { error: "Appointment has already been booked" },
+        { status: 409 } // ✅ Conflict
+      );
+    }
 
     if (error.message === "FORBIDDEN") {
       return NextResponse.json(
@@ -71,7 +77,6 @@ export async function PATCH(
 }
 
 
-
 /**
  * This was gavin created, Used for the Admin View, a slight alteration from the regular route
  * which just uses the session's user id, this route takes a id from the path to use for
@@ -80,7 +85,7 @@ export async function PATCH(
 
 export async function GET(
   req: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
+  { params }: { params: { id: string } }
 ) {
   const session = await auth();
   if (!session || !session.user.isSp) {
@@ -91,7 +96,7 @@ export async function GET(
     const { id } = await params;
     // Data shape should reflect the Appointment.ts defined type
     //const result = await getAllSpAppts(id); // TODO: give data from whenever, data currently is today onward
-
+    const appointments = await getAppointments({serviceProviderId:id},session.user.id);
     //return NextResponse.json(result, { status: 200 });
   } catch (error) {
     console.log("Error inside of api/appointments/[id]: ", error);

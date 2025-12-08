@@ -20,7 +20,6 @@ import { getAppointments, createAppointmentSlot,deleteAppointmentSlot } from "@/
 import {AppointmentFilters} from "../../lib/types/AppointmentFilters";
 
 /************** GET /api/appointments *****************************************************************
- * 
  * Returns appointment slots visible to the authenticated user.
  * Admins:
         - can see all appointment slots
@@ -138,6 +137,8 @@ export async function POST(request: Request) {
     }
 }
 
+
+/* i think this is safe to delete, because this is now a PATCH for a soft delete */
 /***************DELETE /api/appointments/:id************************************************************
   * Deletes or deactivates an appointment slot.
   * Rules:
@@ -151,7 +152,7 @@ export async function POST(request: Request) {
         - 401 Unauthorized
         - 403 User not allowed to delete this appointment
         - 500 Server error
-**********************************************************************************************************************/
+*********************************************************************************************************************
 type Params = { params: { id: string } };
 
 export async function DELETE(
@@ -189,7 +190,7 @@ export async function DELETE(
     );
   }
 }
-
+*/
 
 
 
