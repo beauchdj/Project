@@ -52,6 +52,11 @@ export default function Dropdown({ session }: { session?: Session | null }) {
             User Management
           </Link>
         )}
+        {isAdmin && (
+          <Link href={"/admin/bookings"} className={"nav-btn"}>
+            Booking Management
+          </Link>
+        )}
         <Link className="nav-btn" href={"/"}>
           Home
         </Link>
@@ -70,12 +75,12 @@ export default function Dropdown({ session }: { session?: Session | null }) {
         )}
         {isSp && (
           <Link href={"/appointments"} className={"nav-btn text-sm"}>
-            Create Appointment
+            Create & View Appointment Slots
           </Link>
         )}
         {isCustomer && (
           <Link href={"/bookings"} className={"nav-btn text-sm"}>
-            Book Appointment
+            Book & View Booked Appointments
           </Link>
         )}
         {session && (
