@@ -6,10 +6,16 @@ import { FormEvent, useState } from "react";
 import { filterDate } from "./util";
 import { useNotification } from "@/app/lib/components/NotificationContext";
 import Link from "next/link";
+import DataForm from "./DataForm";
+import MyCharts from "./MyCharts";
+import { MyChartData } from "@/app/api/admin/route";
 
 export default function AdminView({ appt_list }: { appt_list: Appointment[] }) {
   const [appts, setAppts] = useState<Appointment[]>(appt_list);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [error, setError] = useState<string>("");
+  const [showCharts, setShowCharts] = useState<boolean>(false);
+  const [chartData, setChartData] = useState<MyChartData[]>([]);
   const { toggleHidden } = useNotification();
 
   function submitDates(e: FormEvent<HTMLFormElement>) {
@@ -37,56 +43,59 @@ export default function AdminView({ appt_list }: { appt_list: Appointment[] }) {
   }
 
   return (
-    <main className="w-full flex flex-row items-start justify-center gap-2">
-      <form
-        onSubmit={submitDates}
-        className="justify-center items-center rounded-2xl text-black flex flex-col gap-1 ml-4"
-      >
-        <div className="bg-emerald-800/80 rounded-2xl p-2 flex md:items-center px-2 py-2 md:px-8 md:py-4 shadow-xl shadow-black flex-col gap-2 overflow-auto border-4 border-black">
-          <div className="flex flex-col justify-center items-center text-white">
-            <label>Start Date:</label>
-            <input
-              type="date"
-              name="start"
-              className="border-lime-200 border-2 rounded w-fit"
-              required
-              // min={new Date().toISOString().slice(0, 10)}
-              // max={new Date(new Date().setFullYear(new Date().getFullYear() + 1))
-              //   .toISOString()
-              //   .slice(0, 10)}
-            />
-            <label>End Date:</label>
-            <input
-              type="date"
-              name="end"
-              className="border-lime-200 border-2 rounded w-fit"
-            />
+    <main className="w-full flex flex-row items-start justify-center gap-2 relative">
+      <div className="ml-4 flex flex-col gap-1">
+        <form
+          onSubmit={submitDates}
+          className="justify-center items-center rounded-2xl text-black flex flex-col gap-1"
+        >
+          <div
+            className={
+              "bg-emerald-800 rounded-2xl p-2 flex md:items-center px-2 py-2 md:px-8 md:py-4 flex-col gap-2 overflow-auto border-2 border-black"
+            }
+          >
+            <div className="flex flex-col justify-center items-center text-white">
+              <h3 className="underline underline-offset-4">Search Users</h3>
+              <label>Start Date:</label>
+              <input
+                type="date"
+                name="start"
+                className="border-lime-200 border-2 rounded w-fit"
+                required
+              />
+              <label>End Date:</label>
+              <input
+                type="date"
+                name="end"
+                className="border-lime-200 border-2 rounded w-fit"
+              />
+            </div>
+            <div className="flex gap-1 w-full justify-center items-center flex-col md:flex-row">
+              <button type="submit" className="nav-btn">
+                Submit
+              </button>
+              <button
+                type="reset"
+                className="nav-btn"
+                onClick={() => {
+                  toggleHidden("Result's Reset");
+                  setAppts(appt_list);
+                  setError("");
+                }}
+              >
+                Reset
+              </button>
+            </div>
           </div>
-          <div className="flex gap-1 w-full justify-center items-center flex-col md:flex-row">
-            <button type="submit" className="nav-btn">
-              Submit
-            </button>
-            <button
-              type="reset"
-              className="nav-btn"
-              onClick={() => {
-                toggleHidden("Result's Reset");
-                setAppts(appt_list);
-                setError("");
-              }}
-            >
-              Reset
-            </button>
-          </div>
-          <section className="text-red-500">{error}</section>
-        </div>
-      </form>
-      <div className="flex flex-col gap-1 w-[75vw] md:items-center overflow-auto h-[80vh] pb-1 bg-emerald-800/80 text-white rounded-2xl border-black border-4 mr-4">
+        </form>
+        <DataForm setShowCharts={setShowCharts} setChartData={setChartData} />
+      </div>
+      <div className="flex flex-col gap-1 w-[75vw] md:items-center overflow-auto h-[80vh] pb-1 bg-emerald-800/90 text-white rounded-2xl border-black border- mr-4">
         <table className="w-full border-collapse text-center">
-          <thead className="bg-emerald-900 sticky top-0 text-white">
+          <thead className="bg-emerald-900 sticky top-0 text-white text-xs">
             <tr>
-              <th>Index</th>
-              <th className="p-3">Service Provider</th>
+              <th className="p-3">Index</th>
+              <th>Service Provider</th>
               <th>Customer</th>
               <th>Service</th>
               <th>Category</th>
@@ -132,6 +141,17 @@ export default function AdminView({ appt_list }: { appt_list: Appointment[] }) {
           </tbody>
         </table>
       </div>
+
+      {/* <ChartWrapper
+        data={[4, 5]}
+        type={"bar"}
+        labels={["Service Provider", "Customer"]}
+        bgColors={["#000000", "#ffffff"]}
+        label={"Hey"}
+        xAxis="Users"
+        yAxis="Total Registered"
+      /> */}
+      <MyCharts showCharts={showCharts} chartData={chartData} />
     </main>
   );
 }
