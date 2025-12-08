@@ -75,6 +75,8 @@ export default function CreateApptForm({
       endtime: endTime,
       service: service,
       fullname: "",
+      sp_id: "",
+      cust_id: ""
     };
 
     setAppointments((prev) => [...prev, newAppt]);

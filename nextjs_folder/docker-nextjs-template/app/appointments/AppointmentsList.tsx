@@ -1,6 +1,10 @@
 /* Gavin Stankovsky, Jaclyn Brekke
 *  December 2025 (Latest)
-*  Appointment list form
+*  
+* A service provider view of their upcoming appointment slots
+*   If a slot is booked, it will display the customer name
+*   Booked slots will also display a button to cancel the booking
+*   Unbooked slots will display a button to delete the appointment so it is no longer available to book.
 */
 
 "use client";
@@ -88,6 +92,7 @@ export default function AppointmentsList({
                       <DeleteApptButton
                         apptId={row.id!}
                         onSuccess={() => onDeleteAppt(row.id!)}
+                        onError={onError}
                       />
                     </td>
                   )}
