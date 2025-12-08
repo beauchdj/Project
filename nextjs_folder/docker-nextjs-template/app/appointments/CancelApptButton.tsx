@@ -22,7 +22,7 @@ export default function CancelApptButton({
     try {
       // canceling an appt from sp perspective
       // add the customer id to notification as that is who it should be sent to
-      /*await fetch("/api/notifications", {
+      await fetch("/api/notifications", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -30,13 +30,11 @@ export default function CancelApptButton({
           apptid: appointment.id,
           status: "Cancelled",
         }),
-      });*/
+      });
 
       const response = await fetch(`/api/bookings/${appointment.bookingid}/cancel`, {
-          //method: "PUT",
           method: "PATCH",
           headers: { "Content-Type": "application/json" },
-          //body: JSON.stringify(appointment.bookingid),
           body: JSON.stringify({status: "Cancelled"})
         }
       );
