@@ -66,7 +66,7 @@ export default function AdminView({
             }
           >
             <div className="flex flex-col justify-center items-center text-white">
-              <h3 className="underline underline-offset-4">
+              <h3 className="underline underline-offset-4 text-xs">
                 Search Appointments
               </h3>
               <label>Start Date:</label>
@@ -173,9 +173,9 @@ export default function AdminView({
               <tr>
                 <th className="p-3">Name</th>
                 <th>Service Category</th>
-                <th>Phone</th>
                 <th>City</th>
                 <th>State</th>
+                <th>Created At</th>
                 <th>IsActive</th>
               </tr>
             </thead>
@@ -202,9 +202,9 @@ export default function AdminView({
                         </Link>
                       </td>
                       <td>{user.servicecategory ?? "Customer"}</td>
-                      <td>{user.phone}</td>
                       <td>{user.city}</td>
                       <td>{user.state}</td>
+                      <td>{new Date(user.created_at!).toLocaleDateString()}</td>
                       <td>{user.isactive ? "True" : "False"}</td>
                     </tr>
                   ))}

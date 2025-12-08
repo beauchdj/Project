@@ -63,7 +63,6 @@ export async function GET(
     const { id } = await params;
     // Data shape should reflect the Appointment.ts defined type
     const result = await getAllSpApptsAllTime(id); // TODO: give data from whenever, data currently is today onward
-    console.log("putting in id: ", id, " got result :", result);
 
     return NextResponse.json(result, { status: 200 });
   } catch (error) {
@@ -83,7 +82,6 @@ export async function getAllSpApptsAllTime(spId: string) {
        ORDER BY a.starttime asc`,
       [spId]
     );
-    console.log("Ran GetAllSpApptsAllTime() : ", rows);
     return rows;
   } catch (error) {
     console.log("Error fetching from db @getAllSpApptsAllTime(): ", error);

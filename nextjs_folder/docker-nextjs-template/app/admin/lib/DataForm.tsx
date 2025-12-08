@@ -2,7 +2,6 @@
 import { MyChartData } from "@/app/api/admin/route";
 import { useNotification } from "@/app/lib/components/NotificationContext";
 import { Dispatch, FormEvent, SetStateAction } from "react";
-// random add
 
 export default function DataForm({
   setStart,
@@ -23,7 +22,7 @@ export default function DataForm({
       const start = formdata.get("start") as string;
       const end = formdata.get("end") as string;
 
-      if (end && new Date(end).getTime() < new Date(start).getTime())
+      if (end && new Date(end).getTime() <= new Date(start).getTime())
         throw new Error("Bad Dates");
       setStart(start);
       setEnd(end);
@@ -55,7 +54,9 @@ export default function DataForm({
         }
       >
         <div className="flex flex-col justify-center items-center text-white">
-          <h3 className="underline underline-offset-4">Generate Data</h3>
+          <h3 className="underline underline-offset-4 text-xs">
+            Generate Data
+          </h3>
           <label>Start Date:</label>
           <input
             type="date"

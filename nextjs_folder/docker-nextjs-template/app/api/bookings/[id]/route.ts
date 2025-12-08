@@ -27,7 +27,6 @@ export async function GET(
     // Data shape should reflect the Booking.ts defined type
     const result = await getBookedApptsAllTime(id); // TODO: give data from whenever, data currently is today onward
 
-    console.log("Ran GetAllSpApptsAllTime() : ", result);
     return NextResponse.json(result, { status: 200 });
   } catch (error) {
     console.log("Error inside of api/bookings/[id]: ", error);
@@ -49,7 +48,6 @@ export async function getBookedApptsAllTime(userId: string) {
       [userId]
     );
 
-    console.log("Ran getBookedApptsAllTime() : ", rows);
     return rows;
   } catch (error) {
     throw new Error("Get Bookings Error");
