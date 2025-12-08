@@ -3,9 +3,10 @@
 *  Bookings API Route
 */
 
-import { getBookedAppts } from "@/app/lib/services/appointmentServices";
+//import { getBookedAppts } from "@/app/lib/services/appointmentServices";
 import { auth } from "@/auth";
 import { NextRequest, NextResponse } from "next/server";
+import { getBookings } from "@/app/lib/services/BookingService";
 
 /**
  * This was gavin created, Used for the Admin View, a slight alteration from the regular route
@@ -25,8 +26,8 @@ export async function GET(
   try {
     const { id } = await params;
     // Data shape should reflect the Booking.ts defined type
-    const result = await getBookedAppts(id); // TODO: give data from whenever, data currently is today onward
-
+    //const result = await getBookedAppts(id); // TODO: give data from whenever, data currently is today onward
+    const result = await getBookings({ serviceProviderId: id }, session.user.id); //added by Jackie, works with current routes
     return NextResponse.json(result, { status: 200 });
   } catch (error) {
     console.log("Error inside of api/bookings/[id]: ", error);
