@@ -23,10 +23,7 @@ import { getAppointments, updateAppointmentSlot } from "@/app/lib/services/appoi
 *************************************************************************************************************/
 type Params = { params: { id: string } };
 
-export async function PATCH(
-  request: Request,
-  { params }: Params
-) {
+export async function PATCH(request: Request,{ params }: Params) {
   const session = await auth();
   if (!session) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
@@ -42,23 +39,16 @@ export async function PATCH(
   }
 
   try {
-    await updateAppointmentSlot(
-      params.id,
-      isactive,
-      session.user.id
-    );
+    await updateAppointmentSlot(params.id,isactive,session.user.id);
 
-    return NextResponse.json(
-      { success: true },
-      { status: 200 }
-    );
+    return NextResponse.json({ success: true },{ status: 200 });
   } catch (error: any) {
     console.error("Update appointment error:", error);
     
     if (error.message === "APPOINTMENT_CONFLICT") {
       return NextResponse.json(
         { error: "Appointment has already been booked" },
-        { status: 409 } // ✅ Conflict
+        { status: 409 }
       );
     }
 
@@ -69,10 +59,7 @@ export async function PATCH(
       );
     }
 
-    return NextResponse.json(
-      { error: "Server error" },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: "Server error" },{ status: 500 });
   }
 }
 
