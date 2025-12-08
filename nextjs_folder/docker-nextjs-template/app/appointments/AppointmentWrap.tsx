@@ -1,6 +1,6 @@
 /* Gavin Stankovsky, Jaclyn Brekke
 *  December 2025 (Latest)
-*  Appointment wrap handler function
+*  Appointment wrap handler functions
 */
 
 "use client";

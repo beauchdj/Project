@@ -8,7 +8,7 @@
 */
 
 "use client";
-// import { formatter } from "../lib/types/Formatter";
+
 import { Appointment } from "../lib/types/Appointment";
 import CancelApptButton from "./CancelApptButton";
 import DeleteApptButton from "./DeleteApptButton";
@@ -66,7 +66,6 @@ export default function AppointmentsList({
                       hour: "2-digit",
                       minute: "2-digit",
                     })}
-                    {/*formatter.format(new Date(row.starttime))*/}
                   </td>
                   <td className="px-3 py-2 whitespace-nowrap text-xs">
                     {new Date(row.endtime).toLocaleTimeString([], {

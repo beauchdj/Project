@@ -6,15 +6,11 @@
 "use client";
 
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
-//import { Booking } from "../lib/types/Booking";
 import { Appointment } from "../lib/types/Appointment";
 
 export default function SearchAppts({setResults,}: {
-  //results: Booking[];
-  //setResults: Dispatch<SetStateAction<Booking[]>>;
   setResults: Dispatch<SetStateAction<Appointment[]>>;
 }) {
-  //const [base, setBase] = useState<Booking[]>([]);
   const [base, setBase] = useState<Appointment[]>([]);
   const [search, setSearch] = useState("");
   async function updateCategory(category: string) {
