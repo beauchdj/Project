@@ -180,10 +180,13 @@ export default function AdminBookingList() {
                       minute: "2-digit",
                     })}
                </td>
-              <td className="px-4 py-2 text-xs">{booking.isactive? booking.bookstatus || "Available" : "Unavailable"}</td>
-              <td className="px-4 py-2 text-xs">{booking.isactive ? "Active" : "Deleted"}</td>
+              <td className="px-4 py-2 text-xs">{
+                booking.isactive? booking.bookstatus || "Available" : "Unavailable"}</td>
+              <td className="px-4 py-2 text-xs">{
+                booking.starttime < new Date().toISOString() ? "expired" :
+                booking.isactive ? "Active" : "Deleted"}</td>
               <td className="px-4 py-2">
-                {booking.bookstatus === "Booked" ? (
+                {booking.starttime < new Date().toISOString() ? "--" : booking.bookstatus === "Booked" ? (
                   <button
                     onClick={() =>
                       cancelBooking(booking.id)
