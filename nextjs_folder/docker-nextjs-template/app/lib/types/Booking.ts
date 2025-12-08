@@ -14,4 +14,5 @@ export type Booking = {
   bookstatus: string;
   apptid: string;
   userid: string;
+  isactive: boolean;
 };
