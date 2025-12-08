@@ -9,7 +9,7 @@ import { signOut, useSession } from "next-auth/react";
 import Dropdown from "./Dropdown";
 import { GlobalBell } from "./NotificationBell";
 import { CurrentAppointments } from "./CurrentAppointments";
-//import { GlobalBell2 } from "./NotificationBell2";
+import { GlobalBell2 } from "./NotificationBell2";
 
 export default function Nav() {
   const { data: session, status } = useSession();
@@ -47,7 +47,7 @@ export default function Nav() {
       {session?.user.username && (
         <>
           <GlobalBell session={session} />
-          {/* <GlobalBell2 /> */}
+          <GlobalBell2 />
           <CurrentAppointments userid={session.user.id} />
           <button
             onClick={signOutHandler}
