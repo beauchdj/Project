@@ -11,6 +11,7 @@ import {
   cancelAllBookingsforCust,
   cancelAllBookingsforSP,
 } from "./BookingService";
+import { deleteAllSpApptSlots } from "./appointmentServices";
 
 export async function getAllUsers(): Promise<User[]> {
   const { rows } = await pool.query(
@@ -118,10 +119,14 @@ export async function updateUser(
   }
 
   //check if deactivating user, then cancel bookings
+
+  // if service provider being deactivated or changed to non-sp, cancel bookings and delete appt slots
   if (userOld && userOld.issp && !user.issp) {
     await cancelAllBookingsforSP(user.id!, actingUserId);
+    await deleteAllSpApptSlots(user.id!, actingUserId);
   }
 
+  // if customer being deactivated, cancel bookings
   if (userOld && userOld.isactive && !user.isactive) {
     await cancelAllBookingsforCust(user.id!, actingUserId);
   }

@@ -1,6 +1,6 @@
 /* Jaclyn Brekke
  *  November 2025
- *  Appointment List view of booked appointments
+ *  Customer view of booked appointments
  */
 
 "use client";
@@ -13,7 +13,6 @@ export default function BookedApptsList({
   onError,
 }: {
   bookings: Booking[];
-  //onCancel: (apptId: Booking) => void;
   onCancel: (booking: Booking) => void;
   onError: (message: string) => void;
 }) {
@@ -38,14 +37,14 @@ export default function BookedApptsList({
   if (!bookings.length) {
     return (
       <div>
-        <h2 className="text-lg font-semibold mb-2">My Bookings</h2>
+        <h2 className="text-lg font-semibold mb-2">My Upcoming Bookings</h2>
       </div>
     );
   }
 
   return (
     <div className="">
-      <h2 className="text-lg font-semibold mb-2">My Bookings</h2>
+      <h2 className="text-lg font-semibold mb-2">My Upcoming Bookings</h2>
 
       <div className="overflow-x-auto rounded-lg border border-white/10">
         <table className="min-w-full text-sm">
@@ -78,7 +77,6 @@ export default function BookedApptsList({
                       hour: "2-digit",
                       minute: "2-digit",
                     })}
-                    {/*formatter.format(new Date(row.starttime))*/}
                   </td>
                   <td className="px-3 py-2 whitespace-nowrap text-xs">
                     {new Date(row.endtime!).toLocaleTimeString([], {
@@ -100,25 +98,6 @@ export default function BookedApptsList({
                   ) : (
                     <td className="px-3 py-2">Cancelled</td>
                   )}
-                  {/*<td className="px-3 py-2">
-                    <CancelBookingButton
-                      booking={row}
-                      onSuccess={() => onCancel(row)}
-                      onError={onError}
-                    />
-                  </td>*/}
-
-                  {/*!(row.bookstatus == "Cancelled") && (
-                  <td className="px-3 py-2">
-                    <CancelBookingButton 
-                      //bookingId={row.id!}
-                      booking={row}
-                      //onSuccess={() => onCancel(row.id!)}/>
-                       onSuccess={() => onCancel(row)}
-                      onError={onError}
-                    />
-                  </td>
-                  )*/}
                 </tr>
               );
             })}

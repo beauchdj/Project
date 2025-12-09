@@ -1,3 +1,15 @@
+/*
+ * Jaclyn Brekke
+ * December 2025
+ * 
+ * A standalone page for admins to view and manage all users. 
+ * If a user is deactivated: 
+ *    -their account is marked inactive (soft delete)
+ *    - they can no longer log in
+ *    - any appointments they had booked as a customer will be cancelled
+ *    - if they are a service provider, any future appointment slots they had created will be marked inactive
+ */
+
 "use client";
 
 import { useEffect, useState } from "react";

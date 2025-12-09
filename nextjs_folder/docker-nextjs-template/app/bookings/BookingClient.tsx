@@ -14,20 +14,28 @@ import { Appointment } from "../lib/types/Appointment";
 
 export default function BookingClient() {
   const [results, setResults] = useState<Appointment[]>([]);
-  // const [confirmation, setConfirmation] = useState<string | null>(null);
-  const [bookings, setBookings] = useState<Booking[]>([]);
+  const [bookings, setBookings] = useState<Booking[]>([])
   const [error, setError] = useState<string | null>(null);
 
-  //setError(null);
   const { toggleHidden } = useNotification();
   useEffect(() => {
     fetchBookings();
   }, []);
 
   async function fetchBookings() {
-    const res = await fetch("/api/bookings", { method: "GET" });
-    const json = await res.json();
-    setBookings(json.bookings);
+     const params = new URLSearchParams();
+
+      params.set("viewAs", "Customer");
+      params.set("startAfter", new Date().toISOString());
+    
+      const res = await fetch(`/api/bookings?${params.toString()}`, {method: "GET",});
+    
+       if (!res.ok) {
+        console.error("Failed to fetch bookings");
+        return;
+      }
+      const json = await res.json();
+      setBookings(json.bookings);
   }
 
   async function handleBook(apptId: string) {

@@ -163,6 +163,7 @@ export async function countSpCategories(
     return null;
   }
 }
+
 /**
  * Some data ideas:
  *  X total sp and service providers between a date
@@ -170,5 +171,5 @@ export async function countSpCategories(
  *  X total appointments booked between a date
  *  X total bookings canceled between a date
  *  X count of service providers in each category
- *  when users were created?
+ *  count of appointments by month by category - each month will have 3 bars one for each sp category
  */

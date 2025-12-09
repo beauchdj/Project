@@ -1,8 +1,7 @@
 /* Gavin Stankovsky, Jaclyn Brekke
-*  December 2025 (Latest)
-*  Navigation top bar component 
-*/
-
+ *  December 2025 (Latest)
+ *  Navigation top bar component
+ */
 
 "use client";
 import { signOut, useSession } from "next-auth/react";
@@ -46,7 +45,6 @@ export default function Nav() {
       </h1>
       {session?.user.username && (
         <>
-          <GlobalBell session={session} />
           <GlobalBell2 />
           <CurrentAppointments userid={session.user.id} />
           <button

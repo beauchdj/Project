@@ -1,9 +1,52 @@
-/* Jaclyn Brekke
-*  December 2025
-*  Database service 
-*/
+/*******************************************************************************************************
+ * Jaclyn Brekke
+ * December 2025
+ * 
+ * Notification Database Service
+ *
+ *  Database service responsible for managing user notifications.
+ *  Currently supports notifications generated for appointment booking
+ *  cancellations and provides basic read/update functionality.
+ *
+ * Responsibilities:
+ *  - Retrieve active notifications for a user
+ *  - Create cancellation notifications when bookings are cancelled
+ *  - Update notification status (active/new)
+ *
+ * Basic Idea:
+ *  - Notifications are stored in the `notifs` table
+ *  - Each notification has:
+ *      * sender (sent_by)
+ *      * recipient (send_to)
+ *      * message content (msg)
+ *      * activity flags (isactive, isnew)
+ *
+ **************************************************************************************************/
 
 import { pool } from "@/lib/db";
+
+/************** getNotificationsForUser ************************************************************
+ *
+ * Returns all active notifications for a given user.
+ *
+ * Visibility rules:
+ *  - Notifications are returned only for the specified user
+ *  - Only notifications marked as active are returned
+ *
+ * Inputs:
+ *  - userId: ID of the user receiving notifications
+ *
+ * Successful response:
+ *  - Returns an array of notification objects:
+ *      * id
+ *      * message
+ *      * isactive
+ *      * isnew - (not really used or needed)
+ *
+ * Errors:
+ *  - Database query errors
+ *
+ **************************************************************************************************/
 
 export async function getNotificationsForUser(userId: string) {
     const { rows } = await pool.query(
@@ -14,6 +57,43 @@ export async function getNotificationsForUser(userId: string) {
         [userId]);
     return rows;
 }
+
+/************** createCancelNotification ***********************************************************
+ *
+ * Creates notification records when an appointment booking is cancelled.
+ *
+ * Behavior:
+ *  - Gathers booking details, appointment details, and who the canceller is
+ *  - Determines notification recipients based on the role of the canceller
+ *  - Inserts one or more notifications into the database
+ *
+ * Recipient determination rules:
+ *  - If cancelled by an admin:
+ *      * Notify both the customer and service provider
+ *  - If cancelled by a service provider:
+ *      * Notify the customer only
+ *  - If cancelled by a customer:
+ *      * Notify the service provider only
+ *
+ * Inputs:
+ *  - sentBy: ID of the user cancelling the booking
+ *  - bookingId: ID of the cancelled booking
+ *
+ * Message content:
+ *  - Includes:
+ *      * service name
+ *      * appointment date
+ *      * start and end time
+ *      * name of the cancelling user
+ *
+ * Post-conditions:
+ *  - One notification row is created for each intended recipient
+ *
+ * Errors:
+ *  - Booking not found
+ *  - Database query errors
+ *
+ **************************************************************************************************/
 
 export async function createCancelNotification(
     sentBy: string,
@@ -65,7 +145,6 @@ export async function createCancelNotification(
     const msg = `Your ${row.service} appointment for ${dateStr} from ${startStr} to ${endStr} has been cancelled by ${row.canceller_name}.`;
 
     //insert notification(s) into table
-
     for (const sendTo of recipients) {
         await pool.query(
             `INSERT INTO notifs (sent_by, send_to, msg)
@@ -74,6 +153,30 @@ export async function createCancelNotification(
         );
     }
 }
+
+/************** updateNotificationStatus ***********************************************************
+ *
+ * Updates the active and new-status flags for a notification.
+ *
+ * Behavior:
+ *  - Allows notifications to be deleted (soft delete)
+ *  - Allows notifications to be marked as read/unread
+ *
+ * Inputs:
+ *  - notifId: notification ID
+ *  - isActive: whether the notification remains active
+ *  - isNew: whether the notification is considered new - unsued
+ *
+ * Successful response:
+ *  - Returns the updated notification row
+ *
+ * Notes:
+ *  - Typically used to mark notifications as read or dismissed
+ *
+ * Errors:
+ *  - Database update errors
+ *
+ **************************************************************************************************/
 
 export async function updateNotificationStatus(notifId: string, isActive: boolean, isNew: boolean) {
     const result = await pool.query(

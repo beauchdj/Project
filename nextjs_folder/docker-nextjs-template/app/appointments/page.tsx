@@ -1,6 +1,6 @@
 /* Gavin Stankovsky, Jaclyn Brekke
 *  December 2025 (Latest)
-*  Appointment creation page
+*  Wrapper page for the service provider view to "Create & View Appointment Slots" 
 */
 
 "use server";

@@ -1,4 +1,5 @@
 /* Gavin Stankovsky, Jaclyn Brekke
+<<<<<<< HEAD
  *  December 2025 (Latest)
  *  Appointment API route
  */
@@ -6,9 +7,25 @@
 //import { getAllSpAppts } from "@/app/lib/services/appointmentServices";
 import { auth } from "@/auth";
 import { NextRequest, NextResponse } from "next/server";
-import { updateAppointmentSlot } from "@/app/lib/services/appointmentServices";
 import { pool } from "@/lib/db";
 
+import { updateAppointmentSlot } from "@/app/lib/services/appointmentServices";
+
+/************* PATCH /api/appointments/:id**********************************************************
+* Jaclyn Brekke
+* Updates an appointment slot for soft deletes (marking an appointment inactive).
+*   (alternative to deleting an appointment)
+* 
+* Request body: {"isActive": false} 
+*
+* Successful response (200):
+* 
+* Errors:
+  - 400 Invalid request body
+  - 401 Unauthorized
+  - 403 User not allowed to update this appointment
+  - 500 Server error
+*************************************************************************************************************/
 type Params = { params: { id: string } };
 
 export async function PATCH(request: Request, { params }: Params) {
@@ -17,9 +34,9 @@ export async function PATCH(request: Request, { params }: Params) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
-  const { isActive } = await request.json();
+  const { isactive } = await request.json();
 
-  if (typeof isActive !== "boolean") {
+  if (typeof isactive !== "boolean") {
     return NextResponse.json(
       { error: "Invalid request body" },
       { status: 400 }
@@ -27,11 +44,18 @@ export async function PATCH(request: Request, { params }: Params) {
   }
 
   try {
-    await updateAppointmentSlot(params.id, isActive, session.user.id);
+    await updateAppointmentSlot(params.id, isactive, session.user.id);
 
     return NextResponse.json({ success: true }, { status: 200 });
   } catch (error: any) {
     console.error("Update appointment error:", error);
+
+    if (error.message === "APPOINTMENT_CONFLICT") {
+      return NextResponse.json(
+        { error: "Appointment has already been booked" },
+        { status: 409 }
+      );
+    }
 
     if (error.message === "FORBIDDEN") {
       return NextResponse.json(
@@ -52,7 +76,7 @@ export async function PATCH(request: Request, { params }: Params) {
 
 export async function GET(
   req: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
+  { params }: { params: { id: string } }
 ) {
   const session = await auth();
   if (!session || !session.user.isSp) {

@@ -8,16 +8,22 @@
 type Props = {
   apptId: string;
   onSuccess: () => void;
+  onError: (message: string) => void;
 };
 
-export default function DeleteApptButton({ apptId, onSuccess }: Props) {
+export default function DeleteApptButton({ apptId, onSuccess, onError }: Props) {
   async function handleClick() {
-    // const response = await fetch(`/api/bookings?apptId=${apptId}`, {
-    await fetch("/api/appointments", {
-      method: "DELETE",
+    
+    const response = await fetch(`/api/appointments/${apptId}`, {
+      method: "PATCH",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ apptId }),
+      body: JSON.stringify({ isactive: false }),
     });
+    const data = await response.json();
+    if (!response.ok) {
+        onError(data.error || "Unable to cancel appointment.");
+        return;
+      }
     onSuccess();
   }
 

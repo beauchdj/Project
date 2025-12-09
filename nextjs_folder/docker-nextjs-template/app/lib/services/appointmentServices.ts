@@ -1,11 +1,74 @@
-/* Jaclyn Brekke
+/*  Jaclyn Brekke
  *  December 2025
- *  Database Service
- */
-
+ *
+ * Appointment Database Service
+ *
+ *  Database service responsible for querying and updating appointment slot data.
+ *  Enforces role-based visibility, conflict detection, and authorization rules.
+ *
+ * Responsibilities:
+ *  - Retrieve appointment slots visible to the authenticated user
+ *  - Create new appointment slots with conflict detection
+ *  - Soft-delete appointment slots (individually or in bulk)
+ *  - Prevent slot deactivation when an active booking exists
+ *
+ * Role Definitions:
+ *  - Admin:
+ *      * Full visibility and control over all appointment slots
+ *  - Service Provider (SP):
+ *      * Can manage their own appointment slots
+ *      * May browse available slots from other providers
+ *  - Customer:
+ *      * Can only see available, active, and unbooked slots
+ *
+ **************************************************************************************************/
 import { pool } from "@/lib/db";
 import { AppointmentFilters } from "../types/AppointmentFilters";
 import { Appointment } from "../types/Appointment";
+
+/************** getAppointments ********************************************************************
+ *
+ * Returns appointment slots visible to the authenticated user, filtered by the provided criteria.
+ *
+ * Authorization rules are applied first. Filters are evaluated only against records already
+ * visible to the user based on role.
+ *
+ * Visibility rules:
+ *  Admins:
+ *      - Can see all appointment slots
+ *      - Includes past and future
+ *      - Includes booked, available, and inactive slots
+ *
+ *  Service Providers:
+ *      - By default, see their own appointment slots (booked + unbooked)
+ *
+ *  Customers:
+ *      - See only available appointment slots
+ *      - Slots must be:
+ *          * active
+ *          * unbooked
+ *          * visible according to applied filters
+ *
+ * Query filters (all optional):
+ *  - serviceProviderId: filter by service provider ID
+ *  - startAfter: return appointments starting at or after this timestamp
+ *  - startBefore: return appointments starting at or before this timestamp
+ *  - service: filter by service name
+ *  - serviceCategory: Beauty | Medical | Fitness
+ *  - status:
+ *      * Available  – active slot with no booked booking
+ *      * Booked     – active slot with a current booked booking
+ *      * Inactive   – soft-deleted or unavailable slot
+ *
+ *
+ * Successful response:
+ *  - Returns an array of Appointment objects
+ *
+ * Errors:
+ *  - USER_NOT_FOUND
+ *  - Database query errors
+ *
+ **************************************************************************************************/
 
 export async function getAppointments(
   filters: AppointmentFilters,
@@ -26,12 +89,6 @@ export async function getAppointments(
 
   const params: any[] = [];
   const where: string[] = [];
-
-  /* Role-based permissions:
-   * Admins can view all appointments
-   * Service providers can view their appointments
-   * Customers can view only active and available appointments
-   */
 
   if (!user.isadmin) {
     if (user.issp && filters.status !== "Available") {
@@ -85,7 +142,7 @@ export async function getAppointments(
         WHERE b.apptid = a.id
         AND b.bookstatus = 'Booked'
       )`);
-    //where.push(`a.starttime > now()`);
+    //where.push(`a.starttime > now()`);  decided this should be a front end call
   }
 
   if (filters.status === "Booked") {
@@ -128,6 +185,34 @@ export async function getAppointments(
   return rows;
 }
 
+/************** createAppointmentSlot **************************************************************
+ *
+ * Creates a new appointment slot for a service provider.
+ *
+ * Conflict detection:
+ *  - Prevents overlapping appointment slots for the same service provider
+ *  - Uses PostgreSQL tsrange overlap detection
+ *
+ * Inputs:
+ *  - spId: service provider ID
+ *  - service: service name
+ *  - date: ISO date string (YYYY-MM-DD)
+ *  - starttime: HH:MM string
+ *  - endtime: HH:MM string
+ *
+ * Behavior:
+ *  - Converts date + times into timestamps
+ *  - Checks for time overlap against existing slots
+ *  - Inserts active appointment slot on success
+ *
+ * Successful response:
+ *  - Returns object containing newly created appointment ID
+ *
+ * Errors:
+ *  - APPOINTMENT_CONFLICT (overlapping slot)
+ *  - CREATE_APPOINTMENT_FAILED
+ *
+ **************************************************************************************************/
 export async function createAppointmentSlot(
   spId: string,
   service: string,
@@ -171,7 +256,128 @@ export async function createAppointmentSlot(
   }
 }
 
-export async function deleteAppointmentSlot(apptId: string, userId: string) {
+/************** deleteAllSpApptSlots ***************************************************************
+ *
+ * Soft-deletes all future appointment slots for a service provider.
+ *
+ * Access rules:
+ *  - Admins may delete slots for any provider
+ *  - Service providers may delete only their own slots
+ *
+ * Behavior:
+ *  - Sets isactive = false
+ *  - Applies only to future appointments
+ *  - Does not affect past appointments
+ *
+ * Inputs:
+ *  - spId: service provider whose slots are being deleted
+ *  - userId: authenticated actor performing the action
+ *
+ * Successful response:
+ *  - Returns count of updated appointments and affected rows
+ *
+ * Errors:
+ *  - Authorization failure
+ *  - Database errors
+ *
+ **************************************************************************************************/
+export async function deleteAllSpApptSlots(spId: string, userId: string) {
+  const query = `UPDATE appts_avail as a
+            SET isactive = false
+            FROM users u
+            WHERE 
+                a.spId = $1
+                AND a.starttime > NOW()
+                AND (
+                    u.isadmin
+                    OR a.spid = $2
+                )
+            RETURNING a.spId;`;
+
+  try {
+    const result = await pool.query(query, [spId, userId]);
+
+    return {
+      ok: false,
+      cancelledCount: result.rowCount,
+      appointments: result.rows,
+    };
+  } catch (error) {
+    console.error("Cancel Appointment Error: ", error);
+    throw new Error("Cancel Appointment Error");
+  }
+}
+
+/************** updateAppointmentSlot **************************************************************
+ *
+ * Updates the active status of an appointment slot.
+ *
+ * Conflict detection:
+ *  - Prevents deactivating a slot that currently has an active booked booking
+ *
+ * Access rules:
+ *  - Admins may update any appointment slot
+ *  - Service providers may update only their own slots
+ *
+ * Inputs:
+ *  - apptId: appointment slot ID
+ *  - isactive: boolean flag indicating active / inactive
+ *  - userId: authenticated actor performing the update
+ *
+ * Behavior:
+ *  - Fails with conflict if slot is currently booked
+ *  - Applies authorization rules before update
+ *
+ * Successful response:
+ *  - { success: true }
+ *
+ * Errors:
+ *  - APPOINTMENT_CONFLICT (slot has a booked booking)
+ *  - FORBIDDEN (not authorized)
+ *
+ **************************************************************************************************/
+export async function updateAppointmentSlot(
+  apptId: string,
+  isactive: boolean,
+  userId: string
+) {
+  const conflict = await pool.query(
+    `SELECT 1
+    FROM appt_bookings b
+    WHERE b.apptid = $1
+      AND b.bookstatus = 'Booked'
+    LIMIT 1`,
+    [apptId]
+  );
+  if (conflict.rowCount) {
+    throw new Error("APPOINTMENT_CONFLICT");
+  }
+
+  const result = await pool.query(
+    `UPDATE appts_avail a
+     SET isactive = $1
+     FROM users u
+     WHERE a.id = $2
+     AND u.id = $3
+     AND
+      (spid = $3
+      OR u.isadmin) 
+     RETURNING a.id`,
+    [isactive, apptId, userId]
+  );
+
+  if (!result.rowCount) {
+    throw new Error("FORBIDDEN");
+  }
+
+  return { success: true };
+}
+
+/* pretty sure i can delete but keeping around for a min
+export async function deleteAppointmentSlot(
+  apptId: string,
+  userId: string
+) {
   // check for existing bookings
   const bookings = await pool.query(
     `SELECT 1
@@ -213,296 +419,5 @@ export async function deleteAppointmentSlot(apptId: string, userId: string) {
   }
 
   return { deleted: true, hardDelete: false };
-}
-
-export async function updateAppointmentSlot(
-  apptId: string,
-  isActive: boolean,
-  userId: string
-) {
-  const result = await pool.query(
-    `UPDATE appts_avail
-     SET isactive = $1
-     WHERE id = $2
-     AND spid = $3
-     RETURNING id`,
-    [isActive, apptId, userId]
-  );
-
-  if (!result.rowCount) {
-    throw new Error("FORBIDDEN");
-  }
-
-  return { success: true };
-}
-
-/* Source code that is not utilized but parts of it
- *  May be used in future features.
- */
-
-/*
-// for service provider to create a new appointment slot
-//   checks that they do not have other appointment slots that conflict
-export async function createAvailabilitySlot(
-  spId: string,
-  service: string,
-  date: string,
-  starttime: string,
-  endtime: string
-) {
-  const apptConflict = await pool.query(
-    `SELECT id FROM appts_avail
-    WHERE spid = $1
-    AND tsrange(starttime, endtime, '[)') && tsrange($2, $3, '[)')
-    LIMIT 1`,
-    [`${spId}`, `${date}T${starttime}`, `${date}T${endtime}`]
-  );
-
-  if (apptConflict.rowCount) {
-    console.log("Appointment Conflict Detected");
-    throw new Error("Appointment Conflict");
-  }
-  // dateTime format YYYY-MM-DDTHH:MM:SS
-  const realStartTime = new Date(`${date}T${starttime}`);
-  const realEndTime = new Date(`${date}T${endtime}`);
-
-  try {
-    const result = await pool.query(
-      `INSERT INTO appts_avail (spid, starttime,endtime,service)
-             VALUES($1,$2,$3,$4)
-             RETURNING id`,
-      [spId, realStartTime, realEndTime, service]
-    );
-    return { apptId: result.rows[0].id };
-  } catch (error: any) {
-    // catch DB constraint violation
-    if (
-      error?.code === "23P01" ||
-      error?.constraint === "appts_avail_no_overlap"
-    ) {
-      console.log("DB Constraint Violation - Appointment Overlap");
-      throw new Error("CONFLICT: Appointment Overlap");
-    }
-    console.log("Appointment Creation Error: ", error);
-    throw new Error("Appointment Creation Error");
-  }
-}
-
-// get service provider appointments (open and booked, not cancelled)
-export async function getAllSpAppts(spId: string) {
-  try {
-    const { rows } = await pool.query(
-      `SELECT a.starttime, a.endtime, a.service, c.fullname, b.bookstatus, b.id as bookingid, a.id
-       FROM appts_avail AS a
-       LEFT JOIN appt_bookings as b ON b.apptid = a.id AND b.bookstatus = 'Booked'
-       Left JOIN users as c ON c.id = b.userid
-       WHERE spID = $1
-       AND a.starttime > NOW()
-       ORDER BY a.starttime asc`,
-      [spId]
-    );
-    return rows;
-  } catch (error) {
-    throw new Error("Get Sp Appointments Error");
-  }
-}
-
-// returns all available appointments (cancelled or never booked) for a customer
-export async function getAllOpenAppts(serviceCategory: string | null) {
-  try {
-    const { rows } = await pool.query(
-      `SELECT a.starttime,a.endtime,a.service,sp.providername,a.id
-       FROM appts_avail as a
-       JOIN users as sp ON sp.id = a.spid
-       WHERE NOT EXISTS (
-          SELECT 1
-          FROM appt_bookings as b
-          WHERE b.apptid = a.id
-          AND b.bookstatus = 'Booked'
-        )
-        AND a.starttime > NOW()
-        AND sp.servicecategory = $1;
-        `,
-      [serviceCategory]
-    );
-    return rows;
-  } catch (error) {
-    console.log("appointment services error: ", error);
-    throw new Error("Get All Available Appointments Error");
-  }
-}
-
-
-export async function deleteAvailAppt(apptId: string, userId: string) {
-  try {
-    const result = await pool.query(
-      `DELETE FROM appts_avail
-      WHERE
-        id = $1
-        AND
-        spid = $2
-      RETURNING id;`,
-      [apptId, userId]
-    );
-
-    if (result.rowCount === 0) {
-      return { deleted: false };
-    }
-
-    return {
-      deleted: true,
-      bookingId: result.rows[0].id,
-    };
-  } catch (error) {
-    console.error("Delete Appointment Error: ", error);
-    throw new Error("Delete Appointment Error");
-  }
-}
-
-*/
-
-/* MOVED TO BOOKING SERVICE (With modifications) */
-/*
-export async function bookAppointment(userId: string, apptId: string) {
-  // get the appointment to be booked
-  const { rows } = await pool.query(
-    `SELECT * 
-    FROM appts_avail
-    WHERE id = $1
-    `,
-    [apptId]
-  );
-  const appt = rows[0];
-
-  if (!appt) {
-    throw new Error("Appt does not exist");
-  }
-
-  // Check if appointment has already been booked by another customer
-  const alreadyBooked = await pool.query(
-    `SELECT id 
-     FROM appt_bookings 
-     WHERE apptid = $1
-     AND bookstatus = 'Booked'
-    LIMIT 1`,
-    [apptId]
-  );
-
-  if (alreadyBooked.rowCount) {
-    console.log("Already Booked");
-    throw new Error("Appointment is already Booked");
-  }
-
-  console.log(
-    "Check if appt conflicts with another appt that this customer has already booked..."
-  );
-
-  // Check if appointment conflicts with another appointment that this customer has already booked
-
-  const bookingConflict = await pool.query(
-    `SELECT b.id FROM appt_bookings as b
-    JOIN appts_avail as a ON a.id = b.apptId
-    WHERE b.userid = $1
-    AND b.bookstatus = 'Booked'
-    AND tsrange(a.starttime, a.endtime, '[)') && tsrange($2, $3, '[)')
-    LIMIT 1`,
-    [userId, appt.starttime, appt.endtime]
-  );
-
-  if (bookingConflict.rowCount) {
-    console.log("Booking Conflict Detected");
-    throw new Error(
-      "Booking Conflict: Appointment conflicts with an existing booked appointment"
-    );
-  }
-  // if no conflicts, create new booking
-  try {
-    const result = await pool.query(
-      `INSERT INTO appt_bookings (apptid, userid, bookstatus,booked_at)
-         VALUES ($1, $2, 'Booked', NOW())
-         Returning id`,
-      [apptId, userId]
-    );
-
-    //return result.rows[0].id as string;
-    return { ok: true, booking: result.rows[0] };
-  } catch (err: any) {
-    if (
-      err.code === "23505" ||
-      err.constraint === "appt_bookings_one_booked_per_id"
-    ) {
-      return {
-        ok: false,
-        error: "Appointment already booked by another customer.",
-      };
-    } else {
-      throw new Error("Error creating booking");
-    }
-  }
-}
-*/
-/*
-export async function getBookedAppts(userId: string) {
-  try {
-    const { rows } = await pool.query(
-      `SELECT appts.starttime, appts.endtime, appts.service, sp.providername, bookings.id, bookings.bookstatus, apptid
-             FROM appts_avail as appts
-             LEFT JOIN appt_bookings as bookings ON appts.id = bookings.apptid
-             LEFT JOIN users as cust ON bookings.userid = cust.id
-             LEFT JOIN users as sp ON appts.spid = sp.id
-             WHERE bookings.userid = $1
-             AND appts.starttime > NOW()
-             ORDER BY appts.starttime ASC`,
-      [userId]
-    );
-    return rows;
-  } catch (error) {
-    throw new Error("Get Bookings Error");
-  }
-}
-  */
-/*
-export async function cancelBookedAppt(bookingId: string, userId: string) {
-  // check that the user who is trying to cancel has permission to do so
-  // (is the customer, the service provider, or is an admin)
-  const query = `WITH canceller AS (
-      SELECT u.id, u.isadmin
-      FROM users as u
-      WHERE u.id = $2
-    )
-    UPDATE appt_bookings as b
-    SET bookstatus = 'Cancelled',
-        cancelled_at = NOW(),
-        cancelled_by = $2
-    FROM appts_avail as a, canceller
-    WHERE b.id = $1
-    AND a.id = b.apptId
-    AND (
-      b.userId = $2
-      OR canceller.isadmin
-      OR a.spId = $2
-    )
-    AND b.bookstatus = 'Booked'
-    RETURNING b.id,b.apptid,b.userid;`;
-
-  try {
-    const result = await pool.query(query, [bookingId, userId]);
-
-    if (result.rowCount === 0) {
-      return { ok: false };
-    }
-
-    const row = result.rows[0];
-    // console.log(row);
-    return {
-      ok: true,
-      bookingId: row.id,
-      apptId: row.apptid,
-      userId: row.userid,
-    };
-  } catch (error) {
-    console.error("Delete Booked Appointment Error: ", error);
-    throw new Error("Delete Booked Appointment Error");
-  }
 }
 */
