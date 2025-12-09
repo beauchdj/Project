@@ -460,17 +460,33 @@ export function UserUpdate() {
                     <p className="error-text">Please enter your full name</p>
                   )}
                 </label>
-                <label className="flex items-center gap-2">
-                  Service Provider
-                  <input
-                    type="checkbox"
-                    name="issp"
-                    value="issp"
-                    className="w-7 h-7 accent-emerald-500 cursor-pointer"
-                    onChange={handleChange}
-                    checked={formData.issp}
-                  ></input>
-                </label>
+
+                Account Type:
+                <div className="flex gap-1">
+                  <label className="flex items-center gap-2">
+                    Customer
+                    <input
+                      type="checkbox"
+                      onChange={handleChange}
+                      checked={formData.iscustomer}
+                      name="iscustomer"
+                      value="iscustomer"
+                      className="w-7 h-7 accent-sky-500 cursor-pointer"
+                    />
+                  </label>
+                  <label className="flex items-center gap-2">
+                    Service Provider
+                    <input
+                      type="checkbox"
+                      name="issp"
+                      value="issp"
+                      className="w-7 h-7 accent-emerald-500 cursor-pointer"
+                      onChange={handleChange}
+                      checked={formData.issp}
+                    ></input>
+                  </label>
+                </div>
+                {typeError && <p className="error-text">Please select an account type, or both</p>}
 
                 {formData.issp && (
                   <label className="label-col">
