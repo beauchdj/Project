@@ -1,13 +1,7 @@
 /* Gavin Stankovsky, Jaclyn Brekke
-<<<<<<< HEAD
  *  December 2025 (Latest)
- *  Appointment wrap handler function
+ *  Appointment wrap handler functions
  */
-=======
-*  December 2025 (Latest)
-*  Appointment wrap handler functions
-*/
->>>>>>> origin/code_clean_up_jackie
 
 "use client";
 import CreateApptForm from "./CreateApptForm";
@@ -26,12 +20,14 @@ export default function AppointmentWrap() {
   async function fetchAppointments() {
     const params = new URLSearchParams();
     params.set("startAfter", new Date().toISOString());
-    const res = await fetch(`/api/appointments?${params.toString()}`, { method: "GET" });
+    const res = await fetch(`/api/appointments?${params.toString()}`, {
+      method: "GET",
+    });
 
-     if (!res.ok) {
-        console.error("Failed to fetch appointments");
-        return;
-      }
+    if (!res.ok) {
+      console.error("Failed to fetch appointments");
+      return;
+    }
     const json = await res.json();
     setAppointments(json.appointments);
   }

@@ -1,13 +1,7 @@
 /* Jaclyn Brekke
-<<<<<<< HEAD
  *  November 2025
- *  Appointment List view of booked appointments
+ *  Customer view of booked appointments
  */
-=======
-*  November 2025
-*  Customer view of booked appointments
-*/
->>>>>>> origin/code_clean_up_jackie
 
 "use client";
 import { Booking } from "../lib/types/Booking";

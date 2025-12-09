@@ -1,17 +1,11 @@
 /* Gavin Stankovsky, Jaclyn Brekke
-<<<<<<< HEAD
  *  December 2025 (Latest)
- *  Appointment list form
+ *
+ * A service provider view of their upcoming appointment slots
+ *   If a slot is booked, it will display the customer name
+ *   Booked slots will also display a button to cancel the booking
+ *   Unbooked slots will display a button to delete the appointment so it is no longer available to book.
  */
-=======
-*  December 2025 (Latest)
-*  
-* A service provider view of their upcoming appointment slots
-*   If a slot is booked, it will display the customer name
-*   Booked slots will also display a button to cancel the booking
-*   Unbooked slots will display a button to delete the appointment so it is no longer available to book.
-*/
->>>>>>> origin/code_clean_up_jackie
 
 "use client";
 

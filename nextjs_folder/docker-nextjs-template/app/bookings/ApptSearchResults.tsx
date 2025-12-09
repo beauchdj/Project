@@ -1,11 +1,10 @@
 /* Jaclyn Brekke
-*  November 2025
-*  Appointment search results 
-*/
+ *  November 2025
+ *  Appointment search results
+ */
 
 "use client";
 
-import { Booking } from "../lib/types/Booking";
 import BookApptButton from "./BookApptButton";
 import { Appointment } from "../lib/types/Appointment";
 
