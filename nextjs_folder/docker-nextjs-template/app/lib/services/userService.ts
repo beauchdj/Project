@@ -7,10 +7,15 @@ import { pool } from "@/lib/db";
 import { User } from "@/app/lib/types/User";
 import { users_db } from "@/app/lib/types/user_db";
 import bcrypt from "bcryptjs";
+<<<<<<< HEAD
 import {
   cancelAllBookingsforCust,
   cancelAllBookingsforSP,
 } from "./BookingService";
+=======
+import { cancelAllBookingsforCust,cancelAllBookingsforSP } from "./BookingService";
+import { deleteAllSpApptSlots } from "./appointmentServices";
+>>>>>>> origin/code_clean_up_jackie
 
 export async function getAllUsers(): Promise<User[]> {
   const { rows } = await pool.query(
@@ -117,6 +122,7 @@ export async function updateUser(
     throw new Error("USER_NOT_FOUND");
   }
 
+<<<<<<< HEAD
   //check if deactivating user, then cancel bookings
   if (userOld && userOld.issp && !user.issp) {
     await cancelAllBookingsforSP(user.id!, actingUserId);
@@ -125,6 +131,20 @@ export async function updateUser(
   if (userOld && userOld.isactive && !user.isactive) {
     await cancelAllBookingsforCust(user.id!, actingUserId);
   }
+=======
+        //check if deactivating user, then cancel bookings
+
+        // if service provider being deactivated or changed to non-sp, cancel bookings and delete appt slots
+        if (userOld && userOld.issp && !user.issp) {
+            await cancelAllBookingsforSP(user.id!,actingUserId);
+            await deleteAllSpApptSlots(user.id!,actingUserId);
+        }
+
+        // if customer being deactivated, cancel bookings
+        if (userOld && userOld.isactive && !user.isactive) {
+            await cancelAllBookingsforCust(user.id!,actingUserId);
+        }
+>>>>>>> origin/code_clean_up_jackie
 
   return result.rows[0];
 }

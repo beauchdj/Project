@@ -1,10 +1,20 @@
 /* Gavin Stankovsky, Jaclyn Brekke
+<<<<<<< HEAD
  *  December 2025 (Latest)
  *  Appointment list form
  */
+=======
+*  December 2025 (Latest)
+*  
+* A service provider view of their upcoming appointment slots
+*   If a slot is booked, it will display the customer name
+*   Booked slots will also display a button to cancel the booking
+*   Unbooked slots will display a button to delete the appointment so it is no longer available to book.
+*/
+>>>>>>> origin/code_clean_up_jackie
 
 "use client";
-// import { formatter } from "../lib/types/Formatter";
+
 import { Appointment } from "../lib/types/Appointment";
 import CancelApptButton from "./CancelApptButton";
 import DeleteApptButton from "./DeleteApptButton";
@@ -23,14 +33,14 @@ export default function AppointmentsList({
   if (!appointments.length) {
     return (
       <div>
-        <h2 className="text-lg font-semibold mb-2">Available Appointments</h2>
+        <h2 className="text-lg font-semibold mb-2">Upcoming Appointments</h2>
         <p>None</p>
       </div>
     );
   }
   return (
     <div>
-      <h2 className="text-lg font-semibold mb-2">All Appointments</h2>
+      <h2 className="text-lg font-semibold mb-2">Upcoming Appointments</h2>
 
       <div className="overflow-x-auto rounded-lg border border-white/10">
         <table className="min-w-full text-sm">
@@ -62,7 +72,6 @@ export default function AppointmentsList({
                       hour: "2-digit",
                       minute: "2-digit",
                     })}
-                    {/*formatter.format(new Date(row.starttime))*/}
                   </td>
                   <td className="px-3 py-2 whitespace-nowrap text-xs">
                     {new Date(row.endtime).toLocaleTimeString([], {
@@ -88,6 +97,7 @@ export default function AppointmentsList({
                       <DeleteApptButton
                         apptId={row.id!}
                         onSuccess={() => onDeleteAppt(row.id!)}
+                        onError={onError}
                       />
                     </td>
                   )}

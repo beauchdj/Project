@@ -1,14 +1,72 @@
-/* Jaclyn Brekke
-*  December 2025
-*  Database Service 
-*/
-
-
+/**************************************************************************************************************
+ *
+ * Jaclyn Brekke
+ * December 2025
+ *
+ *  Booking Database Service
+ * 
+ *  Database service responsible for querying and managing appointment bookings.
+ *  Handles role-based booking visibility, booking creation, conflict detection, and cancellation.
+ *
+ * Responsibilities:
+ *  - Retrieve bookings visible to the authenticated user
+ *  - Create bookings with conflict checks
+ *  - Cancel individual and bulk bookings
+ *  - Generate cancellation notifications where applicable
+ *
+ * Role Definitions:
+ *  - Admin:
+ *      * Full visibility and control over all bookings
+ *  - Service Provider (SP):
+ *      * Can view and manage bookings for their own appointment slots
+ *  - Customer:
+ *      * Can view and manage their own bookings
+ *
+ *************************************************************************************************************/
 import { pool } from "@/lib/db";
 import { BookingFilters } from "../types/BookingFilters";
 import { Booking } from "../types/Booking";
 import { createCancelNotification } from "./notificationService";
 
+/************** getBookings *************************************************************************
+ *
+ * Returns bookings visible to the authenticated user, based on role and optional filter criteria.
+ *
+ * View modes:
+ *  - Admin:
+ *      * Requires authenticated admin user
+ *      * Can view all bookings in the system
+ *  - Provider:
+ *      * Requires authenticated service provider or admin
+ *      * Defaults to bookings for the provider’s own appointment slots
+ *  - Customer:
+ *      * Default for non-admin / non-provider users
+ *      * Shows bookings belonging to the requesting customer
+ *
+ * If viewAs is not supplied as a query param, it is taken from the requesting user’s role.
+ *
+ * Authorization rules are applied before any filters.
+ * Filters are evaluated only against records the user has access to based on auth rules.
+ *
+ * Query filters (all optional):
+ *  - viewAs: Admin | Provider | Customer
+ *  - customerId: filter by customer user ID
+ *  - serviceProviderId: filter by provider user ID
+ *  - status: booking status (e.g. Booked, Cancelled)
+ *  - startAfter: return bookings for appointments starting at or after this time
+ *  - startBefore: return bookings for appointments starting at or before this time
+ *  - serviceCategory: filter by provider service category
+ *  - customerName: partial match on customer full name (case-insensitive)
+ *  - providerName: partial match on provider name (case-insensitive)
+ *
+ * Successful response: Returns an array of Booking objects
+ *
+ * Errors:
+ *  - User does not exist
+ *  - NOT_AUTHORIZED_ADMIN_VIEW
+ *  - NOT_AUTHORIZED_PROVIDER_VIEW
+ *
+ **************************************************************************************************/
     export async function getBookings(filters: BookingFilters, userId: string)  : Promise<Booking[]> {
         
          /* get the user */
@@ -28,20 +86,34 @@ import { createCancelNotification } from "./notificationService";
         const params: any[] = [];
         const where: string[] = [];
 
-        /* Filter records based on role type 
-            -Admins can see any/all records
-            -Service providers can see records where spId = user.id
-            -Customers can see records where userId = user.id
-        */
-        if (!user.isadmin) { 
-            if (user.issp) {
+        //default to user roles if viewas not provided
+        if (!filters.viewAs) {
+            filters.viewAs = user.isadmin ? "Admin" : user.issp ? "Provider" : "Customer";
+        }
+
+        switch (filters.viewAs) {
+            case "Admin":
+                if (!user.isadmin) {
+                    throw new Error("NOT_AUTHORIZED_ADMIN_VIEW");
+                }
+                break;
+            case "Provider":
+                if (!user.isadmin && !user.issp) {
+                throw new Error("NOT_AUTHORIZED_PROVIDER_VIEW");
+            }
+            if (!filters.serviceProviderId) {
                 params.push(user.id);
                 where.push(`a.spid = $${params.length}`);
-            } else {
-                params.push(user.id);
-                where.push(`b.userid = $${params.length}`);
             }
-        }
+            break;
+
+            case "Customer":
+                if (!filters.customerId) {
+                    params.push(user.id);
+                    where.push(`b.userid = $${params.length}`);
+                }
+                break;
+            }
 
         /* add filters from query params */
         if (filters.customerId) {
@@ -73,6 +145,15 @@ import { createCancelNotification } from "./notificationService";
             where.push(`sp.servicecategory = $${params.length}`);
         }
 
+        if (filters.customerName) {
+            params.push(`%${filters.customerName}%`);
+             where.push(`c.fullname ILIKE $${params.length}`);
+        }
+
+        if (filters.providerName) {
+            params.push(`%${filters.providerName}%`);
+            where.push(`sp.providername ILIKE $${params.length}`);
+        }
         const whereStmt = where.length > 0 ? `WHERE ${where.join(" AND ")}` : "";
 
         const query = 
@@ -86,7 +167,8 @@ import { createCancelNotification } from "./notificationService";
                 b.id AS id,
                 b.bookstatus,
                 a.id AS apptid,
-                b.userid
+                b.userid,
+                a.isactive
               FROM appts_avail as a
               JOIN users sp ON sp.id = a.spid
               LEFT JOIN appt_bookings b ON b.apptid = a.id
@@ -97,7 +179,40 @@ import { createCancelNotification } from "./notificationService";
               const { rows } = await pool.query(query,params);
               return rows;
     }
-
+/************** createBooking ***********************************************************************
+ *
+ * Creates a new booking for a specific appointment slot.
+ *
+ * Preconditions:
+ *  - Appointment slot must exist
+ *  - Appointment slot must not already be booked
+ *  - Customer must not have an overlapping booked appointment
+ *
+ * Conflict detection:
+ *  - Prevents double-booking of appointment slots
+ *  - Prevents a customer from holding overlapping bookings
+ *  - Uses PostgreSQL tsrange overlap detection
+ *
+ * Inputs:
+ *  - appointmentSlotId: apptId for the appt slot to be booked
+ *  - customerId: userid of the customer creating the booking
+ *
+ * Behavior:
+ *  - Validates that the appt slot exists
+ *  - Checks for existing booked booking on the slot
+ *  - Checks for time overlap with customer’s existing bookings
+ *  - Inserts booking with status 'Booked' on success
+ * TODO: add check for apptId isactive status
+ *
+ * Successful response:
+ *  - Returns newly created Booking record
+ *
+ * Errors:
+ *  - APPT_NOT_FOUND
+ *  - SLOT_ALREADY_BOOKED
+ *  - BOOKING_CONFLICT (overlapping customer booking)
+ *
+ **************************************************************************************************/
     export async function createBooking( appointmentSlotId: string, customerId: string) : Promise<Booking> {
         /* get the appointment to be booked */
         const { rows } = await pool.query(
@@ -154,10 +269,38 @@ import { createCancelNotification } from "./notificationService";
             return result.rows[0];
         }
 
- 
+ /************** cancelBooking ************************************************************************
+ *
+ * Cancels a single booking.
+ *
+ * Access rules:
+ *  - Booking customer may cancel their own booking
+ *  - Service provider may cancel bookings for their own appointment slots
+ *  - Admin may cancel any booking
+ *
+ * Cancellation behavior:
+ *  - Updates booking status to 'Cancelled'
+ *  - Stores cancellation timestamp and cancelling user
+ *
+ * Post-actions:
+ *  - Attempts to create a cancellation notification (inserts into notif table)
+ *
+ * Inputs:
+ *  - bookingId: id of booking to cancel
+ *  - userid: userId of the actor performing the cancellation
+ *
+ * Successful response:
+ *  - ok: true
+ *  - bookingId, apptId, userId
+ *
+ * Failure response:
+ *  - ok: false (booking not found or not cancellable)
+ *
+ * Errors:
+ *  - Database errors
+ *
+ **************************************************************************************************/
     export async function cancelBooking(bookingId: string, userid:string) {
-    // check that the user who is trying to cancel has permission to do so
-    // (is the customer, the service provider, or is an admin)
         const query = 
             `WITH canceller AS (
             SELECT u.id, u.isadmin
@@ -207,6 +350,34 @@ import { createCancelNotification } from "./notificationService";
         }
     }
 
+    /************** cancelAllBookingsforSP **************************************************************
+ *
+ * Cancels all future booked appointments for a specific service provider.
+ *
+ * Access rules:
+ *  - Admin may cancel bookings for any service provider
+ *  - Service provider may cancel only their own bookings
+ *
+ * Behavior:
+ *  - Only cancels bookings with status 'Booked'
+ *  - Only affects future appointments
+ *
+ * Post-actions:
+ *  - Attempts to create cancellation notifications for each booking
+ *
+ * Inputs:
+ *  - spId: service provider userId whose bookings are being cancelled
+ *  - userid: userId of actor performing the cancellation (the admin or the sp)
+ *
+ * Successful response:
+ *  - cancelledCount: number of bookings cancelled
+ *  - bookings: list of affected bookings
+ *
+ * Errors:
+ *  - Authorization failure
+ *  - Database errors
+ *
+ **************************************************************************************************/
     export async function cancelAllBookingsforSP(spId: string, userid:string) {
     // check that the user who is trying to cancel has permission to do so
     // (is the service provider, or is an admin)
@@ -249,7 +420,35 @@ import { createCancelNotification } from "./notificationService";
             throw new Error("Cancel Booked Appointment Error");
         }
     }
-
+/************** cancelAllBookingsforCust ************************************************************
+ *
+ * Cancels all future bookings for a specific customer.
+ *
+ * Access rules:
+ *  - Admin may cancel bookings for any customer
+ *  - Customer may cancel their own bookings
+ *  - Service provider may cancel bookings on their own appointment slots
+ *
+ * Behavior:
+ *  - Only cancels bookings with status 'Booked'
+ *  - Only affects future appointments
+ *
+ * Post-actions:
+ *  - Attempts to create cancellation notifications for each booking
+ *
+ * Inputs:
+ *  - custId: customerId whose bookings are being cancelled
+ *  - userid: userid of the actor performing the cancellation
+ *
+ * Successful response:
+ *  - cancelledCount: number of bookings cancelled
+ *  - bookings: list of affected bookings
+ *
+ * Errors:
+ *  - Authorization failure
+ *  - Database errors
+ *
+ **************************************************************************************************/
     export async function cancelAllBookingsforCust(custId: string, userid:string) {
     // check that the user who is trying to cancel has permission to do so
     // (is the customer, the service provider, or is an admin)

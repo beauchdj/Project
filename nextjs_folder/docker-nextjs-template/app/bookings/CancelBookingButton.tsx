@@ -23,8 +23,8 @@ export default function CancelBookingButton({
 
   async function handleClick() {
     try {
-      /* keep cancel pure/single functionality. notify only on success of cancellation */
-      {/*}
+      // keep cancel pure/single functionality. notify only on success of cancellation 
+     
       // As a customer/consumer of appointments we want to send notification to Service provider
       await fetch("/api/notifications", {
         method: "POST",
@@ -34,12 +34,10 @@ export default function CancelBookingButton({
           apptid: booking.apptid,
           status: "Cancelled",
         }),
-      });*/}
+      });
       const response = await fetch(`/api/bookings/${booking.id}/cancel`, {
-        //method: "PUT",
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
-        //body: JSON.stringify(booking.id),
         body: JSON.stringify({ status: "Cancelled"})
       });
 

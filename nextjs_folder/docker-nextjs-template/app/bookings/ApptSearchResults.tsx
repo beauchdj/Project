@@ -87,5 +87,3 @@ export default function ApptSearchResults({
     </div>
   );
 }
-
-// <pre> {JSON.stringify(data)}</pre>
