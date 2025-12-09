@@ -1,7 +1,7 @@
 /* Gavin Stankovsky, Daniel Beauchaine
-*  November 2025
-*  Dropdown Component 
-*/
+ *  November 2025
+ *  Dropdown Component
+ */
 
 "use client";
 
@@ -42,21 +42,6 @@ export default function Dropdown({ session }: { session?: Session | null }) {
           </span>
         )}
 
-        {isAdmin && (
-          <Link href={"/admin"} className={"nav-btn"}>
-            Admin
-          </Link>
-        )}
-        {isAdmin && (
-          <Link href={"/admin/users"} className={"nav-btn"}>
-            User Management
-          </Link>
-        )}
-        {isAdmin && (
-          <Link href={"/admin/bookings"} className={"nav-btn"}>
-            Booking Management
-          </Link>
-        )}
         <Link className="nav-btn" href={"/"}>
           Home
         </Link>
@@ -86,6 +71,21 @@ export default function Dropdown({ session }: { session?: Session | null }) {
         {session && (
           <Link href={"/updateUser"} className={"nav-btn text-sm"}>
             Update Information
+          </Link>
+        )}
+        {isAdmin && (
+          <Link href={"/admin"} className={"nav-btn"}>
+            Admin
+          </Link>
+        )}
+        {isAdmin && (
+          <Link href={"/admin/users"} className={"nav-btn"}>
+            User Management
+          </Link>
+        )}
+        {isAdmin && (
+          <Link href={"/admin/bookings"} className={"nav-btn"}>
+            Booking Management
           </Link>
         )}
       </div>
