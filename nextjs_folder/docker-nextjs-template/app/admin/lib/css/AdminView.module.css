@@ -1,3 +1,0 @@
-.admin-form {
-  @apply bg-emerald-800/80 rounded-2xl p-2 flex md:items-center px-2 py-2 md:px-8 md:py-4 shadow-xl shadow-black flex-col gap-2 overflow-auto border-4 border-black;
-}
