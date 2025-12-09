@@ -55,6 +55,9 @@ export default function Nav() {
           </button>
         </>
       )}
+
+      <a href="/userguide.pdf" target="_blank" rel="noopener noreferrer">User Guide</a>
+
     </main>
   );
 }
