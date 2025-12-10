@@ -11,7 +11,7 @@
 "use client";
 import { MyChartData } from "@/app/api/admin/route";
 import { useNotification } from "@/app/lib/components/NotificationContext";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 import { Dispatch, FormEvent, SetStateAction } from "react";
 
 export default function DataForm({
