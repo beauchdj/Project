@@ -1,3 +1,10 @@
+/**
+ * Gavin Stankovsky
+ * Novemeber 2025
+ *
+ * This is a util file that supplied a filter by date used for
+ *  The admin viewes Search Appointments and Generate Data
+ */
 import { Appointment } from "@/app/lib/types/Appointment";
 import { Dispatch, SetStateAction } from "react";
 

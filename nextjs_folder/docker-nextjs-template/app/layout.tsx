@@ -1,7 +1,11 @@
 /* Gavin Stankovsky
-*  November 2025
-*  Layout for page nav bar and session information
-*/
+ *  November 2025
+ *  Layout for page nav bar and session information
+ *
+ *  This is the Greatest Grandparent of all React Componenets
+ *   (all other componenets are children of this component)
+ *   (Also why we have html and body in here)
+ */
 
 "use client";
 import { SessionProvider } from "next-auth/react";

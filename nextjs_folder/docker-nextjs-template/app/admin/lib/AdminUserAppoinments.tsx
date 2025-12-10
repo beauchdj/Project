@@ -1,3 +1,11 @@
+/**
+ * Gavin Stankovsky
+ * December 2025
+ * This is a React component file
+ *
+ * This is the code for what you see when visiting the /admin/<uuid> frontend route
+ *
+ */
 "use client";
 
 import AppointmentsList from "@/app/appointments/AppointmentsList";

@@ -1,17 +1,11 @@
 /* Gavin Stankovsky, Jaclyn Brekke
-*  December 2025 (Most recent)
-*  Auth handlers for nextAuth.
-*/
-
-export const runtime = "nodejs";
-/**
- * About auth.ts
- *  THE TYPES BEHIND ALLOWING THIS ARE IN types.d.ts  !!!!
- *  ORDER OF callbacks: {jwt(),session()} is jwt first then session
- *  SESSION IS UNDEFINED IN callbacks: {jwt()} ONLY TOKEN AND USER
- *  SESSION WILL USE TOKEN TO CHOOSE WHAT TO SHOW TO USER ON useSession() being called
- *  NEXTAUTH({...}) ACCEPTS session: { strategy: 'database' | 'jwt' } CHANGES WHAT IS AVAIL
+ *  December 2025 (Most recent)
+ *  Auth handlers for nextAuth.
+ *
+ * This file handles our session configuration along with the
+ *  authorization function used when logging in a user
  */
+
 import NextAuth, { User } from "next-auth";
 import Credentials from "next-auth/providers/credentials";
 import bcrypt from "bcryptjs";
@@ -88,9 +82,9 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 
         const json: users_db = await ret.json();
 
-       if (!json.isactive) {
+        if (!json.isactive) {
           return null;
-       }
+        }
 
         const comp = await bcrypt.compare(password, json.hashpass);
 

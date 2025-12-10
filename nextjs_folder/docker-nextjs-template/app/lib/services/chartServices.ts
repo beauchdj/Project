@@ -1,3 +1,8 @@
+/**
+ * Gavin Stankovsky
+ * December 2025
+ * Service file that generates data for the /api/admin/route.ts api endpoint
+ */
 import { pool } from "@/lib/db";
 
 export async function countSpAndCust(

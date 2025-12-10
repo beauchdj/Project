@@ -1,3 +1,10 @@
+/**
+ * Gavin Stankovsky
+ * December 2025
+ * This is an API route file for the MyChart.tsx Component
+ *
+ * This api route file supplies a single GET request for chart data
+ */
 import {
   countApptsBooked,
   countApptsCreated,

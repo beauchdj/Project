@@ -1,7 +1,7 @@
 /* Gavin Stankovsky
-*  November 2025
-*  Main page clock 
-*/
+ *  November 2025
+ *  Main page clock counts in real time
+ */
 
 "use client";
 

@@ -1,16 +1,20 @@
 /**
  * Gavin Stankovsky
  * December 2025
+ * This is a React component file
  *
- * This is a wrapper class for the Chart.js data charts
- *  ChartData is an object that describes the configuration used for the chart
+ * This is an un-used file that was a unique chart wrapper for monthly data
+ * didnt get around to implementing its use case ( a bit too abitious )
  */
 "use client";
 import { useEffect, useRef } from "react";
 import { Chart } from "chart.js/auto";
 import { MyChartData } from "@/app/api/admin/route";
+/**
+ * chartData{ ...chartData, data: is actually a datasets object}
+ */
 
-export default function ChartWrapper({
+export default function MonthlyChart({
   chartData,
 }: {
   chartData: MyChartData;

@@ -3,6 +3,7 @@
 # Basic compose.yaml to start up a postgres db with adminer to alter the db
 # container also has a volume called init.sql which will run the init.sql located
 # in the same directory as compose.yaml
+
 services:
   db: # Service name
     image: postgres #

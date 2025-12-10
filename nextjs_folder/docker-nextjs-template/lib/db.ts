@@ -1,7 +1,10 @@
 /* Gavin Stankovsky
-*  October 2025
-*  Database Pool interaction with postgres
-*/
+ *  October 2025
+ *  Database Pool interaction with postgres
+ *
+ *  exporting pool variable is a reference to the
+ *   Postgresql database connection so we dont open one on each query
+ */
 
 export const runtime = "nodejs";
 // lib/db.ts

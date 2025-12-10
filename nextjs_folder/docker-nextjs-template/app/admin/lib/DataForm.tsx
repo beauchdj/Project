@@ -1,6 +1,17 @@
+/**
+ * Gavin Stankovsky
+ * December 2025
+ * This is a React component file
+ *
+ * This is a form consisting of input fields,
+ *  start and end date which make a request to the /api/admin/route.ts file
+ *  and returns the bar chart configurations for the ChartWrapper.tsx file
+ */
+
 "use client";
 import { MyChartData } from "@/app/api/admin/route";
 import { useNotification } from "@/app/lib/components/NotificationContext";
+import { useRouter } from "next/router";
 import { Dispatch, FormEvent, SetStateAction } from "react";
 
 export default function DataForm({
@@ -15,6 +26,7 @@ export default function DataForm({
   setShowCharts: Dispatch<SetStateAction<boolean>>;
 }) {
   const { toggleHidden } = useNotification();
+  const router = useRouter();
   async function submitData(e: FormEvent<HTMLFormElement>) {
     try {
       e.preventDefault();
@@ -33,6 +45,7 @@ export default function DataForm({
       if (res.ok) {
         setChartData(data);
       } else {
+        if (res.status === 401) router.push("/");
         console.log("Fetch failed for dataform");
         return;
       }

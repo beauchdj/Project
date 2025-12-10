@@ -1,12 +1,8 @@
 /* Gavin Stankovsky
-*  November 2025
-*  Date time formatter 
-*/
-
-/**
- * TODO:
- * timeZone: needs to be dynamic based off user region idk how to do yet
+ *  November 2025
+ *  Date time formatter
  */
+
 export const formatter = new Intl.DateTimeFormat("en-US", {
   timeZone: "America/Chicago",
   year: "numeric",

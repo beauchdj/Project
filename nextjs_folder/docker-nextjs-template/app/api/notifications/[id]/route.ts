@@ -1,7 +1,7 @@
 /* Gavin Stankovsky
-*  December 2025 (Latest)
-*  Gavin's Notification API
-*/
+ *  December 2025 (Latest)
+ *  Gavin's Notification API (*Obselete (not used))
+ */
 
 "use server";
 import { auth } from "@/auth";

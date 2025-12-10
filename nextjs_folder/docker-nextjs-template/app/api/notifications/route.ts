@@ -1,7 +1,7 @@
 /* Gavin Stankovsky
-*  November 2025
-*  Gavin's notification database API
-*/
+ *  November 2025
+ *  Gavin's notification database API (*Obselete (Not used))
+ */
 
 "use server";
 import { auth } from "@/auth";
@@ -57,10 +57,9 @@ export async function DELETE(req: NextRequest) {
     }
     const { noteid } = await req.json();
 
-    const query = await pool.query(
-      "DELETE FROM notifications WHERE id = $1 RETURNING id",
-      [noteid]
-    );
+    await pool.query("DELETE FROM notifications WHERE id = $1 RETURNING id", [
+      noteid,
+    ]);
     // console.log("Delete from /api/notifications query ", query);
     return NextResponse.json({ status: 204 });
   } catch (error) {

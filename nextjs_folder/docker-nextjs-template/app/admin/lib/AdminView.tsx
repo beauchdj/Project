@@ -1,3 +1,12 @@
+/**
+ * Gavin Stankovsky
+ * December 2025
+ *
+ * This is the file for the /admin landing page
+ *  Consists of 2 input forms: Search Appointments, and Generate Data
+ *  Along with two tables: An admin appointment list, and a all users list
+ *   Both tables allow clicking on service provider or customer to see their appointments
+ */
 "use client";
 
 import { Appointment } from "@/app/lib/types/Appointment";

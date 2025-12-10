@@ -1,7 +1,8 @@
 /* Gavin Stankovsky
-*  October 2025
-*  Define Session and User types
-*/
+ *  October 2025
+ *  This File Defines Session and User types used in auth.ts
+ *   all of these describe what is stored in our JWT session
+ */
 
 export const runtime = "nodejs";
 // eslint-disable-next-line @typescript-eslint/no-unused-vars

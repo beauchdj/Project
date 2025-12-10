@@ -1,3 +1,11 @@
+/**
+ * Gavin Stankovsky
+ * Decemeber 2025
+ * This is a React componenet file
+ *
+ * This is the modal componenet you see when you 'Generate Data'
+ *  in the admin view
+ */
 "use client";
 import { MyChartData } from "@/app/api/admin/route";
 import ChartWrapper from "./ChartWrapper";
